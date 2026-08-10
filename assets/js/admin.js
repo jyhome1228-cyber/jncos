@@ -17,15 +17,16 @@
   const get = (obj, path, fallback = '—') => path.split('.').reduce((acc, key) => acc?.[key], obj) ?? fallback;
 
   const fields = [
-    ['Company', 'contact.companyName'], ['Contact', 'contact.contactName'], ['Email', 'contact.email'], ['Phone / WhatsApp', 'contact.phone'],
-    ['Country', 'contact.country'], ['Website / Social', 'contact.website'], ['Preferred contact', 'contact.contactMethod'],
-    ['Service type', 'project.serviceType'], ['Product categories', 'project.productCategories'], ['Project stage', 'project.projectStage'],
-    ['Target markets', 'project.targetMarkets'], ['Launch timing', 'project.launchTiming'], ['Initial quantity', 'project.initialQuantity'],
-    ['Skin concerns', 'formulation.skinConcerns'], ['Textures', 'formulation.textures'], ['Hero ingredients', 'formulation.heroIngredients'],
-    ['Claims', 'formulation.claims'], ['Fragrance', 'formulation.fragrance'], ['Reference products', 'formulation.referenceProducts'],
-    ['Packaging support', 'packaging.packagingSupport'], ['Primary packaging', 'packaging.primaryPackaging'],
-    ['Secondary packaging', 'packaging.secondaryPackaging'], ['Design support', 'packaging.designSupport'], ['Certifications', 'packaging.certifications'],
-    ['Key requirements', 'notes.keyRequirements'], ['Additional notes', 'notes.additionalNotes'], ['How they found us', 'notes.source']
+    ['Company / Brand', 'contact.companyName'], ['Contact Person', 'contact.contactName'], ['Position', 'contact.position'], ['Company Type', 'contact.companyType'],
+    ['Email', 'contact.email'], ['Phone / WhatsApp', 'contact.phone'], ['Country / Region', 'contact.country'], ['Website / Social', 'contact.website'],
+    ['Preferred Contact Method', 'contact.contactMethod'], ['Preferred Contact Time', 'contact.contactTime'],
+    ['Service Type', 'project.serviceType'], ['Product Categories', 'project.productCategories'], ['Project Stage', 'project.projectStage'],
+    ['Target Markets', 'project.targetMarkets'], ['Launch Timing', 'project.launchTiming'], ['Initial Quantity', 'project.initialQuantity'],
+    ['Skin / Product Concerns', 'formulation.skinConcerns'], ['Textures / Finish', 'formulation.textures'], ['Hero Ingredients / Avoid List', 'formulation.heroIngredients'],
+    ['Claims / Positioning', 'formulation.claims'], ['Fragrance', 'formulation.fragrance'], ['Reference Products', 'formulation.referenceProducts'],
+    ['Packaging Support', 'packaging.packagingSupport'], ['Primary Packaging', 'packaging.primaryPackaging'],
+    ['Secondary Packaging', 'packaging.secondaryPackaging'], ['Design Support', 'packaging.designSupport'], ['Certifications / Market Requirements', 'packaging.certifications'],
+    ['Key Requirements', 'notes.keyRequirements'], ['Additional Notes', 'notes.additionalNotes'], ['How They Found Us', 'notes.source']
   ];
 
   const filtered = () => {
@@ -90,7 +91,7 @@
       const lines = doc.splitTextToSize(listText(value), width);
       doc.text(lines, left, y); y += Math.max(8, lines.length * 5 + 3);
     };
-    doc.setFont('helvetica','bold'); doc.setFontSize(20); doc.setTextColor(35); doc.text('JNCOS TECH — Project Inquiry', left, y); y += 9;
+    doc.setFont('helvetica','bold'); doc.setFontSize(20); doc.setTextColor(35); doc.text('JN COS TECH — Project Inquiry', left, y); y += 9;
     doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(110); doc.text(`Inquiry ${item.id.slice(0,8).toUpperCase()} · ${formatDate(item.createdAt)} · ${item.status}`, left, y); y += 12;
     fields.forEach(([label,path]) => addText(label, get(item,path)));
     const filename = `${get(item,'contact.companyName','jncos-inquiry').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'') || 'jncos-inquiry'}-${item.id.slice(0,8)}.pdf`;
