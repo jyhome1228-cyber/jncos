@@ -29,6 +29,7 @@
   const ensureSharedAssets = () => {
     ensureCss('data-content-css', '/assets/css/content.css');
     ensureCss('data-site-system-css', '/assets/css/site-system.css');
+    ensureCss('data-layout-unify-css', '/assets/css/layout-unify.css');
 
     if (!document.querySelector('script[data-page-images]')) {
       const script = document.createElement('script');
