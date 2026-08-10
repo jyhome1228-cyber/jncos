@@ -1,0 +1,81 @@
+/* JN COS TECH — OEM / ODM */
+.oem-page{background:#fff}
+
+.oem-hero{position:relative;min-height:330px;display:flex;align-items:center;overflow:hidden;background:#eee8e2}
+.oem-hero-bg{position:absolute;inset:0;background:url('https://cdn.imweb.me/upload/S2023030963558ef55ba8e/c772a2c8c81d0.jpg') center/cover no-repeat;filter:grayscale(1);opacity:.28;transform:scale(1.015)}
+.oem-hero::after{content:'';position:absolute;inset:0;background:rgba(244,239,234,.66)}
+.oem-hero .site-container{position:relative;z-index:1}
+.oem-hero-inner{max-width:760px;margin:0 auto}
+.oem-hero h1{margin:0 0 16px;font-size:clamp(30px,2.7vw,40px)!important;line-height:1.15;font-weight:720!important;letter-spacing:-.035em!important}
+.oem-hero p{max-width:720px;margin:0;color:#665850;font-size:13px;line-height:1.75}
+
+.oem-section{padding:88px 0}
+.oem-section.alt{background:#f2ece6}
+.oem-inner{width:min(100%,980px);margin:0 auto}
+.oem-heading{margin:0 0 36px}
+.oem-heading h2{margin:0 0 16px;font-size:clamp(28px,2.5vw,36px)!important;line-height:1.18;font-weight:730!important;letter-spacing:-.04em}
+.oem-heading p{max-width:760px;margin:0;color:#76675f;font-size:13px;line-height:1.85}
+
+.oem-intro-copy{max-width:760px}
+.oem-intro-copy p{margin:0;color:#76675f;font-size:13px;line-height:1.9}
+.oem-wide-image{margin:38px 0 0;overflow:hidden;background:#eee8e3}
+.oem-wide-image img{display:block;width:100%;aspect-ratio:16/5.2;object-fit:cover;filter:grayscale(1)}
+
+.oem-process-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.oem-process-card{min-height:276px;padding:34px 32px;background:#fff;border:1px solid #d8c8bc;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease,background .25s ease}
+.oem-process-card:hover{transform:translateY(-4px);border-color:#b9957e;box-shadow:0 16px 36px rgba(47,27,19,.07)}
+.oem-process-card .num{display:block;margin-bottom:26px;color:#d5cbc3;font-size:31px;font-weight:780;line-height:1}
+.oem-process-card h3{margin:0 0 18px;font-size:17px!important;font-weight:720!important;line-height:1.35}
+.oem-process-card p{margin:0;color:#76675f;font-size:12.5px;line-height:1.85}
+
+.oem-scope-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.oem-scope-card{padding:32px 30px;background:#f2ece6;border:1px solid #d8c8bc;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.oem-scope-card:hover{transform:translateY(-4px);border-color:#b9957e;box-shadow:0 16px 36px rgba(47,27,19,.06)}
+.oem-scope-card h3{margin:0 0 18px;font-size:18px!important;font-weight:730!important}
+.oem-scope-card>p{margin:0 0 24px;color:#76675f;font-size:12.5px;line-height:1.8}
+.oem-checklist{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+.oem-checklist li{position:relative;padding-left:20px;color:#76675f;font-size:12.5px;line-height:1.6}
+.oem-checklist li::before{content:'✓';position:absolute;left:0;top:0;color:#9b745c;font-weight:800}
+
+.oem-moq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:30px}
+.oem-moq-card{min-height:138px;padding:28px 30px;background:#fff;border:1px solid #d8c8bc;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.oem-moq-card:hover{transform:translateY(-4px);border-color:#b9957e;box-shadow:0 14px 30px rgba(47,27,19,.06)}
+.oem-moq-card h3{margin:0 0 14px;font-size:16px!important;font-weight:720!important}
+.oem-moq-card p{margin:0;color:#76675f;font-size:12.5px;line-height:1.75}
+.oem-note{margin-top:16px;padding:20px 24px;background:#fff;border:1px solid #d8c8bc;color:#76675f;font-size:11.5px;line-height:1.8}
+
+.oem-pack-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:34px}
+.oem-pack-item{display:flex;align-items:center;justify-content:center;min-height:94px;padding:16px;background:#f2ece6;border:1px solid #d8c8bc;text-align:center;color:#352018;font-size:16px;font-weight:540;transition:transform .22s ease,background .22s ease,border-color .22s ease}
+.oem-pack-item:hover{transform:translateY(-3px);background:#eadfd7;border-color:#b9957e}
+.oem-pack-image{margin:34px 0 0;overflow:hidden;background:#eee8e3}
+.oem-pack-image img{display:block;width:100%;aspect-ratio:16/3.2;object-fit:cover;object-position:center;filter:grayscale(1)}
+
+.oem-custom-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:34px}
+.oem-custom-card{padding:34px 36px;background:#fff;border:1px solid #d8c8bc;min-height:330px;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.oem-custom-card:hover{transform:translateY(-4px);border-color:#b9957e;box-shadow:0 16px 36px rgba(47,27,19,.06)}
+.oem-custom-card h3{margin:0 0 28px;font-size:20px!important;font-weight:720!important}
+.oem-custom-card ul{margin:0;padding-left:20px;color:#76675f}
+.oem-custom-card li{margin:0 0 17px;font-size:13px;line-height:1.65}
+
+.oem-cta{padding:74px 0;background:#2f1b13;color:#fff;text-align:center}
+.oem-cta h2{margin:0;font-size:30px!important;color:#fff}
+.oem-cta p{max-width:700px;margin:16px auto 0;color:#c9bbb3;font-size:13px;line-height:1.8}
+.oem-cta-actions{display:flex;justify-content:center;gap:12px;margin-top:28px}
+.oem-cta .button-primary{background:#fff;color:#2f1b13}
+.oem-cta .button-secondary{background:transparent;color:#fff;border-color:rgba(255,255,255,.35)}
+
+@media(max-width:900px){
+ .oem-process-grid{grid-template-columns:repeat(2,1fr)}
+ .oem-pack-grid{grid-template-columns:repeat(3,1fr)}
+ .oem-custom-grid{grid-template-columns:1fr}
+ .oem-custom-card{min-height:auto}
+}
+@media(max-width:720px){
+ .oem-hero{min-height:270px}
+ .oem-section{padding:68px 0}
+ .oem-process-grid,.oem-scope-grid,.oem-moq-grid,.oem-pack-grid{grid-template-columns:1fr}
+ .oem-process-card{min-height:auto;padding:28px 24px}
+ .oem-pack-item{min-height:64px;font-size:14px}
+ .oem-cta-actions{flex-direction:column}
+ .oem-cta-actions .button{width:100%}
+}
