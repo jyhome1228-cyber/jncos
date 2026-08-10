@@ -2,6 +2,19 @@
   const form = document.querySelector('[data-inquiry-form]');
   if (!form || !window.JNCOSInquiryStore) return;
 
+  const style = document.createElement('style');
+  style.textContent = `
+    .inquiry-live-summary{overflow:visible!important}
+    .summary-head{padding:22px 20px 18px!important}
+    .summary-head>p{margin-top:8px!important;font-size:11px!important;line-height:1.55!important}
+    .summary-content{max-height:none!important;overflow:visible!important;padding:0 20px 6px!important}
+    .summary-row{padding:11px 0!important}
+    .summary-row>span{margin-bottom:4px!important}
+    .summary-row>strong{font-size:11.5px!important;line-height:1.42!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .summary-foot{padding:12px 20px!important}
+  `;
+  document.head.appendChild(style);
+
   const steps = [...form.querySelectorAll('[data-step]')];
   const progress = document.querySelector('[data-progress-bar]');
   const progressLabel = document.querySelector('[data-current-step-label]');
@@ -11,7 +24,6 @@
 
   const value = (name) => form.elements[name]?.value?.trim?.() || '';
   const checked = (name) => [...form.querySelectorAll(`[name="${name}"]:checked`)].map((el) => el.value);
-  const listText = (items) => Array.isArray(items) && items.length ? items.join(', ') : '';
   const compactList = (items, limit = 2) => {
     if (!Array.isArray(items) || !items.length) return '';
     const head = items.slice(0, limit).join(', ');
@@ -21,45 +33,19 @@
 
   const data = () => ({
     contact: {
-      companyName: value('companyName'),
-      contactName: value('contactName'),
-      position: value('position'),
-      companyType: value('companyType'),
-      email: value('email'),
-      phone: value('phone'),
-      country: value('country'),
-      website: value('website'),
-      contactMethod: value('contactMethod'),
-      contactTime: value('contactTime'),
+      companyName: value('companyName'), contactName: value('contactName'), position: value('position'), companyType: value('companyType'), email: value('email'), phone: value('phone'), country: value('country'), website: value('website'), contactMethod: value('contactMethod'), contactTime: value('contactTime'),
     },
     project: {
-      serviceType: value('serviceType'),
-      productCategories: checked('productCategories'),
-      projectStage: value('projectStage'),
-      targetMarkets: value('targetMarkets'),
-      launchTiming: value('launchTiming'),
-      initialQuantity: value('initialQuantity'),
+      serviceType: value('serviceType'), productCategories: checked('productCategories'), projectStage: value('projectStage'), targetMarkets: value('targetMarkets'), launchTiming: value('launchTiming'), initialQuantity: value('initialQuantity'),
     },
     formulation: {
-      skinConcerns: checked('skinConcerns'),
-      textures: checked('textures'),
-      heroIngredients: value('heroIngredients'),
-      claims: checked('claims'),
-      fragrance: value('fragrance'),
-      referenceProducts: value('referenceProducts'),
+      skinConcerns: checked('skinConcerns'), textures: checked('textures'), heroIngredients: value('heroIngredients'), claims: checked('claims'), fragrance: value('fragrance'), referenceProducts: value('referenceProducts'),
     },
     packaging: {
-      packagingSupport: value('packagingSupport'),
-      primaryPackaging: checked('primaryPackaging'),
-      secondaryPackaging: checked('secondaryPackaging'),
-      designSupport: value('designSupport'),
-      certifications: checked('certifications'),
+      packagingSupport: value('packagingSupport'), primaryPackaging: checked('primaryPackaging'), secondaryPackaging: checked('secondaryPackaging'), designSupport: value('designSupport'), certifications: checked('certifications'),
     },
     notes: {
-      keyRequirements: value('keyRequirements'),
-      additionalNotes: value('additionalNotes'),
-      source: value('source'),
-      consent: !!form.elements.consent?.checked,
+      keyRequirements: value('keyRequirements'), additionalNotes: value('additionalNotes'), source: value('source'), consent: !!form.elements.consent?.checked,
     }
   });
 
@@ -72,21 +58,13 @@
   summary.className = 'inquiry-live-summary';
   summary.setAttribute('aria-live', 'polite');
   summary.innerHTML = `
-    <div class="summary-head">
-      <span>PROJECT SUMMARY</span>
-      <strong>Your brief at a glance</strong>
-      <p>Only the key decisions are shown here. Full details are saved with your inquiry.</p>
-    </div>
+    <div class="summary-head"><span>PROJECT SUMMARY</span><strong>Your brief at a glance</strong><p>Key decisions only. Full details are saved with your inquiry.</p></div>
     <div class="summary-content" data-summary-content></div>
     <div class="summary-foot">JN COS TECH · OEM / ODM PROJECT BUILDER</div>`;
   workspace.appendChild(summary);
   const summaryContent = summary.querySelector('[data-summary-content]');
 
-  const summaryRow = (label, content, fallback = 'Not selected') => `
-    <div class="summary-row">
-      <span>${escapeHtml(label)}</span>
-      <strong class="${content ? '' : 'is-empty'}">${escapeHtml(content || fallback)}</strong>
-    </div>`;
+  const summaryRow = (label, content, fallback = 'Not selected') => `<div class="summary-row"><span>${escapeHtml(label)}</span><strong class="${content ? '' : 'is-empty'}">${escapeHtml(content || fallback)}</strong></div>`;
 
   const renderSummary = () => {
     const d = data();
@@ -94,7 +72,6 @@
     const market = d.project.targetMarkets || d.contact.country;
     const packaging = compactList(d.packaging.primaryPackaging, 2) || d.packaging.packagingSupport;
     const formula = compactList(d.formulation.skinConcerns, 2) || compactList(d.formulation.textures, 2);
-
     summaryContent.innerHTML = [
       summaryRow('Company', company),
       summaryRow('Service', d.project.serviceType),
@@ -136,29 +113,17 @@
   form.addEventListener('click', (event) => {
     const next = event.target.closest('[data-next]');
     const prev = event.target.closest('[data-prev]');
-    if (next) {
-      if (validateStep(current)) show(current + 1);
-    } else if (prev) {
-      show(current - 1);
-    }
+    if (next) { if (validateStep(current)) show(current + 1); }
+    else if (prev) show(current - 1);
   });
 
-  form.addEventListener('input', (event) => {
-    event.target.closest('.field, .consent-row')?.classList.remove('has-error');
-    renderSummary();
-  });
-  form.addEventListener('change', (event) => {
-    event.target.closest('.field, .consent-row')?.classList.remove('has-error');
-    renderSummary();
-  });
+  form.addEventListener('input', (event) => { event.target.closest('.field, .consent-row')?.classList.remove('has-error'); renderSummary(); });
+  form.addEventListener('change', (event) => { event.target.closest('.field, .consent-row')?.classList.remove('has-error'); renderSummary(); });
 
   const prefillFromQuery = () => {
     const params = new URLSearchParams(window.location.search);
-    const fields = ['companyName','contactName','email','phone','country','website','additionalNotes','source'];
-    fields.forEach((name) => {
-      const val = params.get(name);
-      const field = form.elements[name];
-      if (field && val) field.value = val;
+    ['companyName','contactName','email','phone','country','website','additionalNotes','source'].forEach((name) => {
+      const val = params.get(name); const field = form.elements[name]; if (field && val) field.value = val;
     });
   };
 
@@ -166,28 +131,18 @@
     event.preventDefault();
     if (!validateStep(current)) return;
     const submit = form.querySelector('[type="submit"]');
-    submit.disabled = true;
-    submit.textContent = 'Submitting…';
+    submit.disabled = true; submit.textContent = 'Submitting…';
     try {
       const saved = await window.JNCOSInquiryStore.create(data());
       workspace.hidden = true;
       document.querySelector('.inquiry-progress-head')?.setAttribute('hidden', '');
       document.querySelector('.inquiry-progress-track')?.setAttribute('hidden', '');
-      if (success) {
-        success.hidden = false;
-        const id = success.querySelector('[data-inquiry-id]');
-        if (id) id.textContent = saved.id.slice(0, 8).toUpperCase();
-      }
+      if (success) { success.hidden = false; const id = success.querySelector('[data-inquiry-id]'); if (id) id.textContent = saved.id.slice(0, 8).toUpperCase(); }
       window.scrollTo({ top: Math.max(0, (document.querySelector('.inquiry-shell')?.offsetTop || 0) - 100), behavior: 'smooth' });
     } catch (error) {
-      console.error(error);
-      alert('We could not save your inquiry. Please try again.');
-      submit.disabled = false;
-      submit.textContent = 'Submit Inquiry';
+      console.error(error); alert('We could not save your inquiry. Please try again.'); submit.disabled = false; submit.textContent = 'Submit Inquiry';
     }
   });
 
-  prefillFromQuery();
-  renderSummary();
-  show(0, false);
+  prefillFromQuery(); renderSummary(); show(0, false);
 })();
