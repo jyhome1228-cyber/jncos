@@ -7,6 +7,19 @@ body.public-page{--header-h:98px}
 .public-page .site-nav>a:not(.nav-cta){display:flex!important;align-items:center!important;padding:0!important;min-height:44px!important}
 .public-page .nav-cta{display:flex!important;align-items:center!important;justify-content:center!important;min-height:44px!important}
 
+/* language / country selector */
+.language-switcher{position:relative;display:flex;align-items:center;min-height:44px}
+.language-switcher-trigger{height:36px;display:inline-flex;align-items:center;gap:6px;padding:0 10px;border:1px solid #d9c8bb;background:#fff;color:#55473f;font:inherit;font-size:11px;font-weight:650;cursor:pointer;transition:border-color .18s ease,background .18s ease,color .18s ease}
+.language-switcher-trigger:hover,.language-switcher-trigger[aria-expanded="true"]{border-color:#a9856f;background:#f7f2ee;color:#2f1b13}
+.language-switcher-trigger svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.language-switcher-menu{position:absolute;right:0;top:calc(100% + 9px);z-index:80;width:210px;border:1px solid #d9c8bb;background:#fff;box-shadow:0 18px 40px rgba(47,27,19,.12)}
+.language-switcher-menu[hidden]{display:none}
+.language-switcher-menu button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px 14px;border:0;border-bottom:1px solid #eee4dd;background:#fff;color:#2f1b13;text-align:left;font:inherit;cursor:pointer}
+.language-switcher-menu button:last-child{border-bottom:0}
+.language-switcher-menu button:hover{background:#f6f0ec}
+.language-switcher-menu strong{font-size:12px;font-weight:700}
+.language-switcher-menu span{color:#8b7b72;font-size:10px;font-weight:500}
+
 /* Taller editorial hero used consistently across sub pages */
 .public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero){
   min-height:450px!important;
@@ -22,17 +35,28 @@ body.public-page{--header-h:98px}
 /* Inquiry is a workspace rather than an image hero */
 .public-page .inquiry-hero{padding-top:82px!important;padding-bottom:38px!important}
 
+@media(max-width:1280px){
+  .public-page .site-nav{gap:clamp(10px,1.1vw,20px)!important}
+  .language-switcher-trigger{padding:0 8px}
+}
 @media(max-width:1180px){
   .public-page .brand{width:220px!important;height:41px!important}
-  .public-page .site-nav{gap:clamp(14px,1.35vw,23px)!important;font-size:13.5px!important}
+  .public-page .site-nav{gap:clamp(10px,1vw,17px)!important;font-size:13px!important}
+  .language-switcher-trigger{font-size:10.5px}
 }
 @media(max-width:1024px){
   body.public-page{--header-h:76px}
   .public-page .site-header{height:76px!important;min-height:76px!important}
   .public-page .header-inner{align-items:center!important;padding-top:0!important;padding-bottom:0!important}
   .public-page .brand{width:182px!important;height:34px!important;align-items:center!important}
-  .public-page .site-nav{position:fixed!important;inset:76px 0 0!important;min-height:0;align-items:stretch!important;padding-top:20px!important;font-size:18px!important}
-  .public-page .site-nav>a,.public-page .site-nav .nav-cta{justify-content:flex-start!important;align-items:center!important;min-height:60px!important;padding:0!important;font-size:18px!important}
+  .public-page .site-nav{position:fixed!important;inset:76px 0 0!important;min-height:0;align-items:stretch!important;padding:20px 22px 28px!important;font-size:18px!important;overflow-y:auto}
+  .public-page .site-nav>a,.public-page .site-nav .nav-cta{justify-content:flex-start!important;align-items:center!important;min-height:58px!important;padding:0!important;font-size:18px!important}
+  .language-switcher{width:100%;min-height:58px;border-bottom:1px solid var(--line)}
+  .language-switcher-trigger{width:100%;height:58px;justify-content:flex-start;padding:0;border:0;background:transparent;font-size:16px}
+  .language-switcher-menu{position:static;width:100%;margin-bottom:8px;border-left:0;border-right:0;box-shadow:none}
+  .language-switcher-menu button{padding:14px 4px}
+  .language-switcher-menu strong{font-size:14px}
+  .language-switcher-menu span{font-size:11px}
   .public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero){min-height:360px!important;padding-top:104px!important;padding-bottom:48px!important}
 }
 @media(max-width:720px){
