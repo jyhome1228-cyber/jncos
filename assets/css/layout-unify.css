@@ -1,0 +1,419 @@
+/* =========================================================
+   JN COS TECH — unified layout rail / hierarchy / interactions
+   Products & Services is the visual reference page.
+   Loaded last by common.js so it can normalize page-specific CSS.
+========================================================= */
+
+:root{
+  --jn-rail:1320px;
+  --jn-section-y:86px;
+  --jn-card-gap:18px;
+  --jn-card-border:#d9c8bb;
+  --jn-card-hover:#b9957f;
+  --jn-soft:#f2ece6;
+  --jn-dark:#2f1b13;
+}
+
+/* ---------- one horizontal rail across all public pages ---------- */
+.public-page .site-container{
+  width:min(100%,var(--jn-rail)) !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+
+/* Remove page-specific centered/narrow rails that made pages drift. */
+.public-page:not(.home-page) :is(
+  .about-narrow,
+  .about-founder-grid,
+  .oem-hero-inner,
+  .oem-inner,
+  .tech-philosophy-grid,
+  .tech-platform-grid,
+  .tech-chip-grid,
+  .tech-optimization-inner,
+  .tech-validation-grid,
+  .mfg-inner,
+  .mfg-collage
+){
+  width:100% !important;
+  max-width:none !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+}
+
+/* Keep long prose readable while keeping its LEFT EDGE on the shared rail. */
+.public-page:not(.home-page) :is(
+  .product-section-lead,
+  .oem-heading p,
+  .oem-intro-copy,
+  .mfg-lead,
+  .tech-optimization p,
+  .about-story > .site-container p,
+  .about-founder-copy,
+  .subpage-lead,
+  .section-heading > p:last-child
+){
+  max-width:860px !important;
+}
+
+.public-page:not(.home-page) :is(.about-story .about-narrow > p){
+  max-width:900px !important;
+}
+
+/* ---------- shared type hierarchy (Products reference) ---------- */
+.public-page:not(.home-page) main{
+  text-align:left;
+}
+.public-page:not(.home-page) main h1{
+  font-size:clamp(30px,3vw,42px) !important;
+  line-height:1.14 !important;
+  font-weight:730 !important;
+  letter-spacing:-.038em !important;
+}
+.public-page:not(.home-page) main h2,
+.public-page:not(.home-page) :is(
+  .product-section-title,
+  .about-section-title,
+  .oem-heading h2,
+  .mfg-title,
+  .tech-section-title
+){
+  font-size:31px !important;
+  line-height:1.18 !important;
+  font-weight:720 !important;
+  letter-spacing:-.035em !important;
+  text-align:left !important;
+}
+.public-page:not(.home-page) main h3{
+  font-size:17px !important;
+  line-height:1.35 !important;
+  font-weight:700 !important;
+  letter-spacing:-.02em !important;
+}
+.public-page:not(.home-page) main p,
+.public-page:not(.home-page) main li{
+  line-height:1.82;
+}
+.public-page:not(.home-page) .eyebrow,
+.public-page:not(.home-page) :is(.about-kicker,.product-kicker){
+  font-size:9px !important;
+  font-weight:760 !important;
+  letter-spacing:.18em !important;
+  text-transform:uppercase;
+}
+
+/* ---------- one section rhythm ---------- */
+.public-page:not(.home-page) :is(
+  .product-section,
+  .about-story,
+  .about-values,
+  .about-founder,
+  .about-capabilities,
+  .oem-section,
+  .tech-philosophy,
+  .tech-platforms,
+  .tech-ingredients,
+  .tech-optimization,
+  .tech-validation,
+  .mfg-section,
+  .subpage-section,
+  .legal-content
+){
+  padding-top:var(--jn-section-y) !important;
+  padding-bottom:var(--jn-section-y) !important;
+}
+
+.public-page:not(.home-page) :is(
+  .product-section-title,
+  .about-section-title,
+  .mfg-title,
+  .tech-section-title
+){
+  margin-top:0 !important;
+  margin-bottom:28px !important;
+}
+
+.public-page:not(.home-page) :is(.subpage-heading,.section-heading,.oem-heading){
+  max-width:900px !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+  margin-bottom:38px !important;
+  text-align:left !important;
+}
+
+/* ---------- common hero: same height, same left edge, same hierarchy ---------- */
+.public-page:not(.home-page) :is(
+  .product-hero,
+  .about-hero,
+  .oem-hero,
+  .subpage-hero,
+  .content-hero
+){
+  min-height:300px !important;
+  height:auto !important;
+  padding:58px 0 !important;
+  display:flex !important;
+  align-items:center !important;
+  text-align:left !important;
+}
+.public-page:not(.home-page) :is(
+  .product-hero-copy,
+  .oem-hero-inner,
+  .subpage-hero-grid > div:first-child,
+  .content-hero .section-heading
+){
+  max-width:920px !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+}
+.public-page:not(.home-page) :is(
+  .product-hero,
+  .about-hero,
+  .oem-hero,
+  .subpage-hero,
+  .content-hero
+) h1{
+  margin:0 0 16px !important;
+}
+.public-page:not(.home-page) :is(
+  .product-hero,
+  .about-hero,
+  .oem-hero,
+  .subpage-hero,
+  .content-hero
+) p:not(.eyebrow):not(.about-kicker):not(.product-kicker){
+  max-width:800px !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+  font-size:13.5px !important;
+  line-height:1.8 !important;
+  text-align:left !important;
+}
+
+/* Inquiry is functional, but follows the same top hierarchy. */
+.public-page .inquiry-hero{
+  padding:62px 0 54px !important;
+  min-height:300px;
+}
+.public-page .inquiry-hero h1{
+  max-width:900px !important;
+  font-size:clamp(30px,3vw,42px) !important;
+  line-height:1.14 !important;
+}
+.public-page .inquiry-lead{
+  max-width:800px !important;
+  font-size:13.5px !important;
+  line-height:1.8 !important;
+}
+
+/* ---------- page-specific grids normalized to the same full rail ---------- */
+.public-page:not(.home-page) :is(
+  .product-capability-grid,
+  .product-grid,
+  .about-values-grid,
+  .about-capability-grid,
+  .oem-process-grid,
+  .oem-scope-grid,
+  .oem-moq-grid,
+  .oem-pack-grid,
+  .oem-custom-grid,
+  .tech-platform-grid,
+  .tech-chip-grid,
+  .tech-validation-grid,
+  .mfg-two,
+  .mfg-equipment-grid,
+  .mfg-support-grid,
+  .mfg-qc-grid,
+  .mfg-standard-grid,
+  .subpage-grid,
+  .subpage-gallery
+){
+  width:100% !important;
+  max-width:none !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+}
+
+.public-page:not(.home-page) :is(.about-story-visual,.oem-wide-image,.oem-pack-image,.tech-optimization figure,.mfg-wide-image,.mfg-collage,.product-wide-visual,.product-visual-strip){
+  width:100% !important;
+  max-width:none !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+}
+
+/* ---------- subtle interaction system ---------- */
+.public-page :is(
+  .product-card,
+  .product-capability-item,
+  .product-mini-card,
+  .about-value-card,
+  .about-capability-card,
+  .oem-process-card,
+  .oem-scope-card,
+  .oem-moq-card,
+  .oem-pack-item,
+  .oem-custom-card,
+  .tech-platform-card,
+  .tech-chip,
+  .tech-validation-card,
+  .mfg-card,
+  .mfg-equipment-card,
+  .mfg-support-item,
+  .mfg-qc-card,
+  .mfg-standard-card,
+  .subpage-card,
+  .contact-card,
+  .partnership-card,
+  .partnership-market,
+  .partnership-model
+){
+  transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease,background-color .24s ease,color .2s ease !important;
+  will-change:transform;
+}
+.public-page :is(
+  .product-card,
+  .product-capability-item,
+  .product-mini-card,
+  .about-value-card,
+  .oem-process-card,
+  .oem-scope-card,
+  .oem-moq-card,
+  .oem-pack-item,
+  .oem-custom-card,
+  .tech-platform-card,
+  .tech-chip,
+  .tech-validation-card,
+  .mfg-card,
+  .mfg-equipment-card,
+  .mfg-support-item,
+  .mfg-qc-card,
+  .subpage-card,
+  .contact-card,
+  .partnership-card,
+  .partnership-market,
+  .partnership-model
+):hover{
+  transform:translateY(-4px) !important;
+  border-color:var(--jn-card-hover) !important;
+  box-shadow:0 15px 34px rgba(54,31,21,.075) !important;
+}
+.public-page :is(.about-capability-card,.mfg-standard-card):hover{
+  transform:translateY(-4px) !important;
+  box-shadow:0 16px 36px rgba(0,0,0,.14) !important;
+}
+.public-page :is(
+  .product-card,
+  .about-value-card,
+  .oem-process-card,
+  .oem-scope-card,
+  .oem-moq-card,
+  .oem-custom-card,
+  .tech-platform-card,
+  .tech-validation-card,
+  .mfg-card,
+  .mfg-equipment-card,
+  .mfg-qc-card,
+  .subpage-card,
+  .partnership-card,
+  .partnership-market,
+  .partnership-model
+):hover h3{
+  color:#8f6a53 !important;
+}
+
+/* Images get a restrained zoom so the site feels responsive, not animated-heavy. */
+.public-page:not(.home-page) main figure{
+  overflow:hidden;
+}
+.public-page:not(.home-page) main figure img{
+  transition:transform .55s cubic-bezier(.2,.65,.2,1),filter .35s ease;
+}
+.public-page:not(.home-page) main figure:hover img{
+  transform:scale(1.015);
+}
+
+.public-page .button,
+.public-page .nav-cta{
+  transition:transform .2s ease,background-color .2s ease,border-color .2s ease,opacity .2s ease !important;
+}
+.public-page .button:hover,
+.public-page .nav-cta:hover{
+  transform:translateY(-2px);
+}
+
+/* ---------- header and footer share the same rail ---------- */
+.public-page .site-header .site-container,
+.global-footer .site-container{
+  width:min(100%,var(--jn-rail)) !important;
+}
+.public-page .brand{
+  width:198px !important;
+  height:34px !important;
+}
+.public-page .site-logo-img{
+  width:100% !important;
+  height:auto !important;
+}
+.public-page .site-nav{
+  font-size:14px !important;
+  font-weight:500 !important;
+}
+
+.global-footer-top{
+  gap:52px !important;
+}
+.global-footer-links a,
+.global-footer-intro{
+  transition:opacity .2s ease,transform .2s ease;
+}
+.global-footer-links a:hover{
+  transform:translateX(3px);
+  text-decoration:none !important;
+}
+
+/* ---------- About normalization ---------- */
+.public-page .about-story .about-narrow{
+  display:block;
+}
+.public-page .about-founder-grid{
+  grid-template-columns:minmax(330px,.72fr) minmax(0,1.28fr) !important;
+  gap:70px !important;
+}
+.public-page .about-values-grid{
+  gap:18px !important;
+}
+.public-page .about-capability-grid{
+  gap:18px !important;
+}
+
+/* ---------- dark CTAs can stay centered as intentional conversion moments ---------- */
+.public-page :is(.products-cta,.oem-cta,.tech-cta,.mfg-cta,.subpage-cta,.about-cta){
+  text-align:center;
+}
+.public-page :is(.products-cta,.oem-cta,.tech-cta,.mfg-cta,.subpage-cta,.about-cta) h2{
+  text-align:center !important;
+}
+
+@media(max-width:1024px){
+  :root{--jn-section-y:72px}
+  .public-page .brand{width:180px !important;height:32px !important}
+  .public-page:not(.home-page) .about-founder-grid{grid-template-columns:1fr !important;gap:42px !important}
+}
+
+@media(max-width:720px){
+  :root{--jn-section-y:64px}
+  .public-page .brand{width:158px !important;height:29px !important}
+  .public-page:not(.home-page) main h1{font-size:31px !important}
+  .public-page:not(.home-page) main h2,
+  .public-page:not(.home-page) :is(.product-section-title,.about-section-title,.oem-heading h2,.mfg-title,.tech-section-title){font-size:27px !important}
+  .public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero){min-height:250px !important;padding:50px 0 !important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .public-page *,
+  .public-page *::before,
+  .public-page *::after{
+    transition:none !important;
+    scroll-behavior:auto !important;
+  }
+}
