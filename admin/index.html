@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Admin — Inquiries | JNCOS TECH</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body class="admin-body">
+  <header class="admin-topbar">
+    <div class="site-container admin-topbar-inner">
+      <div class="admin-title"><a class="brand" href="../"><span class="brand-mark">JNCOS</span><span class="brand-sub">TECH</span></a><strong>Inquiry Admin</strong></div>
+      <div class="admin-top-actions"><a class="admin-btn" href="../Inquiry/">Open Inquiry Form</a><button class="admin-btn" type="button" data-export-csv>Export CSV</button></div>
+    </div>
+  </header>
+
+  <main class="admin-page">
+    <div class="site-container">
+      <section class="admin-overview" aria-label="Inquiry statistics">
+        <div class="admin-stat"><span>All inquiries</span><strong data-count="All">0</strong></div>
+        <div class="admin-stat"><span>New</span><strong data-count="New">0</strong></div>
+        <div class="admin-stat"><span>Reviewing</span><strong data-count="Reviewing">0</strong></div>
+        <div class="admin-stat"><span>Replied</span><strong data-count="Replied">0</strong></div>
+        <div class="admin-stat"><span>Closed</span><strong data-count="Closed">0</strong></div>
+      </section>
+
+      <section class="admin-panel">
+        <aside class="admin-list-pane">
+          <div class="admin-tools"><input type="search" placeholder="Search company, contact, email…" data-admin-search><select data-admin-filter-status><option>All</option><option>New</option><option>Reviewing</option><option>Replied</option><option>Closed</option></select></div>
+          <div class="admin-inquiry-list" data-admin-list></div>
+          <div class="admin-empty" data-admin-empty hidden>No inquiries found.</div>
+        </aside>
+        <article class="admin-detail-pane" data-admin-detail></article>
+      </section>
+      <div class="admin-dev-note"><strong>Development mode:</strong> inquiries are currently stored in this browser only. The admin interface is intentionally accessible without login during development. Before launch, connect the store to Firebase and add administrator authentication so customer inquiry data is not publicly readable.</div>
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+  <script src="../assets/js/inquiry-store.js"></script>
+  <script src="../assets/js/admin.js"></script>
+</body>
+</html>
