@@ -38,6 +38,8 @@
     }
   };
 
+  const logoPath = withBase('/assets/logo/jncos-logo.svg');
+
   const renderHeader = () => {
     if (isAdmin) return;
     const header = document.querySelector('.site-header');
@@ -45,8 +47,8 @@
     header.className = 'site-header';
     header.innerHTML = `
       <div class="site-container header-inner">
-        <a class="brand" href="${withBase('/')}" aria-label="JNCOS TECH home">
-          <span class="brand-mark">JNCOS</span><span class="brand-sub">TECH</span>
+        <a class="brand" href="${withBase('/')}" aria-label="JN COS TECH home">
+          <img class="site-logo-img" src="${logoPath}" alt="JN COS TECH Pvt. Ltd.">
         </a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
           <span></span><span></span><span class="sr-only">Open menu</span>
@@ -69,7 +71,7 @@
       <div class="site-container">
         <div class="global-footer-top">
           <div>
-            <a class="global-footer-brand" href="${withBase('/')}"><strong>JNCOS</strong><span>TECH</span></a>
+            <a class="global-footer-brand" href="${withBase('/')}" aria-label="JN COS TECH home"><img class="global-footer-logo" src="${logoPath}" alt="JN COS TECH Pvt. Ltd. — Add Science to Beauty"></a>
             <p class="global-footer-intro">Science-driven cosmetic development, Korean skincare formulation expertise, bio-active technology and scalable OEM / ODM manufacturing for global beauty brands.</p>
           </div>
           <div>
