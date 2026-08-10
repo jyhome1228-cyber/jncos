@@ -9,6 +9,16 @@
   const success = document.querySelector('[data-inquiry-success]');
   let current = 0;
 
+  const params = new URLSearchParams(window.location.search);
+  ['companyName','contactName','email','additionalNotes','source'].forEach((name) => {
+    const field = form.elements[name];
+    const incoming = params.get(name);
+    if (field && incoming && !field.value) field.value = incoming;
+  });
+  if (!form.elements.source?.value && (params.get('companyName') || params.get('contactName') || params.get('email') || params.get('additionalNotes'))) {
+    form.elements.source.value = 'Contact quick inquiry';
+  }
+
   const value = (name) => form.elements[name]?.value?.trim?.() || '';
   const checked = (name) => [...form.querySelectorAll(`[name="${name}"]:checked`)].map((el) => el.value);
 
