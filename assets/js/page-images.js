@@ -37,8 +37,11 @@
   };
 
   const normalizePath = (path) => {
-    if (!path || path === '/index.html') return '/';
-    const clean = path.replace(/index\.html$/i, '');
+    const basePath = window.JNCOS_BASE_PATH || '';
+    let clean = path || '/';
+    if (basePath && clean.startsWith(basePath)) clean = clean.slice(basePath.length) || '/';
+    if (clean === '/index.html') return '/';
+    clean = clean.replace(/index\.html$/i, '');
     return clean.endsWith('/') ? clean : `${clean}/`;
   };
 
@@ -70,11 +73,5 @@
 
   inner.appendChild(list);
   section.appendChild(inner);
-
-  const footer = document.querySelector('.site-footer');
-  if (footer && main.parentNode === footer.parentNode) {
-    main.appendChild(section);
-  } else {
-    main.appendChild(section);
-  }
+  main.appendChild(section);
 })();
