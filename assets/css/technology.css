@@ -1,0 +1,59 @@
+/* JN COS TECH — Technology & R&D */
+.technology-page{background:#fff}
+.tech-philosophy{padding:82px 0 88px;background:#fff}
+.tech-philosophy-grid{display:grid;grid-template-columns:minmax(280px,.75fr) minmax(0,1fr);gap:54px;align-items:center;width:min(100%,900px);margin:0 auto}
+.tech-philosophy figure{margin:0;overflow:hidden;background:#eee8e3}
+.tech-philosophy figure img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;filter:grayscale(1)}
+.tech-philosophy h2{margin:0 0 18px;font-size:27px!important}
+.tech-philosophy p{margin:0 0 16px;color:#73645d;font-size:13px;line-height:1.85}
+
+.tech-platforms{padding:84px 0 94px;background:#f2ece6}
+.tech-section-title{margin:0 0 36px;font-size:28px!important}
+.tech-platform-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:min(100%,900px)}
+.tech-platform-card{min-height:120px;padding:22px 24px;background:#fff;border:1px solid #d9c8bb;transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease}
+.tech-platform-card:hover{transform:translateY(-4px);border-color:#b9957f;box-shadow:0 14px 34px rgba(54,31,21,.07)}
+.tech-platform-card h3{margin:0 0 10px;font-size:15px!important;font-weight:720;transition:color .2s ease}
+.tech-platform-card:hover h3{color:#8f6a53}
+.tech-platform-card p{margin:0;color:#786960;font-size:11.5px;line-height:1.75}
+
+.tech-ingredients{padding:82px 0 90px;background:#fff}
+.tech-chip-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;width:min(100%,900px)}
+.tech-chip{display:flex;align-items:center;justify-content:center;min-height:54px;padding:10px 14px;background:#f2ece6;border:1px solid #d9c8bb;color:#38231b;text-align:center;font-size:11.5px;font-weight:650;transition:transform .2s ease,border-color .2s ease,background .2s ease}
+.tech-chip:hover{transform:translateY(-3px);border-color:#b9957f;background:#eadfd7}
+
+.tech-optimization{padding:82px 0 92px;background:#f2ece6}
+.tech-optimization-inner{width:min(100%,900px)}
+.tech-optimization h2{margin:0 0 14px;font-size:27px!important}
+.tech-optimization p{max-width:780px;margin:0 0 30px;color:#73645d;font-size:13px;line-height:1.8}
+.tech-optimization figure{margin:0;overflow:hidden;background:#ddd4cd}
+.tech-optimization figure img{display:block;width:100%;aspect-ratio:16/5.2;object-fit:cover;filter:grayscale(1)}
+
+.tech-validation{padding:86px 0 96px;background:#f2ece6}
+.tech-validation-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:min(100%,900px)}
+.tech-validation-card{min-height:145px;padding:22px 22px 24px;background:#fff;border:1px solid #d9c8bb;transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease}
+.tech-validation-card:hover{transform:translateY(-4px);border-color:#b9957f;box-shadow:0 14px 34px rgba(54,31,21,.07)}
+.tech-validation-card h3{margin:0 0 10px;font-size:14px!important;font-weight:720;transition:color .2s ease}
+.tech-validation-card:hover h3{color:#8f6a53}
+.tech-validation-card p{margin:0;color:#786960;font-size:11.5px;line-height:1.75}
+
+.tech-cta{padding:84px 0 92px;background:#2f1b13;color:#fff;text-align:center}
+.tech-cta h2{margin:0;color:#fff;font-size:30px!important}
+.tech-cta p{max-width:720px;margin:16px auto 0;color:#c9bbb3;font-size:13px;line-height:1.8}
+.tech-cta .hero-actions{justify-content:center;margin-top:28px}
+.tech-cta .button-primary{background:#fff;color:#2f1b13}
+.tech-cta .button-secondary{border-color:#9e887c;background:transparent;color:#fff}
+
+@media(max-width:900px){
+ .tech-philosophy-grid{grid-template-columns:1fr;gap:32px;width:100%}
+ .tech-platform-grid,.tech-validation-grid{width:100%}
+ .tech-chip-grid{width:100%;grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:720px){
+ .tech-philosophy,.tech-platforms,.tech-ingredients,.tech-optimization,.tech-validation{padding:64px 0 70px}
+ .tech-platform-grid,.tech-validation-grid{grid-template-columns:1fr}
+ .tech-chip-grid{grid-template-columns:repeat(2,1fr)}
+ .tech-platform-card,.tech-validation-card{min-height:auto}
+ .tech-cta{padding:68px 0 74px}
+ .tech-cta .hero-actions{width:100%}
+ .tech-cta .button{width:100%}
+}
