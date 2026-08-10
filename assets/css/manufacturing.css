@@ -1,0 +1,74 @@
+/* JN COS TECH — Manufacturing */
+.manufacturing-page{background:#fff}
+.manufacturing-page .subpage-hero{background:#ece6e1}
+.manufacturing-page .subpage-hero .eyebrow{display:none}
+.manufacturing-page .subpage-hero h1{margin:0 0 14px!important;font-size:clamp(28px,2.5vw,38px)!important}
+.manufacturing-page .subpage-lead{max-width:690px!important}
+
+.mfg-section{padding:82px 0}
+.mfg-section.alt{background:#f2ece6}
+.mfg-section.dark{background:#2f1b13;color:#fff}
+.mfg-inner{width:min(100%,900px);margin:0 auto}
+.mfg-title{margin:0 0 28px;font-size:27px!important;font-weight:720;letter-spacing:-.035em}
+.mfg-lead{max-width:760px;margin:0 0 30px;color:#75665f;font-size:13px;line-height:1.8}
+
+.mfg-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.mfg-card{padding:24px 26px 26px;border:1px solid #d9c8bb;background:#f2ece6;min-height:150px;transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease,background .24s ease}
+.mfg-section.alt .mfg-card{background:#fff}
+.mfg-card:hover{transform:translateY(-4px);border-color:#b9957f;box-shadow:0 14px 34px rgba(54,31,21,.07)}
+.mfg-card h3{margin:0 0 12px;font-size:15px!important;font-weight:720;letter-spacing:-.025em}
+.mfg-card p{margin:0;color:#77675f;font-size:11.5px;line-height:1.8}
+
+.mfg-wide-image{margin:18px 0 0;overflow:hidden;background:#eee8e3}
+.mfg-wide-image img{display:block;width:100%;height:auto;aspect-ratio:16/4.7;object-fit:cover;filter:grayscale(1)}
+.mfg-collage{margin:0 auto;overflow:hidden;background:#ebe5df;width:min(100%,900px)}
+.mfg-collage img{display:block;width:100%;height:auto;filter:grayscale(1)}
+
+.mfg-equipment-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 16px}
+.mfg-equipment-card{padding:20px 22px;background:#f2ece6;border:1px solid #d9c8bb;min-height:122px;transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease,background .24s ease}
+.mfg-equipment-card:hover{transform:translateY(-4px);border-color:#b9957f;box-shadow:0 14px 34px rgba(54,31,21,.07);background:#f7f2ee}
+.mfg-equipment-card h3{margin:0 0 10px;font-size:14px!important;font-weight:720}
+.mfg-equipment-card p{margin:0;color:#77675f;font-size:11px;line-height:1.72}
+
+.mfg-support-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mfg-support-item{display:flex;align-items:center;justify-content:center;min-height:52px;padding:12px 14px;background:#fff;border:1px solid #d9c8bb;text-align:center;font-size:11.5px;font-weight:650;transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
+.mfg-support-item:hover{transform:translateY(-3px);border-color:#b9957f;box-shadow:0 10px 24px rgba(54,31,21,.06)}
+
+.mfg-qc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.mfg-qc-card{padding:22px 22px 24px;background:#f2ece6;border:1px solid #d9c8bb;min-height:165px;transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease}
+.mfg-qc-card:hover{transform:translateY(-4px);border-color:#b9957f;box-shadow:0 14px 34px rgba(54,31,21,.07)}
+.mfg-qc-card h3{margin:0 0 11px;font-size:13.5px!important;font-weight:720}
+.mfg-qc-card p{margin:0;color:#77675f;font-size:10.8px;line-height:1.72}
+
+.mfg-section.dark .mfg-inner{width:min(100%,930px)}
+.mfg-section.dark .mfg-title{color:#fff}
+.mfg-section.dark .mfg-lead{color:#c6b7af}
+.mfg-standard-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.mfg-standard-card{padding:24px 22px 26px;border:1px solid rgba(255,255,255,.2);min-height:148px;transition:transform .24s ease,border-color .24s ease,background .24s ease}
+.mfg-standard-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.42);background:rgba(255,255,255,.04)}
+.mfg-standard-card h3{margin:0 0 12px;color:#fff;font-size:14px!important}
+.mfg-standard-card p{margin:0;color:#c4b5ad;font-size:11px;line-height:1.75}
+
+.mfg-cta{padding:78px 0;background:#2f1b13;color:#fff;text-align:center;border-top:1px solid rgba(255,255,255,.08)}
+.mfg-cta h2{margin:0;color:#fff;font-size:30px!important}
+.mfg-cta p{max-width:680px;margin:17px auto 0;color:#c4b5ad;font-size:12.5px;line-height:1.8}
+.mfg-cta .hero-actions{justify-content:center;margin-top:28px}
+.mfg-cta .button-primary{background:transparent;border-color:#a99387;color:#fff}
+.mfg-cta .button-secondary{background:transparent;border-color:#a99387;color:#fff}
+
+@media(max-width:900px){
+ .mfg-inner,.mfg-collage{width:100%}
+ .mfg-support-grid{grid-template-columns:repeat(2,1fr)}
+ .mfg-qc-grid,.mfg-standard-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:720px){
+ .mfg-section{padding:66px 0}
+ .mfg-two,.mfg-equipment-grid,.mfg-qc-grid,.mfg-standard-grid{grid-template-columns:1fr}
+ .mfg-support-grid{grid-template-columns:1fr 1fr}
+ .mfg-title{font-size:24px!important}
+ .mfg-wide-image img{aspect-ratio:16/7}
+ .mfg-card,.mfg-equipment-card,.mfg-qc-card,.mfg-standard-card{min-height:auto}
+ .mfg-cta{padding:66px 0}
+ .mfg-cta .hero-actions{flex-direction:column}
+ .mfg-cta .button{width:100%}
+}
