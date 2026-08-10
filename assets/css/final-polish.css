@@ -1,10 +1,11 @@
 body.public-page{--header-h:98px}
 .public-page .site-header{height:98px!important;min-height:98px!important}
-.public-page .header-inner{height:100%!important;align-items:flex-end!important;padding-top:18px!important;padding-bottom:18px!important}
-.public-page .brand{width:238px!important;height:44px!important;align-items:flex-end!important}
+.public-page .header-inner{height:100%!important;align-items:center!important;padding-top:0!important;padding-bottom:0!important}
+.public-page .brand{width:238px!important;height:44px!important;align-items:center!important;display:flex!important}
 .public-page .site-logo-img{display:block;width:100%!important;height:auto!important}
-.public-page .site-nav{align-items:center!important;min-height:42px;font-size:14px!important;font-weight:500!important}
-.public-page .site-nav>a:not(.nav-cta){padding:10px 0 8px!important}
+.public-page .site-nav{align-items:center!important;min-height:44px;font-size:14px!important;font-weight:500!important}
+.public-page .site-nav>a:not(.nav-cta){display:flex!important;align-items:center!important;padding:0!important;min-height:44px!important}
+.public-page .nav-cta{display:flex!important;align-items:center!important;justify-content:center!important;min-height:44px!important}
 
 /* Taller editorial hero used consistently across sub pages */
 .public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero){
@@ -31,7 +32,7 @@ body.public-page{--header-h:98px}
   .public-page .header-inner{align-items:center!important;padding-top:0!important;padding-bottom:0!important}
   .public-page .brand{width:182px!important;height:34px!important;align-items:center!important}
   .public-page .site-nav{position:fixed!important;inset:76px 0 0!important;min-height:0;align-items:stretch!important;padding-top:20px!important;font-size:18px!important}
-  .public-page .site-nav>a,.public-page .site-nav .nav-cta{justify-content:flex-start;min-height:60px!important;padding:0!important;font-size:18px!important}
+  .public-page .site-nav>a,.public-page .site-nav .nav-cta{justify-content:flex-start!important;align-items:center!important;min-height:60px!important;padding:0!important;font-size:18px!important}
   .public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero){min-height:360px!important;padding-top:104px!important;padding-bottom:48px!important}
 }
 @media(max-width:720px){
