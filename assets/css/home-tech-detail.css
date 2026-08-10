@@ -1,0 +1,14 @@
+.home-technology .tech-grid a{cursor:pointer}.home-technology .tech-grid a.is-active{background:#2f1b13!important;border-color:#2f1b13!important;color:#fff!important;transform:translateY(-3px)}
+.home-tech-detail{display:grid;grid-template-columns:.78fr 1.22fr;margin-top:18px;border:1px solid #d9c8bb;background:#fff}
+.home-tech-detail-head{padding:30px 30px 28px;background:#f2ece6;border-right:1px solid #d9c8bb}
+.home-tech-detail-head>span{display:block;margin-bottom:10px;color:#9a745d;font-size:9px;font-weight:760;letter-spacing:.15em}
+.home-tech-detail-head h3{margin:0 0 14px;font-size:23px!important;line-height:1.24;font-weight:720;color:#2f1b13}
+.home-tech-detail-head p{margin:0;color:#76675f;font-size:12.5px;line-height:1.8}
+.home-tech-detail-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.home-tech-detail-grid>div{padding:28px 24px;border-right:1px solid #e2d7cf}
+.home-tech-detail-grid>div:last-child{border-right:0}
+.home-tech-detail-grid span{display:block;margin-bottom:12px;color:#9a745d;font-size:8.5px;font-weight:760;letter-spacing:.13em}
+.home-tech-detail-grid p{margin:0;color:#65574f;font-size:12px;line-height:1.8}
+@media(max-width:1050px){.home-tech-detail{grid-template-columns:1fr}.home-tech-detail-head{border-right:0;border-bottom:1px solid #d9c8bb}}
+@media(max-width:800px){.home-tech-detail-grid{grid-template-columns:1fr}.home-tech-detail-grid>div{border-right:0;border-bottom:1px solid #e2d7cf}.home-tech-detail-grid>div:last-child{border-bottom:0}}
+@media(max-width:720px){.home-tech-detail-head{padding:24px 22px}.home-tech-detail-grid>div{padding:22px}.home-tech-detail-head h3{font-size:20px!important}}
