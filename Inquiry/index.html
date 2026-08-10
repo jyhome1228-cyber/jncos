@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Project Inquiry | JNCOS TECH Cosmetic OEM ODM</title>
-  <meta name="description" content="Submit a detailed cosmetic OEM/ODM project inquiry to JNCOS TECH, including product category, formulation, packaging, target market and launch requirements.">
+  <title>Project Inquiry | JN COS TECH Cosmetic OEM ODM</title>
+  <meta name="description" content="Submit a detailed cosmetic OEM/ODM project inquiry to JN COS TECH, including company, product category, formulation, packaging, market, quantity and launch requirements.">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://jncostech.com/Inquiry/">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
@@ -13,118 +13,122 @@
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header">
-    <div class="site-container header-inner">
-      <a class="brand" href="../"><span class="brand-mark">JNCOS</span><span class="brand-sub">TECH</span></a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle><span></span><span></span><span class="sr-only">Open menu</span></button>
-      <nav class="site-nav" id="site-nav" data-nav>
-        <a href="../About/">About</a><a href="../OEMODM/">OEM / ODM</a><a href="../Technology/">Technology &amp; R&amp;D</a><a href="../Manufacturing/">Manufacturing</a><a href="../Partnership/">Partnership</a><a class="nav-cta" href="./">Inquiry</a>
-      </nav>
-    </div>
-  </header>
+  <header class="site-header"></header>
 
-  <main id="main">
+  <main id="main" class="inquiry-page">
     <section class="inquiry-hero">
-      <div class="site-container inquiry-hero-grid">
-        <div>
-          <p class="eyebrow">PROJECT INQUIRY</p>
-          <h1>Tell us exactly what you want to create.</h1>
-          <p class="inquiry-lead">Share your product direction, target market, formulation preferences, packaging needs and launch plan. The more detail you provide, the more precisely our team can review your project.</p>
-        </div>
-        <div class="inquiry-meta">
-          <div><span>01</span><strong>Product Direction</strong></div><div><span>02</span><strong>Formulation</strong></div><div><span>03</span><strong>Packaging</strong></div><div><span>04</span><strong>Project Brief</strong></div>
-        </div>
+      <div class="site-container">
+        <p class="eyebrow">PROJECT INQUIRY</p>
+        <h1>Build Your Cosmetic Project</h1>
+        <p class="inquiry-lead">Tell us about your company, product requirements, development scope, and production needs. We will organize your request and recommend the most suitable collaboration model for your project.</p>
       </div>
     </section>
 
     <section class="inquiry-shell">
-      <div class="site-container inquiry-layout">
+      <div class="site-container">
+        <div class="inquiry-progress-head">
+          <span data-current-step-label>CONTACT INFORMATION</span>
+          <strong data-current-step-count>01 / 08</strong>
+        </div>
+        <div class="inquiry-progress-track"><div class="inquiry-progress-bar" data-progress-bar></div></div>
+
         <form class="inquiry-card" data-inquiry-form novalidate>
-          <div class="inquiry-progress-track"><div class="inquiry-progress-bar" data-progress-bar></div></div>
-          <div class="step-nav" aria-label="Inquiry progress">
-            <button type="button" data-step-indicator data-step-number="01">01 Contact</button>
-            <button type="button" data-step-indicator data-step-number="02">02 Project</button>
-            <button type="button" data-step-indicator data-step-number="03">03 Formula</button>
-            <button type="button" data-step-indicator data-step-number="04">04 Packaging</button>
-            <button type="button" data-step-indicator data-step-number="05">05 Brief</button>
-          </div>
-
-          <section class="form-step" data-step>
-            <div class="form-step-head"><span>STEP 01 / 05</span><h2>Company & contact</h2><p>Let us know who we will be working with and the best way to reach you.</p></div>
+          <section class="form-step" data-step data-step-label="CONTACT INFORMATION">
+            <div class="form-step-head"><span>STEP 01 / 08</span><h2>Tell us about you and your company.</h2><p>Please enter the basic information required for our team to review and respond to your project inquiry.</p></div>
             <div class="form-grid">
+              <div class="field"><label for="contactName">Name <b class="required">*</b></label><input id="contactName" name="contactName" required autocomplete="name" placeholder="Your full name"></div>
               <div class="field"><label for="companyName">Company / Brand <b class="required">*</b></label><input id="companyName" name="companyName" required autocomplete="organization" placeholder="Company or brand name"></div>
-              <div class="field"><label for="contactName">Contact Person <b class="required">*</b></label><input id="contactName" name="contactName" required autocomplete="name" placeholder="Full name"></div>
+              <div class="field"><label for="position">Position</label><input id="position" name="position" placeholder="Your position"></div>
+              <div class="field"><label for="companyType">Company Type</label><select id="companyType" name="companyType"><option value="">Select company type</option><option>Beauty Brand</option><option>Distributor / Importer</option><option>Retailer</option><option>Agency / Consultant</option><option>Startup / Founder</option><option>Manufacturer / Industry Partner</option><option>Other</option></select></div>
               <div class="field"><label for="email">Email <b class="required">*</b></label><input id="email" name="email" type="email" required autocomplete="email" placeholder="name@company.com"></div>
-              <div class="field"><label for="phone">Phone / WhatsApp</label><input id="phone" name="phone" autocomplete="tel" placeholder="+00 000 000 0000"></div>
-              <div class="field"><label for="country">Country / Region <b class="required">*</b></label><input id="country" name="country" required autocomplete="country-name" placeholder="Country"></div>
-              <div class="field"><label for="website">Website / Social</label><input id="website" name="website" type="url" placeholder="https://"></div>
-              <div class="field field-full"><label for="contactMethod">Preferred Contact Method</label><select id="contactMethod" name="contactMethod"><option value="Email">Email</option><option value="WhatsApp">WhatsApp</option><option value="Phone call">Phone call</option><option value="Video meeting">Video meeting</option></select></div>
+              <div class="field"><label for="phone">Phone / WhatsApp <b class="required">*</b></label><input id="phone" name="phone" required autocomplete="tel" placeholder="+00 00000 00000"></div>
+              <div class="field"><label for="country">Country</label><input id="country" name="country" autocomplete="country-name" placeholder="Country"></div>
+              <div class="field"><label for="website">Website / Social Media</label><input id="website" name="website" type="url" placeholder="Website or social media URL"></div>
+              <div class="field"><label for="contactMethod">Preferred Contact Method</label><select id="contactMethod" name="contactMethod"><option value="">Select contact method</option><option>Email</option><option>WhatsApp</option><option>Phone call</option><option>Video meeting</option></select></div>
+              <div class="field"><label for="contactTime">Preferred Contact Time</label><input id="contactTime" name="contactTime" placeholder="Example: 10:00–16:00 IST"></div>
             </div>
-            <div class="form-actions"><span></span><button class="button button-primary" type="button" data-next>Continue</button></div>
+            <div class="form-actions"><button class="button button-secondary" type="button" disabled>Previous</button><button class="button button-primary" type="button" data-next>Next</button></div>
           </section>
 
-          <section class="form-step" data-step hidden>
-            <div class="form-step-head"><span>STEP 02 / 05</span><h2>Project direction</h2><p>Define the development model, product category, market and expected production scale.</p></div>
+          <section class="form-step" data-step data-step-label="PROJECT MODEL" hidden>
+            <div class="form-step-head"><span>STEP 02 / 08</span><h2>Choose the collaboration model.</h2><p>Select the route that best matches your current project stage. If you are unsure, our team can recommend the most suitable option.</p></div>
             <div class="form-grid">
-              <div class="field field-full"><label for="serviceType">Service Type <b class="required">*</b></label><select id="serviceType" name="serviceType" required><option value="">Select a service</option><option>OEM — Manufacture my existing formula/spec</option><option>ODM — Develop a new product with JNCOS TECH</option><option>Private Label — Fast-track existing solution</option><option>Formula Development / R&D</option><option>Manufacturing Only</option><option>Not sure — Recommend the best route</option></select></div>
-              <div class="field field-full"><span class="field-label">Product Categories</span><div class="choice-grid"><label class="choice"><input type="checkbox" name="productCategories" value="Serum / Ampoule"><span>Serum / Ampoule</span></label><label class="choice"><input type="checkbox" name="productCategories" value="Cream / Lotion"><span>Cream / Lotion</span></label><label class="choice"><input type="checkbox" name="productCategories" value="Toner / Essence"><span>Toner / Essence</span></label><label class="choice"><input type="checkbox" name="productCategories" value="Cleanser"><span>Cleanser</span></label><label class="choice"><input type="checkbox" name="productCategories" value="Mask / Hydrogel"><span>Mask / Hydrogel</span></label><label class="choice"><input type="checkbox" name="productCategories" value="Suncare"><span>Suncare</span></label><label class="choice"><input type="checkbox" name="productCategories" value="Body Care"><span>Body Care</span></label><label class="choice"><input type="checkbox" name="productCategories" value="Hair / Scalp"><span>Hair / Scalp</span></label><label class="choice"><input type="checkbox" name="productCategories" value="Other"><span>Other</span></label></div></div>
+              <div class="field field-full"><label for="serviceType">Service Type <b class="required">*</b></label><select id="serviceType" name="serviceType" required><option value="">Select a service</option><option>OEM — Manufacture my existing formula/spec</option><option>ODM — Develop a new product with JN COS TECH</option><option>Private Label — Fast-track an existing solution</option><option>Formula Development / R&amp;D</option><option>Manufacturing Only</option><option>Not sure — Recommend the best route</option></select></div>
               <div class="field"><label for="projectStage">Current Project Stage</label><select id="projectStage" name="projectStage"><option>Idea / Early concept</option><option>Benchmark products selected</option><option>Formula already developed</option><option>Packaging already selected</option><option>Ready for manufacturing</option></select></div>
-              <div class="field"><label for="initialQuantity">Expected Initial Quantity</label><select id="initialQuantity" name="initialQuantity"><option value="">Not decided yet</option><option>Under 1,000 units</option><option>1,000–3,000 units</option><option>3,000–5,000 units</option><option>5,000–10,000 units</option><option>10,000+ units</option></select></div>
-              <div class="field"><label for="targetMarkets">Target Markets / Countries</label><input id="targetMarkets" name="targetMarkets" placeholder="e.g. India, UAE, US, EU"></div>
-              <div class="field"><label for="launchTiming">Target Launch Timing</label><select id="launchTiming" name="launchTiming"><option>Not decided yet</option><option>Within 3 months</option><option>3–6 months</option><option>6–12 months</option><option>12+ months</option></select></div>
+              <div class="field"><label for="source">How did you find us?</label><select id="source" name="source"><option value="">Select</option><option>Google Search</option><option>Referral</option><option>Exhibition / Event</option><option>Social Media</option><option>Existing Business Contact</option><option>Other</option></select></div>
             </div>
-            <div class="form-actions"><button class="button button-secondary" type="button" data-prev>Back</button><button class="button button-primary" type="button" data-next>Continue</button></div>
+            <div class="form-actions"><button class="button button-secondary" type="button" data-prev>Previous</button><button class="button button-primary" type="button" data-next>Next</button></div>
           </section>
 
-          <section class="form-step" data-step hidden>
-            <div class="form-step-head"><span>STEP 03 / 05</span><h2>Formulation preferences</h2><p>Tell us how the product should feel, perform and communicate its benefits.</p></div>
+          <section class="form-step" data-step data-step-label="PRODUCT SCOPE" hidden>
+            <div class="form-step-head"><span>STEP 03 / 08</span><h2>What do you want to develop?</h2><p>Select one or more product categories and share any reference product or benchmark you already have.</p></div>
+            <div class="form-grid">
+              <div class="field field-full"><span class="field-label">Product Categories</span><div class="choice-grid"><label class="choice"><input type="checkbox" name="productCategories" value="Serum / Ampoule"><span>Serum / Ampoule</span></label><label class="choice"><input type="checkbox" name="productCategories" value="Cream / Lotion"><span>Cream / Lotion</span></label><label class="choice"><input type="checkbox" name="productCategories" value="Toner / Essence"><span>Toner / Essence</span></label><label class="choice"><input type="checkbox" name="productCategories" value="Cleanser"><span>Cleanser</span></label><label class="choice"><input type="checkbox" name="productCategories" value="Mask / Hydrogel"><span>Mask / Hydrogel</span></label><label class="choice"><input type="checkbox" name="productCategories" value="Suncare"><span>Suncare</span></label><label class="choice"><input type="checkbox" name="productCategories" value="Body Care"><span>Body Care</span></label><label class="choice"><input type="checkbox" name="productCategories" value="Hair / Scalp"><span>Hair / Scalp</span></label><label class="choice"><input type="checkbox" name="productCategories" value="Other"><span>Other</span></label></div></div>
+              <div class="field field-full"><label for="referenceProducts">Reference Product / Benchmark / URL</label><textarea id="referenceProducts" name="referenceProducts" placeholder="Product name, brand, URL or benchmark details"></textarea></div>
+            </div>
+            <div class="form-actions"><button class="button button-secondary" type="button" data-prev>Previous</button><button class="button button-primary" type="button" data-next>Next</button></div>
+          </section>
+
+          <section class="form-step" data-step data-step-label="FORMULATION GOALS" hidden>
+            <div class="form-step-head"><span>STEP 04 / 08</span><h2>Define the product experience.</h2><p>Tell us the key consumer concerns and the texture or finish you want the final product to deliver.</p></div>
             <div class="form-grid">
               <div class="field field-full"><span class="field-label">Primary Skin / Product Concerns</span><div class="choice-grid"><label class="choice"><input type="checkbox" name="skinConcerns" value="Hydration"><span>Hydration</span></label><label class="choice"><input type="checkbox" name="skinConcerns" value="Barrier Repair"><span>Barrier Repair</span></label><label class="choice"><input type="checkbox" name="skinConcerns" value="Brightening"><span>Brightening</span></label><label class="choice"><input type="checkbox" name="skinConcerns" value="Anti-aging"><span>Anti-aging</span></label><label class="choice"><input type="checkbox" name="skinConcerns" value="Acne / Sebum"><span>Acne / Sebum</span></label><label class="choice"><input type="checkbox" name="skinConcerns" value="Sensitive Skin"><span>Sensitive Skin</span></label><label class="choice"><input type="checkbox" name="skinConcerns" value="Firming"><span>Firming</span></label><label class="choice"><input type="checkbox" name="skinConcerns" value="Soothing"><span>Soothing</span></label><label class="choice"><input type="checkbox" name="skinConcerns" value="Other"><span>Other</span></label></div></div>
               <div class="field field-full"><span class="field-label">Preferred Texture / Finish</span><div class="choice-grid"><label class="choice"><input type="checkbox" name="textures" value="Lightweight / Watery"><span>Lightweight / Watery</span></label><label class="choice"><input type="checkbox" name="textures" value="Gel"><span>Gel</span></label><label class="choice"><input type="checkbox" name="textures" value="Rich / Nourishing"><span>Rich / Nourishing</span></label><label class="choice"><input type="checkbox" name="textures" value="Milky"><span>Milky</span></label><label class="choice"><input type="checkbox" name="textures" value="Non-sticky"><span>Non-sticky</span></label><label class="choice"><input type="checkbox" name="textures" value="Matte / Soft Finish"><span>Matte / Soft Finish</span></label></div></div>
-              <div class="field field-full"><label for="heroIngredients">Hero Ingredients / Ingredients to Include or Avoid</label><textarea id="heroIngredients" name="heroIngredients" placeholder="e.g. peptides, ceramides, niacinamide, fermented ingredients, fragrance-free, avoid specific allergens…"></textarea></div>
-              <div class="field field-full"><span class="field-label">Desired Claims / Positioning</span><div class="choice-grid"><label class="choice"><input type="checkbox" name="claims" value="Vegan"><span>Vegan</span></label><label class="choice"><input type="checkbox" name="claims" value="Cruelty-free"><span>Cruelty-free</span></label><label class="choice"><input type="checkbox" name="claims" value="Fragrance-free"><span>Fragrance-free</span></label><label class="choice"><input type="checkbox" name="claims" value="Clean Beauty"><span>Clean Beauty</span></label><label class="choice"><input type="checkbox" name="claims" value="Dermatology Tested"><span>Dermatology Tested</span></label><label class="choice"><input type="checkbox" name="claims" value="Sensitive Skin"><span>Sensitive Skin</span></label></div></div>
-              <div class="field"><label for="fragrance">Fragrance Preference</label><select id="fragrance" name="fragrance"><option>Open to recommendation</option><option>Fragrance-free</option><option>Light fragrance</option><option>Specific fragrance direction</option></select></div>
-              <div class="field"><label for="referenceProducts">Reference Product / Brand</label><input id="referenceProducts" name="referenceProducts" placeholder="Product name, URL or benchmark"></div>
             </div>
-            <div class="form-actions"><button class="button button-secondary" type="button" data-prev>Back</button><button class="button button-primary" type="button" data-next>Continue</button></div>
+            <div class="form-actions"><button class="button button-secondary" type="button" data-prev>Previous</button><button class="button button-primary" type="button" data-next>Next</button></div>
           </section>
 
-          <section class="form-step" data-step hidden>
-            <div class="form-step-head"><span>STEP 04 / 05</span><h2>Packaging & compliance</h2><p>Let us know how much support you need beyond formulation and manufacturing.</p></div>
+          <section class="form-step" data-step data-step-label="INGREDIENTS & CLAIMS" hidden>
+            <div class="form-step-head"><span>STEP 05 / 08</span><h2>Set ingredients and claim direction.</h2><p>Share desired hero ingredients, ingredients to avoid, fragrance preference and relevant product positioning.</p></div>
+            <div class="form-grid">
+              <div class="field field-full"><label for="heroIngredients">Hero Ingredients / Ingredients to Include or Avoid</label><textarea id="heroIngredients" name="heroIngredients" placeholder="e.g. peptides, ceramides, niacinamide, fermented ingredients, fragrance-free, avoid specific allergens…"></textarea></div>
+              <div class="field field-full"><span class="field-label">Desired Claims / Positioning</span><div class="choice-grid"><label class="choice"><input type="checkbox" name="claims" value="Vegan"><span>Vegan</span></label><label class="choice"><input type="checkbox" name="claims" value="Cruelty-free"><span>Cruelty-free</span></label><label class="choice"><input type="checkbox" name="claims" value="Fragrance-free"><span>Fragrance-free</span></label><label class="choice"><input type="checkbox" name="claims" value="Clean Beauty"><span>Clean Beauty</span></label><label class="choice"><input type="checkbox" name="claims" value="Dermatology Tested"><span>Dermatology Tested</span></label><label class="choice"><input type="checkbox" name="claims" value="Sensitive Skin"><span>Sensitive Skin</span></label></div></div>
+              <div class="field field-full"><label for="fragrance">Fragrance Preference</label><select id="fragrance" name="fragrance"><option>Open to recommendation</option><option>Fragrance-free</option><option>Light fragrance</option><option>Specific fragrance direction</option></select></div>
+            </div>
+            <div class="form-actions"><button class="button button-secondary" type="button" data-prev>Previous</button><button class="button button-primary" type="button" data-next>Next</button></div>
+          </section>
+
+          <section class="form-step" data-step data-step-label="PACKAGING" hidden>
+            <div class="form-step-head"><span>STEP 06 / 08</span><h2>Define packaging support.</h2><p>Select the packaging formats you are considering and tell us how much sourcing or design support you need.</p></div>
             <div class="form-grid">
               <div class="field field-full"><label for="packagingSupport">Packaging Support</label><select id="packagingSupport" name="packagingSupport"><option>Need full packaging sourcing support</option><option>Need recommendations only</option><option>Packaging supplier already selected</option><option>Packaging already completed</option></select></div>
               <div class="field field-full"><span class="field-label">Primary Packaging</span><div class="choice-grid"><label class="choice"><input type="checkbox" name="primaryPackaging" value="Dropper / Ampoule"><span>Dropper / Ampoule</span></label><label class="choice"><input type="checkbox" name="primaryPackaging" value="Pump / Airless"><span>Pump / Airless</span></label><label class="choice"><input type="checkbox" name="primaryPackaging" value="Jar"><span>Jar</span></label><label class="choice"><input type="checkbox" name="primaryPackaging" value="Tube"><span>Tube</span></label><label class="choice"><input type="checkbox" name="primaryPackaging" value="Pouch / Sachet"><span>Pouch / Sachet</span></label><label class="choice"><input type="checkbox" name="primaryPackaging" value="Open to recommendation"><span>Open to recommendation</span></label></div></div>
               <div class="field field-full"><span class="field-label">Secondary Packaging</span><div class="choice-grid two"><label class="choice"><input type="checkbox" name="secondaryPackaging" value="Folding carton"><span>Folding carton</span></label><label class="choice"><input type="checkbox" name="secondaryPackaging" value="Set / Gift box"><span>Set / Gift box</span></label><label class="choice"><input type="checkbox" name="secondaryPackaging" value="Labels / Stickers"><span>Labels / Stickers</span></label><label class="choice"><input type="checkbox" name="secondaryPackaging" value="No secondary packaging"><span>No secondary packaging</span></label></div></div>
-              <div class="field"><label for="designSupport">Artwork / Design Support</label><select id="designSupport" name="designSupport"><option>Need design support</option><option>Need artwork adaptation only</option><option>Design files will be supplied</option><option>Not decided yet</option></select></div>
-              <div class="field"><span class="field-label">Certifications / Market Requirements</span><div class="choice-grid two"><label class="choice"><input type="checkbox" name="certifications" value="EU"><span>EU</span></label><label class="choice"><input type="checkbox" name="certifications" value="US"><span>US</span></label><label class="choice"><input type="checkbox" name="certifications" value="India"><span>India</span></label><label class="choice"><input type="checkbox" name="certifications" value="GCC / Middle East"><span>GCC / Middle East</span></label><label class="choice"><input type="checkbox" name="certifications" value="Other"><span>Other</span></label></div></div>
+              <div class="field field-full"><label for="designSupport">Artwork / Design Support</label><select id="designSupport" name="designSupport"><option>Need design support</option><option>Need artwork adaptation only</option><option>Design files will be supplied</option><option>Not decided yet</option></select></div>
             </div>
-            <div class="form-actions"><button class="button button-secondary" type="button" data-prev>Back</button><button class="button button-primary" type="button" data-next>Continue</button></div>
+            <div class="form-actions"><button class="button button-secondary" type="button" data-prev>Previous</button><button class="button button-primary" type="button" data-next>Next</button></div>
           </section>
 
-          <section class="form-step" data-step hidden>
-            <div class="form-step-head"><span>STEP 05 / 05</span><h2>Final project brief</h2><p>Add the details that would help our team understand the project without assumptions.</p></div>
+          <section class="form-step" data-step data-step-label="MARKET & PRODUCTION" hidden>
+            <div class="form-step-head"><span>STEP 07 / 08</span><h2>Tell us where and when you plan to launch.</h2><p>Production planning depends on market, quantity, compliance requirements and launch timing.</p></div>
             <div class="form-grid">
-              <div class="field field-full"><label for="keyRequirements">Key Requirements <b class="required">*</b></label><textarea id="keyRequirements" name="keyRequirements" required placeholder="Describe the product concept, target customer, must-have features, benchmark quality, packaging direction or any non-negotiable requirements."></textarea></div>
-              <div class="field field-full"><label for="additionalNotes">Additional Notes</label><textarea id="additionalNotes" name="additionalNotes" placeholder="Any other context, questions or information our team should know."></textarea></div>
-              <div class="field field-full"><label for="source">How did you find JNCOS TECH?</label><select id="source" name="source"><option>Google Search</option><option>Referral / Partner</option><option>LinkedIn</option><option>Instagram / Social</option><option>Exhibition / Event</option><option>Other</option></select></div>
-              <div class="field-full consent-row"><input id="consent" name="consent" type="checkbox" required><label for="consent">I agree that JNCOS TECH may use the information submitted here to review and respond to this business inquiry. <b class="required">*</b></label></div>
+              <div class="field"><label for="targetMarkets">Target Markets / Countries</label><input id="targetMarkets" name="targetMarkets" placeholder="e.g. India, UAE, US, EU"></div>
+              <div class="field"><label for="initialQuantity">Expected Initial Quantity</label><select id="initialQuantity" name="initialQuantity"><option value="">Not decided yet</option><option>Under 1,000 units</option><option>1,000–3,000 units</option><option>3,000–5,000 units</option><option>5,000–10,000 units</option><option>10,000+ units</option></select></div>
+              <div class="field"><label for="launchTiming">Target Launch Timing</label><select id="launchTiming" name="launchTiming"><option>Not decided yet</option><option>Within 3 months</option><option>3–6 months</option><option>6–12 months</option><option>12+ months</option></select></div>
+              <div class="field"><span class="field-label">Certifications / Market Requirements</span><div class="choice-grid two"><label class="choice"><input type="checkbox" name="certifications" value="EU"><span>EU</span></label><label class="choice"><input type="checkbox" name="certifications" value="US"><span>US</span></label><label class="choice"><input type="checkbox" name="certifications" value="India"><span>India</span></label><label class="choice"><input type="checkbox" name="certifications" value="Middle East"><span>Middle East</span></label><label class="choice"><input type="checkbox" name="certifications" value="Other"><span>Other</span></label></div></div>
             </div>
-            <div class="form-actions"><button class="button button-secondary" type="button" data-prev>Back</button><button class="button button-primary" type="submit">Submit Inquiry</button></div>
+            <div class="form-actions"><button class="button button-secondary" type="button" data-prev>Previous</button><button class="button button-primary" type="button" data-next>Next</button></div>
+          </section>
+
+          <section class="form-step" data-step data-step-label="PROJECT BRIEF" hidden>
+            <div class="form-step-head"><span>STEP 08 / 08</span><h2>Complete your project brief.</h2><p>Add anything that will help our team understand priorities, target cost, launch constraints or special requirements.</p></div>
+            <div class="form-grid">
+              <div class="field field-full"><label for="keyRequirements">Key Requirements / Target Cost / Must-Haves</label><textarea id="keyRequirements" name="keyRequirements" placeholder="Target cost, key performance expectations, must-have ingredients, packaging limitations, etc."></textarea></div>
+              <div class="field field-full"><label for="additionalNotes">Additional Notes</label><textarea id="additionalNotes" name="additionalNotes" placeholder="Any additional project details or questions"></textarea></div>
+              <div class="consent-row field-full"><input id="consent" name="consent" type="checkbox" required><label for="consent">I agree that JN COS TECH may use the information submitted here to review and respond to this business inquiry. <b class="required">*</b></label></div>
+            </div>
+            <div class="form-actions"><button class="button button-secondary" type="button" data-prev>Previous</button><button class="button button-primary" type="submit">Submit Inquiry</button></div>
           </section>
         </form>
 
-        <aside class="inquiry-summary">
-          <p class="eyebrow">LIVE PROJECT SUMMARY</p><h3>Your brief at a glance</h3><div data-live-summary></div><p class="summary-note">You can move back at any time to revise your answers before submitting.</p>
-        </aside>
+        <section class="inquiry-success" data-inquiry-success hidden>
+          <div class="success-mark">✓</div><h1>Thank you for your project inquiry.</h1><p>Our team will review the information you provided and use it to prepare the first project discussion.</p><div class="reference">Reference <strong data-inquiry-id>—</strong></div>
+        </section>
       </div>
-    </section>
-
-    <section class="inquiry-success" data-inquiry-success hidden>
-      <div class="site-container"><div class="success-mark">✓</div><p class="eyebrow">INQUIRY RECEIVED</p><h1>Thank you for sharing your project.</h1><p>Your detailed brief has been saved for review. We will use the information to understand your needs before discussing the next steps.</p><span class="reference">Reference <strong data-inquiry-id></strong></span></div>
     </section>
   </main>
 
-  <footer class="site-footer"><div class="site-container footer-grid"><div><a class="brand" href="../"><span class="brand-mark">JNCOS</span><span class="brand-sub">TECH</span></a><p class="footer-note">Cosmetic OEM · ODM · R&amp;D · Manufacturing</p></div><div class="footer-links"><a href="../About/">About</a><a href="../OEMODM/">OEM / ODM</a><a href="../Technology/">Technology</a><a href="../Manufacturing/">Manufacturing</a><a href="../Partnership/">Partnership</a><a href="./">Inquiry</a></div><div class="footer-bottom"><span>© <span data-year></span> JNCOS TECH. All rights reserved.</span><span>Korea</span></div></div></footer>
+  <footer class="site-footer"></footer>
   <script src="../assets/js/common.js" defer></script>
   <script src="../assets/js/inquiry-store.js" defer></script>
   <script src="../assets/js/inquiry.js" defer></script>
