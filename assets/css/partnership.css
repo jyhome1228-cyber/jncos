@@ -1,0 +1,50 @@
+/* JN COS TECH — Partnership */
+.partnership-page{background:#fff}
+.partnership-hero{position:relative;overflow:hidden;background:#ece6e1}
+.partnership-hero-mark{position:absolute;right:5%;top:50%;width:min(42vw,540px);transform:translateY(-50%);filter:brightness(0) saturate(100%) invert(11%) sepia(19%) saturate(1394%) hue-rotate(337deg) brightness(91%) contrast(95%);opacity:.08;pointer-events:none}
+.partnership-hero .subpage-hero-visual{opacity:.18!important}
+.partnership-intro{padding:86px 0;background:#fff}
+.partnership-intro-copy{max-width:900px}
+.partnership-intro h2{margin:0 0 20px}
+.partnership-intro p{margin:0 0 18px;max-width:900px;color:#74655d;font-size:13px;line-height:1.85}
+
+.partnership-section{padding:86px 0}
+.partnership-section.alt{background:#f2ece6}
+.partnership-heading{max-width:900px;margin:0 0 38px}
+.partnership-heading h2{margin:0 0 14px}
+.partnership-heading p{margin:0;max-width:820px;color:#75665f;font-size:13px;line-height:1.82}
+
+.partnership-market-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.partnership-benefit-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.partnership-model-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+
+.partnership-market,.partnership-card,.partnership-model{padding:28px 28px 30px;border:1px solid #d9c8bb;background:#fff}
+.partnership-market{min-height:200px}
+.partnership-card{min-height:210px}
+.partnership-model{min-height:280px}
+
+.partnership-icon{width:44px;height:44px;display:grid;place-items:center;margin:0 0 22px;border:1px solid #dbc9bc;background:#f6f0eb;color:#8f6a53;border-radius:50%}
+.partnership-icon svg{width:21px;height:21px;display:block;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.partnership-market h3,.partnership-card h3,.partnership-model h3{margin:0 0 12px}
+.partnership-market p,.partnership-card p,.partnership-model p{margin:0;color:#75665f;font-size:12.5px;line-height:1.82}
+.partnership-model ul{margin:18px 0 0;padding:0;list-style:none;display:grid;gap:8px}
+.partnership-model li{position:relative;padding-left:17px;color:#75665f;font-size:12px;line-height:1.55}
+.partnership-model li::before{content:'↗';position:absolute;left:0;top:0;color:#9a745d;font-size:11px}
+
+.partnership-section.dark{background:#2f1b13;color:#fff}
+.partnership-section.dark .partnership-heading h2{color:#fff}
+.partnership-section.dark .partnership-heading p{color:#c6b7af}
+.partnership-section.dark .partnership-model{background:transparent;border-color:rgba(255,255,255,.22)}
+.partnership-section.dark .partnership-model h3{color:#fff}
+.partnership-section.dark .partnership-model p,.partnership-section.dark .partnership-model li{color:#c4b5ad}
+.partnership-section.dark .partnership-icon{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.04);color:#d5b9a8}
+
+.partnership-cta{padding:78px 0;background:#2f1b13;color:#fff;text-align:center;border-top:1px solid rgba(255,255,255,.08)}
+.partnership-cta h2{margin:0;color:#fff;font-size:31px!important;text-align:center!important}
+.partnership-cta p{max-width:720px;margin:16px auto 0;color:#c6b7af;font-size:13px;line-height:1.8}
+.partnership-cta .hero-actions{justify-content:center;margin-top:28px}
+.partnership-cta .button{background:transparent;border-color:#a58d80;color:#fff}
+
+@media(max-width:1050px){.partnership-benefit-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.partnership-market-grid,.partnership-model-grid{grid-template-columns:repeat(2,1fr)}.partnership-hero-mark{width:62vw;right:-8%}}
+@media(max-width:720px){.partnership-section,.partnership-intro{padding:64px 0}.partnership-market-grid,.partnership-benefit-grid,.partnership-model-grid{grid-template-columns:1fr}.partnership-market,.partnership-card,.partnership-model{min-height:auto;padding:25px 23px}.partnership-hero-mark{width:90vw;right:-28%;opacity:.05}.partnership-cta{padding:66px 0}.partnership-cta .hero-actions{flex-direction:column}.partnership-cta .button{width:100%}}
