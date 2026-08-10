@@ -11,6 +11,8 @@
 
   const value = (name) => form.elements[name]?.value?.trim?.() || '';
   const checked = (name) => [...form.querySelectorAll(`[name="${name}"]:checked`)].map((el) => el.value);
+  const listText = (items) => Array.isArray(items) && items.length ? items.join(', ') : '';
+  const escapeHtml = (str = '') => String(str).replace(/[&<>'"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 
   const data = () => ({
     contact: {
@@ -56,6 +58,64 @@
     }
   });
 
+  const workspace = document.createElement('div');
+  workspace.className = 'inquiry-workspace';
+  form.parentNode.insertBefore(workspace, form);
+  workspace.appendChild(form);
+
+  const summary = document.createElement('aside');
+  summary.className = 'inquiry-live-summary';
+  summary.setAttribute('aria-live', 'polite');
+  summary.innerHTML = `
+    <div class="summary-head">
+      <span>LIVE PROJECT SUMMARY</span>
+      <strong>Your selections</strong>
+      <p>Selections and entered information will be organized here as you build the brief.</p>
+    </div>
+    <div class="summary-content" data-summary-content></div>
+    <div class="summary-foot">JN COS TECH · OEM / ODM PROJECT BUILDER</div>`;
+  workspace.appendChild(summary);
+  const summaryContent = summary.querySelector('[data-summary-content]');
+
+  const summaryRow = (label, content, fallback = 'Not selected yet') => `
+    <div class="summary-row">
+      <span>${escapeHtml(label)}</span>
+      <strong class="${content ? '' : 'is-empty'}">${escapeHtml(content || fallback)}</strong>
+    </div>`;
+
+  const renderSummary = () => {
+    const d = data();
+    const contactTitle = [d.contact.companyName, d.contact.contactName].filter(Boolean).join(' · ');
+    const market = [d.project.targetMarkets, d.contact.country].filter(Boolean).join(' / ');
+    const products = listText(d.project.productCategories);
+    const concerns = listText(d.formulation.skinConcerns);
+    const textures = listText(d.formulation.textures);
+    const claims = listText(d.formulation.claims);
+    const primaryPack = listText(d.packaging.primaryPackaging);
+    const secondaryPack = listText(d.packaging.secondaryPackaging);
+    const certifications = listText(d.packaging.certifications);
+
+    summaryContent.innerHTML = [
+      summaryRow('Company / Contact', contactTitle),
+      summaryRow('Service Model', d.project.serviceType),
+      summaryRow('Product Categories', products),
+      summaryRow('Project Stage', d.project.projectStage),
+      summaryRow('Target Market', market),
+      summaryRow('Initial Quantity', d.project.initialQuantity),
+      summaryRow('Launch Timing', d.project.launchTiming),
+      summaryRow('Product Concerns', concerns),
+      summaryRow('Texture / Finish', textures),
+      summaryRow('Hero Ingredients', d.formulation.heroIngredients),
+      summaryRow('Claims', claims),
+      summaryRow('Primary Packaging', primaryPack),
+      summaryRow('Secondary Packaging', secondaryPack),
+      summaryRow('Packaging Support', d.packaging.packagingSupport),
+      summaryRow('Design Support', d.packaging.designSupport),
+      summaryRow('Market Requirements', certifications),
+      summaryRow('Key Requirements', d.notes.keyRequirements),
+    ].join('');
+  };
+
   const validateStep = (index) => {
     const required = [...steps[index].querySelectorAll('[required]')];
     let ok = true;
@@ -74,6 +134,7 @@
     if (progress) progress.style.width = `${((current + 1) / steps.length) * 100}%`;
     if (progressLabel) progressLabel.textContent = steps[current].dataset.stepLabel || `STEP ${current + 1}`;
     if (progressCount) progressCount.textContent = `${String(current + 1).padStart(2, '0')} / ${String(steps.length).padStart(2, '0')}`;
+    renderSummary();
     if (scroll) {
       const shell = document.querySelector('.inquiry-shell');
       const top = Math.max(0, (shell?.offsetTop || form.offsetTop) - 110);
@@ -93,9 +154,11 @@
 
   form.addEventListener('input', (event) => {
     event.target.closest('.field, .consent-row')?.classList.remove('has-error');
+    renderSummary();
   });
   form.addEventListener('change', (event) => {
     event.target.closest('.field, .consent-row')?.classList.remove('has-error');
+    renderSummary();
   });
 
   const prefillFromQuery = () => {
@@ -116,7 +179,7 @@
     submit.textContent = 'Submitting…';
     try {
       const saved = await window.JNCOSInquiryStore.create(data());
-      form.hidden = true;
+      workspace.hidden = true;
       document.querySelector('.inquiry-progress-head')?.setAttribute('hidden', '');
       document.querySelector('.inquiry-progress-track')?.setAttribute('hidden', '');
       if (success) {
@@ -134,5 +197,6 @@
   });
 
   prefillFromQuery();
+  renderSummary();
   show(0, false);
 })();
