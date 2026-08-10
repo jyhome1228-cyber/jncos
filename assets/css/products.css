@@ -1,0 +1,49 @@
+/* JN COS TECH — Products & Services */
+.products-page{background:#fff}
+.product-hero{position:relative;min-height:300px;display:flex;align-items:center;overflow:hidden;background:#ece7e2}
+.product-hero::before{content:"";position:absolute;inset:0;background:url('https://cdn.imweb.me/upload/S2023030963558ef55ba8e/8df4c931a8b92.jpg') center/cover no-repeat;filter:saturate(.35);opacity:.24;transform:scale(1.01)}
+.product-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(244,240,236,.96),rgba(244,240,236,.82) 58%,rgba(244,240,236,.48))}
+.product-hero .site-container{position:relative;z-index:2}
+.product-hero-copy{max-width:900px}
+.product-hero h1{margin:0 0 16px!important;font-size:clamp(30px,3vw,42px)!important;line-height:1.14!important}
+.product-hero p{max-width:780px;margin:0;color:#5f514a;font-size:13.5px;line-height:1.8}
+
+.product-section{padding:86px 0}
+.product-section.alt{background:#f2ece6}
+.product-section-title{margin:0 0 20px;font-size:31px!important;line-height:1.18}
+.product-section-lead{max-width:830px;margin:0 0 42px;color:#75665f;font-size:13px;line-height:1.85}
+.product-capability-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:28px}
+.product-capability-item{min-height:76px;display:flex;align-items:center;padding:20px 24px;border:1px solid #d9c8bb;background:#fff;color:#2f1b13;font-size:13px;font-weight:700}
+.product-wide-visual{margin:0;overflow:hidden;background:#e8e1dc}
+.product-wide-visual img{width:100%;height:auto;display:block;filter:grayscale(1)}
+.product-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.product-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.product-grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.product-card{min-height:190px;padding:30px 32px;border:1px solid #d9c8bb;background:#fff}
+.product-section:not(.alt) .product-card.soft{background:#f2ece6}
+.product-card h3{margin:0 0 16px;font-size:17px!important;font-weight:740;line-height:1.35}
+.product-card p{margin:0;color:#75665f;font-size:12.5px;line-height:1.85}
+.product-grid.four .product-card{min-height:214px;padding:28px 28px}
+.product-grid.four .product-card h3{font-size:16px!important}
+.product-visual-strip{margin:30px 0 0;overflow:hidden;background:#e8e1dc}
+.product-visual-strip img{width:100%;height:185px;object-fit:cover;filter:grayscale(1)}
+.products-cta{padding:76px 0;background:#2f1b13;color:#fff;text-align:center}
+.products-cta h2{margin:0;color:#fff;font-size:31px!important}
+.products-cta p{max-width:720px;margin:16px auto 0;color:#c8b8af;font-size:13px;line-height:1.8}
+.products-cta-actions{display:flex;justify-content:center;gap:12px;margin-top:28px}
+.products-cta .button-secondary{background:transparent;border-color:#a89083;color:#fff}
+
+@media(max-width:900px){
+ .product-capability-grid,.product-grid.three{grid-template-columns:repeat(2,1fr)}
+ .product-grid.four{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:720px){
+ .product-hero{min-height:250px}
+ .product-section{padding:66px 0}
+ .product-section-title{font-size:27px!important}
+ .product-capability-grid,.product-grid,.product-grid.three,.product-grid.four{grid-template-columns:1fr}
+ .product-card,.product-grid.four .product-card{min-height:auto;padding:26px 24px}
+ .product-visual-strip img{height:150px}
+ .products-cta-actions{flex-direction:column}
+ .products-cta-actions .button{width:100%}
+}
