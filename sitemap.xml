@@ -9,4 +9,7 @@
   <url><loc>https://jncostech.com/Partnership/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://jncostech.com/Contact/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://jncostech.com/Inquiry/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://jncostech.com/Privacy/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://jncostech.com/Terms/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://jncostech.com/Cookies/</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
 </urlset>
