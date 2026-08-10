@@ -17,9 +17,29 @@
 .tech-platform-card p{margin:0;color:#786960;font-size:11.5px;line-height:1.75}
 
 .tech-ingredients{padding:82px 0 90px;background:#fff}
-.tech-chip-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;width:min(100%,900px)}
-.tech-chip{display:flex;align-items:center;justify-content:center;min-height:54px;padding:10px 14px;background:#f2ece6;border:1px solid #d9c8bb;color:#38231b;text-align:center;font-size:11.5px;font-weight:650;transition:transform .2s ease,border-color .2s ease,background .2s ease}
-.tech-chip:hover{transform:translateY(-3px);border-color:#b9957f;background:#eadfd7}
+.tech-chip-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;width:100%}
+.tech-chip{display:flex;align-items:center;justify-content:flex-start;gap:11px;min-height:66px;padding:12px 16px;background:#f2ece6;border:1px solid #d9c8bb;color:#38231b;text-align:left;font-size:11.5px;font-weight:650;cursor:pointer;outline:none;transition:transform .2s ease,border-color .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease}
+.tech-chip:hover,.tech-chip:focus-visible{transform:translateY(-3px);border-color:#b9957f;background:#eadfd7;box-shadow:0 10px 24px rgba(54,31,21,.05)}
+.tech-chip.is-active{background:#2f1b13;border-color:#2f1b13;color:#fff;box-shadow:0 12px 28px rgba(47,27,19,.12)}
+.tech-chip-icon{width:30px;height:30px;flex:0 0 30px;display:grid;place-items:center;border:1px solid #d9c8bb;border-radius:50%;background:#fff;color:#8f6a53;transition:background .2s ease,border-color .2s ease,color .2s ease}
+.tech-chip-icon svg,.tech-detail-icon svg,.tech-mini-icon svg{width:17px;height:17px;display:block;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+.tech-chip.is-active .tech-chip-icon{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.24);color:#e1c3b2}
+.tech-chip-label{line-height:1.35}
+
+.tech-ingredient-detail{display:grid;grid-template-columns:1.55fr 2.45fr;margin-top:16px;border:1px solid #d9c8bb;background:#fff}
+.tech-ingredient-detail-head{display:grid;grid-template-columns:46px 1fr;gap:18px;align-items:start;padding:30px;background:#f2ece6;border-right:1px solid #d9c8bb}
+.tech-detail-icon{width:46px;height:46px;display:grid;place-items:center;border:1px solid #d9c8bb;border-radius:50%;background:#fff;color:#8f6a53}
+.tech-detail-icon svg{width:21px;height:21px}
+.tech-detail-kicker{display:block;margin:2px 0 11px;color:#9a745d;font-size:9px;font-weight:760;letter-spacing:.16em}
+.tech-ingredient-detail-head h3{margin:0 0 12px;font-size:22px!important;line-height:1.2}
+.tech-ingredient-detail-head p{margin:0;color:#75665f;font-size:12.5px;line-height:1.82}
+.tech-ingredient-detail-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.tech-ingredient-detail-grid>div{position:relative;padding:28px 25px;border-right:1px solid #e3d8d0}
+.tech-ingredient-detail-grid>div:last-child{border-right:0}
+.tech-ingredient-detail-grid>div>span:not(.tech-mini-icon){display:block;margin:0 0 11px;color:#9a745d;font-size:8.5px;font-weight:760;letter-spacing:.14em}
+.tech-mini-icon{width:34px;height:34px;display:grid!important;place-items:center;margin-bottom:16px!important;border:1px solid #dbc9bc;border-radius:50%;background:#faf6f2;color:#8f6a53}
+.tech-mini-icon svg{width:16px;height:16px}
+.tech-ingredient-detail-grid p{margin:0;color:#65574f;font-size:12px;line-height:1.8}
 
 .tech-optimization{padding:82px 0 92px;background:#f2ece6}
 .tech-optimization-inner{width:min(100%,900px)}
@@ -43,16 +63,27 @@
 .tech-cta .button-primary{background:#fff;color:#2f1b13}
 .tech-cta .button-secondary{border-color:#9e887c;background:transparent;color:#fff}
 
+@media(max-width:1000px){
+ .tech-ingredient-detail{grid-template-columns:1fr}
+ .tech-ingredient-detail-head{border-right:0;border-bottom:1px solid #d9c8bb}
+}
 @media(max-width:900px){
  .tech-philosophy-grid{grid-template-columns:1fr;gap:32px;width:100%}
  .tech-platform-grid,.tech-validation-grid{width:100%}
- .tech-chip-grid{width:100%;grid-template-columns:repeat(3,1fr)}
+ .tech-chip-grid{width:100%;grid-template-columns:repeat(2,1fr)}
+ .tech-ingredient-detail-grid{grid-template-columns:1fr}
+ .tech-ingredient-detail-grid>div{border-right:0;border-bottom:1px solid #e3d8d0}
+ .tech-ingredient-detail-grid>div:last-child{border-bottom:0}
 }
 @media(max-width:720px){
  .tech-philosophy,.tech-platforms,.tech-ingredients,.tech-optimization,.tech-validation{padding:64px 0 70px}
  .tech-platform-grid,.tech-validation-grid{grid-template-columns:1fr}
- .tech-chip-grid{grid-template-columns:repeat(2,1fr)}
+ .tech-chip-grid{grid-template-columns:1fr}
+ .tech-chip{min-height:58px}
  .tech-platform-card,.tech-validation-card{min-height:auto}
+ .tech-ingredient-detail-head{grid-template-columns:40px 1fr;padding:24px 22px;gap:14px}
+ .tech-detail-icon{width:40px;height:40px}
+ .tech-ingredient-detail-grid>div{padding:22px}
  .tech-cta{padding:68px 0 74px}
  .tech-cta .hero-actions{width:100%}
  .tech-cta .button{width:100%}
