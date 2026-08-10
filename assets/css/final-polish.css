@@ -1,1 +1,42 @@
-body.public-page{--header-h:94px}.public-page .site-header{height:94px!important;min-height:94px!important}.public-page .header-inner{height:100%!important;align-items:flex-end!important;padding-top:16px!important;padding-bottom:18px!important}.public-page .brand{width:212px!important;height:40px!important;align-items:flex-end!important}.public-page .site-logo-img{display:block;width:100%!important;height:auto!important}.public-page .site-nav{align-items:center!important;min-height:42px;font-size:14px!important;font-weight:500!important}.public-page .site-nav>a:not(.nav-cta){padding:10px 0 8px!important}.public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero){min-height:300px!important;display:flex!important;align-items:flex-end!important;padding-top:88px!important;padding-bottom:46px!important}.public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero) .site-container{align-self:flex-end}.public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero) h1{margin-top:0!important;margin-bottom:14px!important}.public-page .inquiry-hero{padding-top:76px!important;padding-bottom:48px!important}@media(max-width:1024px){body.public-page{--header-h:76px}.public-page .site-header{height:76px!important;min-height:76px!important}.public-page .header-inner{align-items:center!important;padding-top:0!important;padding-bottom:0!important}.public-page .brand{width:176px!important;height:34px!important;align-items:center!important}.public-page .site-nav{position:fixed!important;inset:76px 0 0!important;min-height:0;align-items:stretch!important;padding-top:20px!important}.public-page .site-nav>a,.public-page .site-nav .nav-cta{justify-content:flex-start;min-height:60px!important;padding:0!important;font-size:18px!important}.public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero){min-height:270px!important;padding-top:70px!important;padding-bottom:40px!important}}@media(max-width:720px){.public-page .brand{width:154px!important;height:30px!important}.public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero){min-height:235px!important;padding-top:58px!important;padding-bottom:32px!important}.public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero) h1{font-size:29px!important}}
+body.public-page{--header-h:98px}
+.public-page .site-header{height:98px!important;min-height:98px!important}
+.public-page .header-inner{height:100%!important;align-items:flex-end!important;padding-top:18px!important;padding-bottom:18px!important}
+.public-page .brand{width:238px!important;height:44px!important;align-items:flex-end!important}
+.public-page .site-logo-img{display:block;width:100%!important;height:auto!important}
+.public-page .site-nav{align-items:center!important;min-height:42px;font-size:14px!important;font-weight:500!important}
+.public-page .site-nav>a:not(.nav-cta){padding:10px 0 8px!important}
+
+/* Taller editorial hero used consistently across sub pages */
+.public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero){
+  min-height:450px!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  padding-top:150px!important;
+  padding-bottom:64px!important;
+}
+.public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero) .site-container{align-self:flex-end}
+.public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero) h1{margin-top:0!important;margin-bottom:14px!important}
+.public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero) p:not(.eyebrow):not(.about-kicker):not(.product-kicker){max-width:760px!important}
+
+/* Inquiry is a workspace rather than an image hero */
+.public-page .inquiry-hero{padding-top:82px!important;padding-bottom:38px!important}
+
+@media(max-width:1180px){
+  .public-page .brand{width:220px!important;height:41px!important}
+  .public-page .site-nav{gap:clamp(14px,1.35vw,23px)!important;font-size:13.5px!important}
+}
+@media(max-width:1024px){
+  body.public-page{--header-h:76px}
+  .public-page .site-header{height:76px!important;min-height:76px!important}
+  .public-page .header-inner{align-items:center!important;padding-top:0!important;padding-bottom:0!important}
+  .public-page .brand{width:182px!important;height:34px!important;align-items:center!important}
+  .public-page .site-nav{position:fixed!important;inset:76px 0 0!important;min-height:0;align-items:stretch!important;padding-top:20px!important;font-size:18px!important}
+  .public-page .site-nav>a,.public-page .site-nav .nav-cta{justify-content:flex-start;min-height:60px!important;padding:0!important;font-size:18px!important}
+  .public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero){min-height:360px!important;padding-top:104px!important;padding-bottom:48px!important}
+}
+@media(max-width:720px){
+  .public-page .brand{width:160px!important;height:30px!important}
+  .public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero){min-height:320px!important;padding-top:92px!important;padding-bottom:38px!important}
+  .public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero) h1{font-size:29px!important}
+  .public-page .inquiry-hero{padding-top:52px!important;padding-bottom:24px!important}
+}
