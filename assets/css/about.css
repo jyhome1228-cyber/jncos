@@ -1,0 +1,61 @@
+/* JN COS TECH — About */
+.about-page{background:#fff}
+.about-hero{position:relative;min-height:360px;display:flex;align-items:center;overflow:hidden;background:#e9e2dc}
+.about-hero-bg{position:absolute;inset:0;background:url('https://cdn.imweb.me/upload/S2023030963558ef55ba8e/4ec6a98aa3f21.jpg') center/cover no-repeat;filter:saturate(.65);opacity:.32;transform:scale(1.02)}
+.about-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(242,236,230,.97) 0%,rgba(242,236,230,.87) 48%,rgba(242,236,230,.35) 100%)}
+.about-hero .site-container{position:relative;z-index:1}
+.about-kicker{margin:0 0 14px;color:#8f6a53;font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+.about-hero h1{max-width:680px;margin:0 0 22px;font-size:clamp(34px,3.5vw,50px)!important}
+.about-hero p{max-width:810px;margin:0;color:#5f514a;font-size:14px;line-height:1.8}
+
+.about-story{padding:94px 0 106px}
+.about-narrow{width:min(100%,900px);margin:0 auto}
+.about-section-title{margin:0 0 36px;font-size:32px!important}
+.about-story p{margin:0 0 24px;color:#716159;font-size:14px;line-height:1.9}
+.about-story-visual{margin:54px 0 0;overflow:hidden;background:#2f1b13}
+.about-story-visual img{width:100%;aspect-ratio:16/6.5;object-fit:cover;object-position:center}
+
+.about-values{padding:94px 0 110px;background:#f2ece6}
+.about-values-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:42px}
+.about-value-card{min-height:170px;padding:30px 32px;background:#fff;border:1px solid #d9c8bb}
+.about-value-card h3{margin:0 0 14px;font-size:17px!important;font-weight:750}
+.about-value-card p{margin:0;color:#75665f;font-size:12.5px;line-height:1.85}
+
+.about-founder{padding:104px 0 112px;background:#fff}
+.about-founder-grid{display:grid;grid-template-columns:minmax(320px,.8fr) minmax(0,1fr);gap:78px;align-items:center;width:min(100%,1080px);margin:0 auto}
+.about-founder-photo{margin:0;background:#f7f5f3;overflow:hidden}
+.about-founder-photo img{width:100%;aspect-ratio:4/5.35;object-fit:cover;object-position:center top}
+.about-founder-copy .about-kicker{margin-bottom:14px}
+.about-founder-copy>p{margin:0 0 22px;color:#74645c;font-size:14px;line-height:1.9}
+.about-signature{margin-top:30px}
+.about-signature-script{margin:0 0 10px;font-family:'Brush Script MT','Segoe Script',cursive;font-size:38px;line-height:1;color:#2f1b13;transform:rotate(-2deg);transform-origin:left center}
+.about-signature strong{display:block;font-size:16px}
+.about-signature span{display:block;margin-top:4px;color:#8a7467;font-size:12px}
+
+.about-capabilities{padding:100px 0 112px;background:#2f1b13;color:#fff}
+.about-capabilities .about-section-title{color:#fff}
+.about-capability-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:42px}
+.about-capability-card{min-height:210px;padding:34px 34px;border:1px solid rgba(255,255,255,.24);background:rgba(255,255,255,.015)}
+.about-capability-card h3{margin:0 0 22px;color:#fff;font-size:18px!important}
+.about-capability-card p{margin:0;color:#c4b5ad;font-size:13px;line-height:1.85}
+
+.about-cta{padding:82px 0;background:#f2ece6;text-align:center}
+.about-cta h2{margin:0;font-size:32px!important}
+.about-cta p{max-width:720px;margin:18px auto 0;color:#74645c;font-size:13px;line-height:1.8}
+.about-cta-actions{display:flex;justify-content:center;gap:12px;margin-top:30px}
+
+@media(max-width:900px){
+ .about-founder-grid{grid-template-columns:1fr;gap:48px}
+ .about-founder-photo{max-width:520px}
+ .about-capability-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:720px){
+ .about-hero{min-height:320px}
+ .about-story,.about-values,.about-founder,.about-capabilities{padding:70px 0}
+ .about-values-grid,.about-capability-grid{grid-template-columns:1fr}
+ .about-value-card,.about-capability-card{min-height:auto;padding:26px 24px}
+ .about-founder-grid{gap:38px}
+ .about-signature-script{font-size:32px}
+ .about-cta-actions{flex-direction:column}
+ .about-cta-actions .button{width:100%}
+}
