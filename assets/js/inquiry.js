@@ -12,6 +12,11 @@
   const value = (name) => form.elements[name]?.value?.trim?.() || '';
   const checked = (name) => [...form.querySelectorAll(`[name="${name}"]:checked`)].map((el) => el.value);
   const listText = (items) => Array.isArray(items) && items.length ? items.join(', ') : '';
+  const compactList = (items, limit = 2) => {
+    if (!Array.isArray(items) || !items.length) return '';
+    const head = items.slice(0, limit).join(', ');
+    return items.length > limit ? `${head} +${items.length - limit}` : head;
+  };
   const escapeHtml = (str = '') => String(str).replace(/[&<>'"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 
   const data = () => ({
@@ -68,16 +73,16 @@
   summary.setAttribute('aria-live', 'polite');
   summary.innerHTML = `
     <div class="summary-head">
-      <span>LIVE PROJECT SUMMARY</span>
-      <strong>Your selections</strong>
-      <p>Selections and entered information will be organized here as you build the brief.</p>
+      <span>PROJECT SUMMARY</span>
+      <strong>Your brief at a glance</strong>
+      <p>Only the key decisions are shown here. Full details are saved with your inquiry.</p>
     </div>
     <div class="summary-content" data-summary-content></div>
     <div class="summary-foot">JN COS TECH · OEM / ODM PROJECT BUILDER</div>`;
   workspace.appendChild(summary);
   const summaryContent = summary.querySelector('[data-summary-content]');
 
-  const summaryRow = (label, content, fallback = 'Not selected yet') => `
+  const summaryRow = (label, content, fallback = 'Not selected') => `
     <div class="summary-row">
       <span>${escapeHtml(label)}</span>
       <strong class="${content ? '' : 'is-empty'}">${escapeHtml(content || fallback)}</strong>
@@ -85,34 +90,20 @@
 
   const renderSummary = () => {
     const d = data();
-    const contactTitle = [d.contact.companyName, d.contact.contactName].filter(Boolean).join(' · ');
-    const market = [d.project.targetMarkets, d.contact.country].filter(Boolean).join(' / ');
-    const products = listText(d.project.productCategories);
-    const concerns = listText(d.formulation.skinConcerns);
-    const textures = listText(d.formulation.textures);
-    const claims = listText(d.formulation.claims);
-    const primaryPack = listText(d.packaging.primaryPackaging);
-    const secondaryPack = listText(d.packaging.secondaryPackaging);
-    const certifications = listText(d.packaging.certifications);
+    const company = d.contact.companyName || d.contact.contactName;
+    const market = d.project.targetMarkets || d.contact.country;
+    const packaging = compactList(d.packaging.primaryPackaging, 2) || d.packaging.packagingSupport;
+    const formula = compactList(d.formulation.skinConcerns, 2) || compactList(d.formulation.textures, 2);
 
     summaryContent.innerHTML = [
-      summaryRow('Company / Contact', contactTitle),
-      summaryRow('Service Model', d.project.serviceType),
-      summaryRow('Product Categories', products),
-      summaryRow('Project Stage', d.project.projectStage),
+      summaryRow('Company', company),
+      summaryRow('Service', d.project.serviceType),
+      summaryRow('Products', compactList(d.project.productCategories, 2)),
+      summaryRow('Formula Focus', formula),
+      summaryRow('Packaging', packaging),
       summaryRow('Target Market', market),
-      summaryRow('Initial Quantity', d.project.initialQuantity),
-      summaryRow('Launch Timing', d.project.launchTiming),
-      summaryRow('Product Concerns', concerns),
-      summaryRow('Texture / Finish', textures),
-      summaryRow('Hero Ingredients', d.formulation.heroIngredients),
-      summaryRow('Claims', claims),
-      summaryRow('Primary Packaging', primaryPack),
-      summaryRow('Secondary Packaging', secondaryPack),
-      summaryRow('Packaging Support', d.packaging.packagingSupport),
-      summaryRow('Design Support', d.packaging.designSupport),
-      summaryRow('Market Requirements', certifications),
-      summaryRow('Key Requirements', d.notes.keyRequirements),
+      summaryRow('Quantity', d.project.initialQuantity),
+      summaryRow('Launch', d.project.launchTiming),
     ].join('');
   };
 
