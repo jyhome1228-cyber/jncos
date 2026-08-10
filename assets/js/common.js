@@ -30,6 +30,7 @@
     ensureCss('data-content-css', '/assets/css/content.css');
     ensureCss('data-site-system-css', '/assets/css/site-system.css');
     ensureCss('data-layout-unify-css', '/assets/css/layout-unify.css');
+    ensureCss('data-final-polish-css', '/assets/css/final-polish.css');
 
     if (!document.querySelector('script[data-page-images]')) {
       const script = document.createElement('script');
@@ -61,7 +62,7 @@
           <a href="${withBase('/Technology/')}">Technology &amp; R&amp;D</a>
           <a href="${withBase('/Manufacturing/')}">Manufacturing</a>
           <a href="${withBase('/Partnership/')}">Partnership</a>
-          <a href="${withBase('/Contact/')}">Contact</a>
+          <a href="${withBase('/Contact/')}">Contact us</a>
           <a class="nav-cta" href="${withBase('/Inquiry/')}">Inquiry</a>
         </nav>
       </div>`;
@@ -81,7 +82,7 @@
               <a href="${withBase('/About/')}">About</a>
               <a href="${withBase('/Products/')}">Products &amp; Services</a>
               <a href="${withBase('/Partnership/')}">Partnership</a>
-              <a href="${withBase('/Contact/')}">Contact</a>
+              <a href="${withBase('/Contact/')}">Contact us</a>
             </div>
           </div>
           <div>
