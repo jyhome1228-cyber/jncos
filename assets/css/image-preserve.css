@@ -1,0 +1,38 @@
+/* JN COS TECH — preserve original aspect ratio for editorial/body images.
+   Hero/background visuals are intentionally excluded so banners may continue to crop. */
+
+.public-page main figure:not(.home-hero-visual):not(.subpage-hero-visual):not(.about-hero-visual):not(.product-hero-visual):not(.contact-hero-visual),
+.public-page main .visual-stack figure {
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  aspect-ratio:auto !important;
+  overflow:visible !important;
+}
+
+.public-page main figure:not(.home-hero-visual):not(.subpage-hero-visual):not(.about-hero-visual):not(.product-hero-visual):not(.contact-hero-visual) > img,
+.public-page main .visual-stack img,
+.public-page main :is(.manufacturing-gallery,.manufacturing-visual,.production-visual,.facility-gallery,.product-visual,.product-image,.oem-visual,.tech-optimization,.tech-philosophy,.about-visual,.story-visual) img {
+  display:block !important;
+  width:100% !important;
+  max-width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  aspect-ratio:auto !important;
+  object-fit:contain !important;
+  object-position:center !important;
+}
+
+/* Remove fixed media heights from common editorial wrappers while keeping their width. */
+.public-page main :is(.manufacturing-gallery,.manufacturing-visual,.production-visual,.facility-gallery,.product-visual,.product-image,.oem-visual,.tech-optimization figure,.tech-philosophy figure,.about-visual,.story-visual) {
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  aspect-ratio:auto !important;
+}
+
+/* Hero visuals remain full-bleed/cropped by design. */
+.public-page main :is(.home-hero-visual,.subpage-hero-visual,.about-hero-visual,.product-hero-visual,.contact-hero-visual) img {
+  width:100%;
+}
