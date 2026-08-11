@@ -25,10 +25,15 @@
   };
 
   const loadDashboard = () => {
-    if (document.querySelector('script[data-admin-dashboard]')) return;
+    const old = document.querySelector('script[data-admin-dashboard]');
+    if (old) old.remove();
     const script = document.createElement('script');
-    script.src = '../assets/js/admin.js';
+    script.src = '../assets/js/admin.js?v=20260811-1745';
     script.setAttribute('data-admin-dashboard', '');
+    script.onerror = () => {
+      const mode = document.querySelector('[data-admin-mode]');
+      if (mode) mode.textContent = 'Admin dashboard script failed to load';
+    };
     document.body.appendChild(script);
   };
 
@@ -41,8 +46,8 @@
       userLabel.textContent = user.email || 'Admin';
     }
     window.JNCOS_ADMIN_READY = true;
+    window.JNCOS_ADMIN_USER = user;
     loadDashboard();
-    window.dispatchEvent(new CustomEvent('jncos:admin-ready', { detail: { user } }));
   };
 
   const init = async () => {
@@ -58,13 +63,13 @@
         import('https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js'),
         import('https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js')
       ]);
-
       const app = getApps().length ? getApps()[0] : initializeApp(config);
       const auth = authMod.getAuth(app);
       const db = fsMod.getFirestore(app);
 
       const verifyAdmin = async (user) => {
         if (!user) {
+          window.JNCOS_ADMIN_READY = false;
           showLogin();
           return false;
         }
@@ -73,16 +78,16 @@
           if (!snapshot.exists() || snapshot.data()?.active === false) {
             await authMod.signOut(auth);
             showLogin();
-            showMessage('This account is signed in, but it is not registered as a JN COS TECH administrator.', 'error');
+            showMessage('This account is not registered as an active JN COS TECH administrator.', 'error');
             return false;
           }
           showMessage('');
           showApp(user);
           return true;
         } catch (error) {
-          console.error(error);
+          console.error('[JNCOS Admin Auth]', error);
           showLogin();
-          showMessage('Unable to verify administrator access. Check Firestore Rules and the admins collection.', 'error');
+          showMessage(`Unable to verify administrator access${error?.code ? ` (${error.code})` : ''}.`, 'error');
           return false;
         }
       };
@@ -99,11 +104,10 @@
         submit.textContent = 'Signing in…';
         showMessage('');
         try {
-          const credential = await authMod.signInWithEmailAndPassword(auth, email, password);
-          await verifyAdmin(credential.user);
+          await authMod.signInWithEmailAndPassword(auth, email, password);
         } catch (error) {
-          console.error(error);
-          showMessage('Sign-in failed. Check the email/password and confirm this UID exists in the admins collection.', 'error');
+          console.error('[JNCOS Admin Login]', error);
+          showMessage('Sign-in failed. Check the email and password.', 'error');
         } finally {
           submit.disabled = false;
           submit.textContent = 'Sign In';
@@ -128,11 +132,11 @@
           showMessage('Password reset email sent.', 'success');
         } catch (error) {
           console.error(error);
-          showMessage('Could not send the reset email. Check the account email.', 'error');
+          showMessage('Could not send the reset email.', 'error');
         }
       });
     } catch (error) {
-      console.error(error);
+      console.error('[JNCOS Admin Init]', error);
       showLogin();
       showMessage('Firebase Authentication could not be initialized.', 'error');
     }
