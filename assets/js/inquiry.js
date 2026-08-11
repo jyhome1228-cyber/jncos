@@ -2,6 +2,14 @@
   const form = document.querySelector('[data-inquiry-form]');
   if (!form) return;
 
+  try {
+    const raw = localStorage.getItem('jncos_inquiries_v1');
+    const parsed = raw == null ? [] : JSON.parse(raw);
+    if (!Array.isArray(parsed)) localStorage.removeItem('jncos_inquiries_v1');
+  } catch (_) {
+    localStorage.removeItem('jncos_inquiries_v1');
+  }
+
   const STORE_RUNTIME = '20260812-0138-rest';
   const ensureInquiryStore = () => new Promise((resolve, reject) => {
     const current = window.JNCOSInquiryStore?.diagnostics;
