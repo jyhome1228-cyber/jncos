@@ -1,13 +1,13 @@
 body.public-page{--header-h:98px}
 .public-page .site-header{height:98px!important;min-height:98px!important}
 .public-page .header-inner{height:100%!important;align-items:center!important;padding-top:0!important;padding-bottom:0!important}
-.public-page .brand{width:238px!important;height:44px!important;align-items:center!important;display:flex!important}
+.public-page .brand{width:266px!important;height:49px!important;align-items:center!important;display:flex!important}
 .public-page .site-logo-img{display:block;width:100%!important;height:auto!important}
 .public-page .site-nav{align-items:center!important;min-height:44px;font-size:14px!important;font-weight:500!important}
 .public-page .site-nav>a:not(.nav-cta){display:flex!important;align-items:center!important;padding:0!important;min-height:44px!important}
 .public-page .nav-cta{display:flex!important;align-items:center!important;justify-content:center!important;min-height:44px!important}
 
-/* language / country selector */
+/* language / country selector — Inquiry comes first in DOM */
 .language-switcher{position:relative;display:flex;align-items:center;min-height:44px}
 .language-switcher-trigger{height:36px;display:inline-flex;align-items:center;gap:6px;padding:0 10px;border:1px solid #d9c8bb;background:#fff;color:#55473f;font:inherit;font-size:11px;font-weight:650;cursor:pointer;transition:border-color .18s ease,background .18s ease,color .18s ease}
 .language-switcher-trigger:hover,.language-switcher-trigger[aria-expanded="true"]{border-color:#a9856f;background:#f7f2ee;color:#2f1b13}
@@ -19,6 +19,12 @@ body.public-page{--header-h:98px}
 .language-switcher-menu button:hover{background:#f6f0ec}
 .language-switcher-menu strong{font-size:12px;font-weight:700}
 .language-switcher-menu span{color:#8b7b72;font-size:10px;font-weight:500}
+
+/* Google Translate engine is functional but visually hidden. */
+.google-translate-engine{position:fixed!important;left:-9999px!important;top:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
+.goog-te-banner-frame.skiptranslate,iframe.goog-te-banner-frame{display:none!important}
+body{top:0!important}
+#goog-gt-tt,.goog-te-balloon-frame{display:none!important}
 
 /* Taller editorial hero used consistently across sub pages */
 .public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero){
@@ -36,6 +42,7 @@ body.public-page{--header-h:98px}
 .public-page .inquiry-hero{padding-top:82px!important;padding-bottom:38px!important}
 
 @media(max-width:1280px){
+  .public-page .brand{width:238px!important;height:44px!important}
   .public-page .site-nav{gap:clamp(10px,1.1vw,20px)!important}
   .language-switcher-trigger{padding:0 8px}
 }
@@ -48,7 +55,7 @@ body.public-page{--header-h:98px}
   body.public-page{--header-h:76px}
   .public-page .site-header{height:76px!important;min-height:76px!important}
   .public-page .header-inner{align-items:center!important;padding-top:0!important;padding-bottom:0!important}
-  .public-page .brand{width:182px!important;height:34px!important;align-items:center!important}
+  .public-page .brand{width:198px!important;height:37px!important;align-items:center!important}
   .public-page .site-nav{position:fixed!important;inset:76px 0 0!important;min-height:0;align-items:stretch!important;padding:20px 22px 28px!important;font-size:18px!important;overflow-y:auto}
   .public-page .site-nav>a,.public-page .site-nav .nav-cta{justify-content:flex-start!important;align-items:center!important;min-height:58px!important;padding:0!important;font-size:18px!important}
   .language-switcher{width:100%;min-height:58px;border-bottom:1px solid var(--line)}
@@ -60,8 +67,20 @@ body.public-page{--header-h:98px}
   .public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero){min-height:360px!important;padding-top:104px!important;padding-bottom:48px!important}
 }
 @media(max-width:720px){
-  .public-page .brand{width:160px!important;height:30px!important}
+  .public-page .brand{width:184px!important;height:35px!important}
   .public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero){min-height:320px!important;padding-top:92px!important;padding-bottom:38px!important}
   .public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero) h1{font-size:29px!important}
   .public-page .inquiry-hero{padding-top:52px!important;padding-bottom:24px!important}
+
+  /* mobile footer: brand full-width, Company + Capabilities in 2 columns,
+     contact full-width. This cuts the long single-column footer height. */
+  .global-footer-top{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:34px 22px!important;padding-bottom:40px!important}
+  .global-footer-top>div:first-child{grid-column:1/-1}
+  .global-footer-contact{grid-column:1/-1}
+  .global-footer-brand{width:250px!important;margin-bottom:18px!important}
+  .global-footer-intro{max-width:none!important;font-size:13px!important;line-height:1.72!important}
+  .global-footer-label{font-size:10px!important;margin-bottom:14px!important}
+  .global-footer-links{gap:9px!important}
+  .global-footer-links a{font-size:13px!important}
+  .global-footer-contact p{font-size:12.5px!important;line-height:1.7!important}
 }
