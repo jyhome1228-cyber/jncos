@@ -15,6 +15,12 @@
     return value;
   };
 
+  const normalizeError = (error) => ({
+    ok: false,
+    code: error?.code || 'firestore/unknown',
+    message: error?.message || 'Unknown Firestore error'
+  });
+
   const getClient = async () => {
     if (!configured) return null;
     if (!clientPromise) {
@@ -26,20 +32,20 @@
         const app = getApps().length ? getApps()[0] : initializeApp(config);
         return { db: firestore.getFirestore(app), fs: firestore, app };
       })().catch((error) => {
-        console.warn('[JNCOS] Firebase initialization failed. Local backup remains active.', error);
+        console.warn('[JNCOS] Firebase initialization failed.', error);
         return null;
       });
     }
     return clientPromise;
   };
 
-  const withClient = async (handler, fallback = null) => {
+  const withClient = async (handler) => {
     const client = await getClient();
-    if (!client) return fallback;
+    if (!client) return { ok:false, code:'firebase/not-initialized', message:'Firebase could not be initialized.' };
     try { return await handler(client); }
     catch (error) {
-      console.warn('[JNCOS] Firestore request failed. Local backup remains active.', error);
-      return fallback;
+      console.warn('[JNCOS] Firestore request failed.', error);
+      return normalizeError(error);
     }
   };
 
@@ -50,8 +56,8 @@
     async ping() {
       return withClient(async ({ db, fs }) => {
         await fs.getDoc(fs.doc(db, '__jncos_health__', 'connection'));
-        return { ok: true, projectId: config.projectId };
-      }, { ok: false, projectId: config.projectId || '' });
+        return { ok:true, projectId:config.projectId };
+      });
     },
     async put(collectionName, id, payload) {
       return withClient(async ({ db, fs }) => {
@@ -59,34 +65,33 @@
         await fs.setDoc(ref, {
           ...payload,
           id,
-          updatedAt: fs.serverTimestamp(),
           updatedAtISO: new Date().toISOString()
-        }, { merge: true });
-        return true;
-      }, false);
+        });
+        return { ok:true, id, collection:collectionName };
+      });
     },
     async update(collectionName, id, patch) {
       return withClient(async ({ db, fs }) => {
         await fs.setDoc(fs.doc(db, collectionName, id), {
           ...patch,
-          updatedAt: fs.serverTimestamp(),
           updatedAtISO: new Date().toISOString()
-        }, { merge: true });
-        return true;
-      }, false);
+        }, { merge:true });
+        return { ok:true, id, collection:collectionName };
+      });
     },
     async remove(collectionName, id) {
       return withClient(async ({ db, fs }) => {
         await fs.deleteDoc(fs.doc(db, collectionName, id));
-        return true;
-      }, false);
+        return { ok:true, id, collection:collectionName };
+      });
     },
     async list(collectionName, max = 1000) {
-      return withClient(async ({ db, fs }) => {
+      const result = await withClient(async ({ db, fs }) => {
         const q = fs.query(fs.collection(db, collectionName), fs.limit(max));
         const snapshot = await fs.getDocs(q);
-        return snapshot.docs.map((doc) => normalizeValue({ id: doc.id, ...doc.data() }));
-      }, []);
+        return { ok:true, items:snapshot.docs.map((doc) => normalizeValue({ id:doc.id, ...doc.data() })) };
+      });
+      return result?.ok ? result.items : [];
     }
   };
 })();
