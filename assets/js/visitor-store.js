@@ -14,6 +14,7 @@
   sessionStorage.setItem(SESSION_KEY, sessionId);
   const localList = () => safeParse(localStorage.getItem(STORAGE_KEY), []);
   const writeLocal = (items) => localStorage.setItem(STORAGE_KEY, JSON.stringify(items.slice(0, 1500)));
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const indiaDate = (date = new Date()) => {
     const parts = new Intl.DateTimeFormat('en-CA', { timeZone:'Asia/Kolkata', year:'numeric', month:'2-digit', day:'2-digit' }).formatToParts(date);
@@ -30,21 +31,27 @@
   };
 
   const loadScript = (src, key) => new Promise((resolve) => {
-    if (window[key]) return resolve();
+    if (window[key]) return resolve(true);
     const existing = document.querySelector(`script[data-loader="${key}"]`);
-    if (existing) { existing.addEventListener('load', resolve, { once:true }); return; }
+    if (existing) {
+      if (existing.dataset.loaded === 'true') return resolve(Boolean(window[key]));
+      existing.addEventListener('load', () => resolve(Boolean(window[key])), { once:true });
+      existing.addEventListener('error', () => resolve(false), { once:true });
+      return;
+    }
     const script = document.createElement('script');
     script.src = `${basePath}${src}`;
     script.setAttribute('data-loader', key);
-    script.onload = resolve;
-    script.onerror = resolve;
+    script.onload = () => { script.dataset.loaded = 'true'; resolve(Boolean(window[key])); };
+    script.onerror = () => resolve(false);
     document.head.appendChild(script);
   });
 
   let backendPromise;
   const ensureBackend = () => backendPromise ||= (async () => {
-    if (!window.JNCOS_FIREBASE_CONFIG) await loadScript('/assets/js/firebase-config.js?v=20260811-2150', 'JNCOS_FIREBASE_CONFIG');
-    if (!window.JNCOSCloudStore) await loadScript('/assets/js/cloud-store.js?v=20260811-2150', 'JNCOSCloudStore');
+    if (!window.JNCOS_FIREBASE_CONFIG) await loadScript('/assets/js/firebase-config.js?v=20260811-2345', 'JNCOS_FIREBASE_CONFIG');
+    if (!window.JNCOSCloudStore) await loadScript('/assets/js/cloud-store.js?v=20260811-2345', 'JNCOSCloudStore');
+    return Boolean(window.JNCOSCloudStore?.configured);
   })();
 
   const localStats = () => {
@@ -113,10 +120,31 @@
     };
   };
 
-  const trackPageView = async () => {
-    if (/\/admin\/?(?:index\.html)?$/i.test(location.pathname)) return;
-    await ensureBackend();
+  const writeCloud = async (dateKey, record, deltas) => {
+    if (!window.JNCOSCloudStore?.configured) {
+      return {
+        rawResult:{ ok:false, code:'firebase/not-configured' },
+        aggregateResult:{ ok:false, code:'firebase/not-configured' }
+      };
+    }
 
+    let rawResult = await window.JNCOSCloudStore.put('visits', sessionId, record);
+    let aggregateResult = await window.JNCOSCloudStore.incrementTraffic(dateKey, deltas.day, deltas.total);
+
+    if (!rawResult?.ok || !aggregateResult?.ok) {
+      console.warn('[JNCOS Traffic] initial Firestore write failed', { rawResult, aggregateResult });
+      await sleep(900);
+      if (!rawResult?.ok) rawResult = await window.JNCOSCloudStore.put('visits', sessionId, record);
+      if (!aggregateResult?.ok) aggregateResult = await window.JNCOSCloudStore.incrementTraffic(dateKey, deltas.day, deltas.total);
+    }
+
+    return { rawResult, aggregateResult };
+  };
+
+  const trackPageView = async () => {
+    if (/\/admin\/?(?:index\.html)?$/i.test(location.pathname)) return { skipped:true, reason:'admin' };
+
+    const backendReady = await ensureBackend();
     const now = new Date().toISOString();
     const dateKey = indiaDate();
     const list = localList();
@@ -153,23 +181,12 @@
     const firstTotalVisit = localStorage.getItem(TOTAL_COUNTED_KEY) !== '1';
     const firstVisitToday = localStorage.getItem(DAY_COUNTED_KEY) !== dateKey;
     const firstPageThisSession = sessionStorage.getItem(SESSION_COUNTED_KEY) !== sessionId;
+    const deltas = {
+      day:{ visitors:firstVisitToday ? 1 : 0, sessions:firstPageThisSession ? 1 : 0, pageViews:1 },
+      total:{ visitors:firstTotalVisit ? 1 : 0, sessions:firstPageThisSession ? 1 : 0, pageViews:1 }
+    };
 
-    const [rawResult, aggregateResult] = await Promise.all([
-      window.JNCOSCloudStore?.put?.('visits', sessionId, record),
-      window.JNCOSCloudStore?.incrementTraffic?.(
-        dateKey,
-        {
-          visitors:firstVisitToday ? 1 : 0,
-          sessions:firstPageThisSession ? 1 : 0,
-          pageViews:1
-        },
-        {
-          visitors:firstTotalVisit ? 1 : 0,
-          sessions:firstPageThisSession ? 1 : 0,
-          pageViews:1
-        }
-      )
-    ]);
+    const { rawResult, aggregateResult } = await writeCloud(dateKey, record, deltas);
 
     if (aggregateResult?.ok) {
       if (firstTotalVisit) localStorage.setItem(TOTAL_COUNTED_KEY, '1');
@@ -177,11 +194,15 @@
       if (firstPageThisSession) sessionStorage.setItem(SESSION_COUNTED_KEY, sessionId);
     }
 
-    return { record, rawResult, aggregateResult };
+    const result = { ok:Boolean(rawResult?.ok), backendReady, record, rawResult, aggregateResult };
+    window.JNCOS_TRAFFIC_LAST_RESULT = result;
+    if (!rawResult?.ok) console.error('[JNCOS Traffic] visit record was not saved to Firestore', result);
+    return result;
   };
 
   window.JNCOSVisitorStore = {
     get mode() { return window.JNCOSCloudStore?.configured ? 'firestore+local' : 'local'; },
+    get lastResult() { return window.JNCOS_TRAFFIC_LAST_RESULT || null; },
     trackPageView,
     async list() {
       await ensureBackend();
