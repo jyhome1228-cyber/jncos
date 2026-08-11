@@ -1,10 +1,12 @@
 (() => {
   const STORAGE_KEY = 'jncos_inquiries_v1';
   const STATUS_KEY = 'jncos_inquiry_status_v1';
-  const RUNTIME_VERSION = '20260812-0115';
+  const RUNTIME_VERSION = '20260812-0121';
+  const FIREBASE_VERSION = '12.16.0';
+  const APP_NAME = 'jncos-inquiry-client';
   const basePath = window.JNCOS_BASE_PATH || (location.hostname.endsWith('github.io') ? '/jncos' : '');
 
-  const firebaseConfig = window.JNCOS_FIREBASE_CONFIG || {
+  const firebaseConfig = {
     apiKey: 'AIzaSyC-QT7LqvH4qXwhZDHDyyzV4r1y8rZTLcM',
     authDomain: 'jncostech.firebaseapp.com',
     projectId: 'jncostech',
@@ -36,55 +38,59 @@
     return [...map.values()].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
   };
 
+  // Inquiry submissions only need online CRUD. Use a dedicated named Firebase app
+  // and the REST-only Firestore Lite client so visitor/admin Firestore runtimes cannot
+  // interfere with the public inquiry write connection.
   let firebasePromise = null;
   const getFirebase = () => firebasePromise ||= Promise.all([
-    import('https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js'),
-    import('https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js')
+    import(`https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-app.js`),
+    import(`https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-firestore-lite.js`)
   ]).then(([appMod, fsMod]) => {
-    const app = appMod.getApps().length ? appMod.getApps()[0] : appMod.initializeApp(firebaseConfig);
-    return { db: fsMod.getFirestore(app), fs: fsMod, app };
+    const app = appMod.getApps().find((candidate) => candidate.name === APP_NAME)
+      || appMod.initializeApp(firebaseConfig, APP_NAME);
+    const db = fsMod.getFirestore(app);
+    return { db, fs: fsMod, app };
   });
 
+  const plainData = (value) => JSON.parse(JSON.stringify(value, (_key, val) => val === undefined ? null : val));
+
   const normalizeFirebaseError = (error) => {
-    const out = new Error(error?.message || 'Firebase could not save the inquiry.');
-    out.code = error?.code || 'firestore/unknown';
+    const rawCode = error?.code || '';
+    const rawMessage = error?.message || String(error || 'Unknown Firebase error');
+    const out = new Error(rawMessage);
+    out.code = rawCode || 'firestore/unknown';
+    out.name = error?.name || 'FirebaseError';
     out.details = {
       host: location.hostname,
       projectId: firebaseConfig.projectId,
-      runtimeVersion: RUNTIME_VERSION
+      appName: APP_NAME,
+      firebaseVersion: FIREBASE_VERSION,
+      runtimeVersion: RUNTIME_VERSION,
+      originalName: error?.name || '',
+      originalCode: rawCode,
+      originalMessage: rawMessage
     };
     return out;
   };
 
-  const cleanForFirestore = (value) => {
-    if (value === undefined) return null;
-    if (value === null) return null;
-    if (Array.isArray(value)) return value.map(cleanForFirestore);
-    if (typeof value === 'object') {
-      const out = {};
-      Object.entries(value).forEach(([key, val]) => {
-        if (val !== undefined) out[key] = cleanForFirestore(val);
-      });
-      return out;
-    }
-    return value;
-  };
-
   window.JNCOSInquiryStore = {
-    get mode() { return 'firestore+local'; },
+    get mode() { return 'firestore-lite+local'; },
     get diagnostics() {
       return {
         host: location.hostname,
-        mode: 'direct-firestore+local',
+        mode: 'firestore-lite+local',
         projectId: firebaseConfig.projectId,
-        runtimeVersion: RUNTIME_VERSION
+        appName: APP_NAME,
+        firebaseVersion: FIREBASE_VERSION,
+        runtimeVersion: RUNTIME_VERSION,
+        lastResult: window.JNCOS_INQUIRY_LAST_RESULT || null
       };
     },
 
     async create(payload) {
       const item = normalize(payload);
       const previous = listLocal();
-      const cloudPayload = cleanForFirestore({
+      const cloudPayload = plainData({
         ...item,
         createdAtISO: item.createdAt,
         submittedPage: location.pathname,
@@ -94,13 +100,16 @@
 
       try {
         const { db, fs } = await getFirebase();
-        await fs.setDoc(fs.doc(db, 'inquiries', item.id), cloudPayload);
+        const ref = fs.doc(db, 'inquiries', item.id);
+        await fs.setDoc(ref, cloudPayload);
         writeLocal([item, ...previous.filter((x) => x.id !== item.id)]);
         window.JNCOS_INQUIRY_LAST_RESULT = {
           ok: true,
           id: item.id,
           collection: 'inquiries',
           host: location.hostname,
+          transport: 'firestore-lite',
+          firebaseVersion: FIREBASE_VERSION,
           runtimeVersion: RUNTIME_VERSION
         };
         return item;
@@ -109,12 +118,11 @@
         window.JNCOS_INQUIRY_LAST_RESULT = {
           ok: false,
           code: normalized.code,
+          name: normalized.name,
           message: normalized.message,
-          host: location.hostname,
-          projectId: firebaseConfig.projectId,
-          runtimeVersion: RUNTIME_VERSION
+          details: normalized.details
         };
-        console.error('[JNCOS Inquiry Firestore]', window.JNCOS_INQUIRY_LAST_RESULT, error);
+        console.error('[JNCOS Inquiry Firestore Lite]', window.JNCOS_INQUIRY_LAST_RESULT, error);
         throw normalized;
       }
     },
