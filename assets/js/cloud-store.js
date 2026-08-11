@@ -1,6 +1,7 @@
 (() => {
   const config = window.JNCOS_FIREBASE_CONFIG || {};
   const configured = Boolean(config.apiKey && config.projectId && config.appId);
+  const FIREBASE_VERSION = '12.16.0';
   let clientPromise = null;
 
   const normalizeValue = (value) => {
@@ -26,13 +27,13 @@
     if (!clientPromise) {
       clientPromise = (async () => {
         const [{ initializeApp, getApps }, firestore] = await Promise.all([
-          import('https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js'),
-          import('https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js')
+          import(`https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-app.js`),
+          import(`https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-firestore.js`)
         ]);
         const app = getApps().length ? getApps()[0] : initializeApp(config);
         return { db: firestore.getFirestore(app), fs: firestore, app };
       })().catch((error) => {
-        console.warn('[JNCOS] Firebase initialization failed.', error);
+        console.warn('[JNCOS] Firebase initialization failed.', { firebaseVersion:FIREBASE_VERSION, error });
         return null;
       });
     }
@@ -54,6 +55,7 @@
   window.JNCOSCloudStore = {
     configured,
     mode: configured ? 'firestore' : 'local',
+    firebaseVersion: FIREBASE_VERSION,
     getClient,
     async ping() {
       return withClient(async ({ db, fs }) => {
