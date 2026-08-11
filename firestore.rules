@@ -4,37 +4,8 @@ service cloud.firestore {
 
     function isAdmin() {
       return request.auth != null
-        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
-    }
-
-    function isShortString(value, max) {
-      return value is string && value.size() <= max;
-    }
-
-    function validInquiryCreate() {
-      return request.resource.data.keys().hasAll(['id', 'type', 'createdAtISO'])
-        && request.resource.data.type == 'inquiry'
-        && isShortString(request.resource.data.id, 120)
-        && isShortString(request.resource.data.createdAtISO, 64);
-    }
-
-    function validContactCreate() {
-      return request.resource.data.keys().hasAll(['id', 'type', 'createdAtISO'])
-        && request.resource.data.type == 'contact'
-        && isShortString(request.resource.data.id, 120)
-        && isShortString(request.resource.data.createdAtISO, 64)
-        && (!request.resource.data.keys().hasAny(['message']) || isShortString(request.resource.data.message, 12000));
-    }
-
-    function validVisitWrite(docId) {
-      return request.resource.data.keys().hasAll(['id', 'type', 'sessionId', 'visitorId'])
-        && request.resource.data.type == 'visit'
-        && request.resource.data.id == docId
-        && request.resource.data.sessionId == docId
-        && isShortString(request.resource.data.visitorId, 160)
-        && request.resource.data.pageViews is int
-        && request.resource.data.pageViews >= 1
-        && request.resource.data.pageViews <= 10000;
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == true;
     }
 
     match /admins/{uid} {
@@ -42,18 +13,28 @@ service cloud.firestore {
       allow create, update, delete: if false;
     }
 
+    // Anyone can submit a NEW detailed inquiry without signing in.
+    // Only an authenticated JN COS TECH admin can read or manage it.
     match /inquiries/{inquiryId} {
-      allow create: if validInquiryCreate();
+      allow create: if request.resource.data.type == 'inquiry'
+                    && request.resource.data.id == inquiryId;
       allow read, update, delete: if isAdmin();
     }
 
+    // Anyone can submit a NEW quick contact request without signing in.
+    // Only an authenticated JN COS TECH admin can read or manage it.
     match /contacts/{contactId} {
-      allow create: if validContactCreate();
+      allow create: if request.resource.data.type == 'contact'
+                    && request.resource.data.id == contactId;
       allow read, update, delete: if isAdmin();
     }
 
+    // Public website sessions can create/update their own session document.
+    // Only an authenticated admin can read traffic data.
     match /visits/{sessionId} {
-      allow create, update: if validVisitWrite(sessionId);
+      allow create, update: if request.resource.data.type == 'visit'
+                            && request.resource.data.id == sessionId
+                            && request.resource.data.sessionId == sessionId;
       allow read, delete: if isAdmin();
     }
 
