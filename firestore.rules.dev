@@ -1,0 +1,20 @@
+// DEVELOPMENT ONLY — enables the current no-login /admin workflow.
+// Do NOT deploy this rule set to production because Inquiry/Contact PII would be publicly readable.
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /inquiries/{document=**} {
+      allow read, write: if true;
+    }
+    match /contacts/{document=**} {
+      allow read, write: if true;
+    }
+    match /visits/{document=**} {
+      allow read, write: if true;
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
