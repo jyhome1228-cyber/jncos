@@ -21,7 +21,7 @@ body.public-page{--header-h:98px}
 .nav-capability-link>small{grid-column:1/2;color:#806f66;font-size:10.5px;font-weight:450;line-height:1.55}
 .nav-capability-link>b{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#9a745d;font-size:13px;font-weight:500}
 
-/* language / country selector — Inquiry comes first in DOM */
+/* language / country selector */
 .language-switcher{position:relative;display:flex;align-items:center;min-height:44px}
 .language-switcher-trigger{height:36px;display:inline-flex;align-items:center;gap:6px;padding:0 10px;border:1px solid #d9c8bb;background:#fff;color:#55473f;font:inherit;font-size:11px;font-weight:650;cursor:pointer;transition:border-color .18s ease,background .18s ease,color .18s ease}
 .language-switcher-trigger:hover,.language-switcher-trigger[aria-expanded="true"]{border-color:#a9856f;background:#f7f2ee;color:#2f1b13}
@@ -33,7 +33,6 @@ body.public-page{--header-h:98px}
 .language-switcher-menu button:hover{background:#f6f0ec}
 .language-switcher-menu strong{font-size:12px;font-weight:700}
 .language-switcher-menu span{color:#8b7b72;font-size:10px;font-weight:500}
-
 .google-translate-engine{position:fixed!important;left:-9999px!important;top:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
 .goog-te-banner-frame.skiptranslate,iframe.goog-te-banner-frame{display:none!important}
 body{top:0!important}
@@ -45,6 +44,23 @@ body{top:0!important}
 .public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero) p:not(.eyebrow):not(.about-kicker):not(.product-kicker){max-width:760px!important}
 .public-page .inquiry-hero{padding-top:82px!important;padding-bottom:38px!important}
 
+/* Robust technology icons */
+.tech-glyph{display:block!important;width:100%!important;height:100%!important;max-width:none!important;overflow:visible!important;fill:none!important;stroke:currentColor!important;stroke-width:1.65!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.tech-glyph *{vector-effect:non-scaling-stroke}
+.tech-chip-icon,.tech-detail-icon,.tech-mini-icon{overflow:hidden!important;box-sizing:border-box!important}
+.tech-chip-icon .tech-glyph{width:16px!important;height:16px!important}
+.tech-detail-icon .tech-glyph{width:20px!important;height:20px!important}
+.tech-mini-icon .tech-glyph{width:15px!important;height:15px!important}
+
+/* All dark CTA sections share one left-aligned layout with logo on the right */
+section:is(.home-cta,.tech-cta,.oem-cta,.partnership-cta,.manufacturing-cta,.subpage-cta){text-align:left!important;position:relative;overflow:hidden}
+section:is(.home-cta,.tech-cta,.oem-cta,.partnership-cta,.manufacturing-cta,.subpage-cta)>.site-container{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(260px,360px)!important;column-gap:72px!important;align-items:center!important;position:relative}
+section:is(.home-cta,.tech-cta,.oem-cta,.partnership-cta,.manufacturing-cta,.subpage-cta)>.site-container>*{grid-column:1!important;text-align:left!important;margin-left:0!important;margin-right:0!important}
+section:is(.home-cta,.tech-cta,.oem-cta,.partnership-cta,.manufacturing-cta,.subpage-cta)>.site-container::after{content:"";grid-column:2;grid-row:1/6;width:100%;height:150px;background:url('../logo/jncos-logo.svg') center right/contain no-repeat;filter:brightness(0) invert(1);opacity:.96;justify-self:end}
+section:is(.home-cta,.tech-cta,.oem-cta,.partnership-cta,.manufacturing-cta,.subpage-cta) h2{max-width:760px!important;text-align:left!important;margin-left:0!important;margin-right:0!important}
+section:is(.home-cta,.tech-cta,.oem-cta,.partnership-cta,.manufacturing-cta,.subpage-cta) p{max-width:760px!important;text-align:left!important;margin-left:0!important;margin-right:0!important}
+section:is(.home-cta,.tech-cta,.oem-cta,.partnership-cta,.manufacturing-cta,.subpage-cta) :is(.hero-actions,.home-actions,.oem-cta-actions){justify-content:flex-start!important;margin-left:0!important;margin-right:0!important}
+
 @media(max-width:1280px){
   .public-page .brand{width:238px!important;height:44px!important}
   .public-page .site-nav{gap:clamp(12px,1.35vw,24px)!important}
@@ -55,6 +71,7 @@ body{top:0!important}
   .public-page .site-nav{gap:clamp(10px,1.15vw,19px)!important;font-size:13px!important}
   .nav-capabilities-trigger{font-size:13px}
   .language-switcher-trigger{font-size:10.5px}
+  section:is(.home-cta,.tech-cta,.oem-cta,.partnership-cta,.manufacturing-cta,.subpage-cta)>.site-container{grid-template-columns:minmax(0,1fr) 260px!important;column-gap:44px!important}
 }
 @media(max-width:1024px){
   body.public-page{--header-h:76px}
@@ -80,6 +97,8 @@ body{top:0!important}
   .language-switcher-menu strong{font-size:14px}
   .language-switcher-menu span{font-size:11px}
   .public-page:not(.home-page) :is(.product-hero,.about-hero,.oem-hero,.subpage-hero,.content-hero,.contact-hero){min-height:360px!important;padding-top:104px!important;padding-bottom:48px!important}
+  section:is(.home-cta,.tech-cta,.oem-cta,.partnership-cta,.manufacturing-cta,.subpage-cta)>.site-container{grid-template-columns:1fr!important;row-gap:36px!important}
+  section:is(.home-cta,.tech-cta,.oem-cta,.partnership-cta,.manufacturing-cta,.subpage-cta)>.site-container::after{grid-column:1;grid-row:auto;width:min(280px,65vw);height:90px;justify-self:start;background-position:left center}
 }
 @media(max-width:720px){
   .public-page .brand{width:184px!important;height:35px!important}
@@ -95,4 +114,5 @@ body{top:0!important}
   .global-footer-links{gap:9px!important}
   .global-footer-links a{font-size:13px!important}
   .global-footer-contact p{font-size:12.5px!important;line-height:1.7!important}
+  section:is(.home-cta,.tech-cta,.oem-cta,.partnership-cta,.manufacturing-cta,.subpage-cta)>.site-container::after{width:220px;height:72px}
 }
