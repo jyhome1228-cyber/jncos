@@ -20,6 +20,14 @@
   };
   const path = normalizePath(window.location.pathname);
 
+  if (!document.querySelector('link[data-image-preserve-css]')) {
+    const imageCss = document.createElement('link');
+    imageCss.rel = 'stylesheet';
+    imageCss.href = `${basePath}/assets/css/image-preserve.css`;
+    imageCss.setAttribute('data-image-preserve-css', '');
+    document.head.appendChild(imageCss);
+  }
+
   const fixInternalLinks = (root = document) => {
     if (!basePath) return;
     root.querySelectorAll?.('a[href^="/"]').forEach((link) => {
