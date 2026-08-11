@@ -1,17 +1,33 @@
 (() => {
   const form = document.querySelector('[data-contact-form]');
-  if (!form || !window.JNCOSContactStore) return;
+  if (!form) return;
 
   const status = document.querySelector('[data-contact-form-status]');
   const button = form.querySelector('[type="submit"]');
   const value = (name) => form.elements[name]?.value?.trim?.() || '';
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
-  const fieldFor = (name) => form.elements[name];
-  const fieldWrap = (field) => field?.closest('.field');
+  const firebaseConfig = {
+    apiKey: 'AIzaSyC-QT7LqvH4qXwhZDHDyyzV4r1y8rZTLcM',
+    authDomain: 'jncostech.firebaseapp.com',
+    projectId: 'jncostech',
+    storageBucket: 'jncostech.firebasestorage.app',
+    messagingSenderId: '629672019213',
+    appId: '1:629672019213:web:c2c0d5699fb65ce848dc44'
+  };
 
+  let firebasePromise = null;
+  const getFirebase = () => firebasePromise ||= Promise.all([
+    import('https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js'),
+    import('https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js')
+  ]).then(([appMod, fsMod]) => {
+    const app = appMod.getApps().length ? appMod.getApps()[0] : appMod.initializeApp(firebaseConfig);
+    return { db: fsMod.getFirestore(app), fs: fsMod };
+  });
+
+  const fieldFor = (name) => form.elements[name];
   const ensureErrorEl = (field) => {
-    const wrap = fieldWrap(field);
+    const wrap = field?.closest('.field');
     if (!wrap) return null;
     let error = wrap.querySelector('.field-error');
     if (!error) {
@@ -27,7 +43,7 @@
   const setFieldError = (name, message = '') => {
     const field = fieldFor(name);
     if (!field) return;
-    const wrap = fieldWrap(field);
+    const wrap = field.closest('.field');
     const error = ensureErrorEl(field);
     field.setAttribute('aria-invalid', message ? 'true' : 'false');
     wrap?.classList.toggle('has-error', Boolean(message));
@@ -37,26 +53,18 @@
     }
   };
 
-  const clearStatus = () => {
-    if (!status) return;
-    status.hidden = true;
-    status.classList.remove('is-error', 'is-success');
-    status.innerHTML = '';
-  };
-
   const showStatus = (title, message, type = 'error') => {
     if (!status) return;
     status.hidden = false;
     status.classList.toggle('is-error', type === 'error');
     status.classList.toggle('is-success', type === 'success');
     status.innerHTML = `<strong>${title}</strong><span>${message}</span>`;
-    status.scrollIntoView({ behavior:'smooth', block:'nearest' });
   };
 
   const validate = () => {
     let valid = true;
-    ['email', 'message'].forEach((name) => setFieldError(name, ''));
-
+    setFieldError('email', '');
+    setFieldError('message', '');
     const email = value('email');
     const message = value('message');
 
@@ -74,79 +82,68 @@
     }
 
     if (!valid) {
-      const first = form.querySelector('[aria-invalid="true"]');
-      first?.focus({ preventScroll:true });
-      first?.scrollIntoView({ behavior:'smooth', block:'center' });
       showStatus('Please check the form.', 'Complete the highlighted fields and try again.', 'error');
+      form.querySelector('[aria-invalid="true"]')?.focus();
     }
     return valid;
   };
 
-  const firestoreMessage = (error) => {
-    const code = String(error?.code || '').replace(/^firestore\//, '');
-    if (code === 'permission-denied') return 'Firebase rejected this request. Please confirm that the published Firestore Rules allow public create access to the contacts collection.';
-    if (code === 'unavailable') return 'Firebase is temporarily unavailable or the network connection was interrupted. Please try again.';
-    if (code === 'failed-precondition') return 'Firestore is not ready for this request. Please confirm that the database and rules are fully deployed.';
-    if (code === 'firebase/not-initialized') return 'Firebase could not be initialized on this page. Please refresh the page and try again.';
-    return `The request could not be saved to Firebase${code ? ` (${code})` : ''}. Please try again or email info@jncostech.com.`;
-  };
-
   form.setAttribute('novalidate', 'novalidate');
-  form.querySelectorAll('input, textarea, select').forEach((field) => {
+  form.querySelectorAll('input, textarea').forEach((field) => {
     field.addEventListener('input', () => {
       if (field.name === 'email') {
         const email = field.value.trim();
         if (!email || emailPattern.test(email)) setFieldError('email', '');
-      } else if (field.name === 'message' && field.value.trim()) {
-        setFieldError('message', '');
       }
-      if (!form.querySelector('.has-error')) clearStatus();
-    });
-    field.addEventListener('change', () => {
-      if (field.name === 'email') {
-        const email = field.value.trim();
-        setFieldError('email', !email ? 'Please enter your email address.' : (!emailPattern.test(email) ? 'Please enter a valid email address, for example name@company.com.' : ''));
-      }
+      if (field.name === 'message' && field.value.trim()) setFieldError('message', '');
     });
   });
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    clearStatus();
+    if (status) status.hidden = true;
     if (!validate()) return;
 
-    button.disabled = true;
     const oldLabel = button.textContent;
+    button.disabled = true;
     button.textContent = 'Sending…';
 
+    const id = window.crypto?.randomUUID?.() || `contact-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    const createdAt = new Date().toISOString();
+    const payload = {
+      id,
+      type: 'contact',
+      createdAt,
+      createdAtISO: createdAt,
+      status: 'New',
+      source: value('source') || 'Contact quick inquiry',
+      page: location.pathname,
+      contact: {
+        companyName: value('companyName'),
+        contactName: value('contactName'),
+        email: value('email'),
+        phone: value('phone'),
+        country: value('country')
+      },
+      message: value('message')
+    };
+
     try {
-      const payload = {
-        contact: {
-          companyName: value('companyName'),
-          contactName: value('contactName'),
-          email: value('email'),
-          phone: value('phone'),
-          country: value('country')
-        },
-        message: value('message'),
-        source: value('source') || 'Contact quick inquiry',
-        page: location.pathname,
-        status: 'New'
-      };
+      const { db, fs } = await getFirebase();
+      await fs.setDoc(fs.doc(db, 'contacts', id), payload);
 
-      const saved = await window.JNCOSContactStore.create(payload);
+      try {
+        const current = JSON.parse(localStorage.getItem('jncos_contacts_v1') || '[]');
+        localStorage.setItem('jncos_contacts_v1', JSON.stringify([payload, ...current.filter((item) => item.id !== id)]));
+      } catch (_) {}
+
       form.reset();
-      ['email','message'].forEach((name) => setFieldError(name, ''));
-
-      if (status) {
-        status.hidden = false;
-        status.classList.remove('is-error');
-        status.classList.add('is-success');
-        status.innerHTML = `<strong>Message received.</strong><span>Reference ${saved.id.slice(0,8).toUpperCase()} · Your request has been saved to JN COS TECH.</span><a href="../Inquiry/?source=Contact%20follow-up&companyName=${encodeURIComponent(payload.contact.companyName)}&contactName=${encodeURIComponent(payload.contact.contactName)}&email=${encodeURIComponent(payload.contact.email)}&phone=${encodeURIComponent(payload.contact.phone)}&country=${encodeURIComponent(payload.contact.country)}&additionalNotes=${encodeURIComponent(payload.message)}">Continue to Detailed Inquiry →</a>`;
-      }
+      showStatus('Message received.', `Reference ${id.slice(0,8).toUpperCase()} · Your request has been sent to JN COS TECH.`, 'success');
     } catch (error) {
-      console.error('[JNCOS Contact]', error);
-      showStatus('Message was not sent.', firestoreMessage(error), 'error');
+      console.error('[JNCOS Contact Firestore]', error);
+      const code = error?.code || 'unknown';
+      const message = error?.message || 'Unknown Firebase error.';
+      showStatus('Message was not sent.', `Firebase error: ${code}. ${message}`, 'error');
     } finally {
       button.disabled = false;
       button.textContent = oldLabel;
