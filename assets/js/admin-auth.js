@@ -28,7 +28,7 @@
     const old = document.querySelector('script[data-admin-dashboard]');
     if (old) old.remove();
     const script = document.createElement('script');
-    script.src = '../assets/js/admin.js?v=20260811-1752';
+    script.src = '../assets/js/admin.js?v=20260811-1817';
     script.setAttribute('data-admin-dashboard', '');
     script.onerror = () => {
       const mode = document.querySelector('[data-admin-mode]');
