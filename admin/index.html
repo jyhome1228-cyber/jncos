@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
   <link rel="stylesheet" href="../assets/css/common.css">
   <link rel="stylesheet" href="../assets/css/admin.css">
+  <link rel="stylesheet" href="../assets/css/admin-auth.css">
 </head>
 <body class="admin-body">
   <header class="admin-topbar">
@@ -50,7 +51,6 @@
           <div><span class="admin-eyebrow">JN COS TECH · BUSINESS OPERATIONS</span><h1>Requests & Traffic</h1><p>Review customer requests, update response status, export project briefs, and monitor website traffic from one dashboard.</p></div>
           <div class="admin-page-actions"><button class="admin-btn" type="button" data-export-csv>Export Requests CSV</button></div>
         </section>
-
         <section class="admin-overview" aria-label="Dashboard statistics">
           <article class="admin-stat"><span>Today Visitors</span><strong data-stat="todayVisitors">0</strong><small>India date</small></article>
           <article class="admin-stat"><span>7-Day Visitors</span><strong data-stat="weekVisitors">0</strong><small>Unique visitors</small></article>
@@ -59,20 +59,17 @@
           <article class="admin-stat"><span>New Contacts</span><strong data-stat="newContacts">0</strong><small>Quick contact requests</small></article>
           <article class="admin-stat accent"><span>Total Requests</span><strong data-stat="totalRequests">0</strong><small>Inquiry + Contact</small></article>
         </section>
-
         <section class="admin-traffic-grid">
           <article class="admin-card traffic-card">
             <div class="admin-card-head"><div><span class="admin-eyebrow">TRAFFIC</span><h2>Last 7 Days</h2></div><div class="traffic-totals"><span><b data-stat="totalSessions">0</b> sessions</span><span><b data-stat="pageViews">0</b> page views</span></div></div>
             <div class="traffic-chart" data-traffic-chart></div>
           </article>
           <article class="admin-card traffic-note-card">
-            <span class="admin-eyebrow">MEASUREMENT</span>
-            <h2>Visitor Tracking</h2>
+            <span class="admin-eyebrow">MEASUREMENT</span><h2>Visitor Tracking</h2>
             <p>Dashboard counts use the JN COS TECH session tracker. Google Analytics is also connected for acquisition, source, campaign and behavior analysis.</p>
             <dl><div><dt>Google Analytics</dt><dd>G-9JRLB4KEVK</dd></div><div><dt>Visitor timezone</dt><dd>Asia / Kolkata</dd></div><div><dt>Data source</dt><dd data-data-source>Firestore</dd></div></dl>
           </article>
         </section>
-
         <section class="admin-requests-section">
           <div class="admin-section-head"><div><span class="admin-eyebrow">REQUEST CENTER</span><h2>Customer Requests</h2></div><p>Inquiry and Contact requests are combined chronologically. Use Source and Status filters to narrow the list.</p></div>
           <div class="admin-panel">
@@ -82,17 +79,12 @@
                 <select data-admin-filter-type><option value="All">All sources</option><option value="inquiry">Inquiry</option><option value="contact">Contact</option></select>
                 <select data-admin-filter-status><option>All</option><option>New</option><option>Reviewing</option><option>Replied</option><option>Closed</option></select>
               </div>
-              <div class="admin-request-list" data-admin-list></div>
-              <div class="admin-empty" data-admin-empty hidden>No requests found.</div>
+              <div class="admin-request-list" data-admin-list></div><div class="admin-empty" data-admin-empty hidden>No requests found.</div>
             </aside>
             <article class="admin-detail-pane" data-admin-detail></article>
           </div>
         </section>
-
-        <section class="admin-foot-note">
-          <strong data-admin-storage-title>Cloud sync active</strong>
-          <span data-admin-storage-note>Inquiry, Contact and visitor data are synchronized through the JN COS TECH Firestore project.</span>
-        </section>
+        <section class="admin-foot-note"><strong data-admin-storage-title>Cloud sync active</strong><span data-admin-storage-note>Inquiry, Contact and visitor data are synchronized through the JN COS TECH Firestore project.</span></section>
       </div>
     </div>
   </main>
