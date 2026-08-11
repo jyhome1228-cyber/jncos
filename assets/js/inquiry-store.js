@@ -1,10 +1,7 @@
 (() => {
   const STORAGE_KEY = 'jncos_inquiries_v1';
   const STATUS_KEY = 'jncos_inquiry_status_v1';
-  const RUNTIME_VERSION = '20260812-0121';
-  const FIREBASE_VERSION = '12.16.0';
-  const APP_NAME = 'jncos-inquiry-client';
-  const basePath = window.JNCOS_BASE_PATH || (location.hostname.endsWith('github.io') ? '/jncos' : '');
+  const RUNTIME_VERSION = '20260812-0128';
 
   const firebaseConfig = {
     apiKey: 'AIzaSyC-QT7LqvH4qXwhZDHDyyzV4r1y8rZTLcM',
@@ -22,6 +19,7 @@
   const writeLocal = (items) => localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   const statusMap = () => safeParse(localStorage.getItem(STATUS_KEY), {});
   const uid = () => window.crypto?.randomUUID?.() || `jnc-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
   const normalize = (record) => ({
     id: record.id || uid(),
     type: 'inquiry',
@@ -29,6 +27,7 @@
     status: record.status || 'New',
     ...record
   });
+
   const merge = (local, cloud) => {
     const map = new Map();
     [...local, ...cloud].forEach((item) => {
@@ -38,16 +37,15 @@
     return [...map.values()].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
   };
 
-  // Inquiry submissions only need online CRUD. Use a dedicated named Firebase app
-  // and the REST-only Firestore Lite client so visitor/admin Firestore runtimes cannot
-  // interfere with the public inquiry write connection.
+  // Keep Inquiry on exactly the same Firebase client path as the working Contact form.
+  // Do not load Firestore Lite or a second named Firebase app here.
   let firebasePromise = null;
   const getFirebase = () => firebasePromise ||= Promise.all([
-    import(`https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-app.js`),
-    import(`https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-firestore-lite.js`)
+    import('https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js'),
+    import('https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js')
   ]).then(([appMod, fsMod]) => {
-    const app = appMod.getApps().find((candidate) => candidate.name === APP_NAME)
-      || appMod.initializeApp(firebaseConfig, APP_NAME);
+    const apps = appMod.getApps();
+    const app = apps.length ? apps[0] : appMod.initializeApp(firebaseConfig);
     const db = fsMod.getFirestore(app);
     return { db, fs: fsMod, app };
   });
@@ -63,8 +61,6 @@
     out.details = {
       host: location.hostname,
       projectId: firebaseConfig.projectId,
-      appName: APP_NAME,
-      firebaseVersion: FIREBASE_VERSION,
       runtimeVersion: RUNTIME_VERSION,
       originalName: error?.name || '',
       originalCode: rawCode,
@@ -74,14 +70,12 @@
   };
 
   window.JNCOSInquiryStore = {
-    get mode() { return 'firestore-lite+local'; },
+    get mode() { return 'firestore+local'; },
     get diagnostics() {
       return {
         host: location.hostname,
-        mode: 'firestore-lite+local',
+        mode: 'standard-firestore+local',
         projectId: firebaseConfig.projectId,
-        appName: APP_NAME,
-        firebaseVersion: FIREBASE_VERSION,
         runtimeVersion: RUNTIME_VERSION,
         lastResult: window.JNCOS_INQUIRY_LAST_RESULT || null
       };
@@ -100,16 +94,14 @@
 
       try {
         const { db, fs } = await getFirebase();
-        const ref = fs.doc(db, 'inquiries', item.id);
-        await fs.setDoc(ref, cloudPayload);
+        await fs.setDoc(fs.doc(db, 'inquiries', item.id), cloudPayload);
         writeLocal([item, ...previous.filter((x) => x.id !== item.id)]);
         window.JNCOS_INQUIRY_LAST_RESULT = {
           ok: true,
           id: item.id,
           collection: 'inquiries',
           host: location.hostname,
-          transport: 'firestore-lite',
-          firebaseVersion: FIREBASE_VERSION,
+          transport: 'standard-firestore',
           runtimeVersion: RUNTIME_VERSION
         };
         return item;
@@ -122,7 +114,7 @@
           message: normalized.message,
           details: normalized.details
         };
-        console.error('[JNCOS Inquiry Firestore Lite]', window.JNCOS_INQUIRY_LAST_RESULT, error);
+        console.error('[JNCOS Inquiry Firestore]', window.JNCOS_INQUIRY_LAST_RESULT, error);
         throw normalized;
       }
     },
@@ -174,19 +166,4 @@
       localStorage.removeItem(STATUS_KEY);
     }
   };
-
-  const loadTraffic = () => {
-    if (window.JNCOSVisitorStore) {
-      window.JNCOSVisitorStore.trackPageView?.();
-      return;
-    }
-    const existing = document.querySelector('script[data-inquiry-visitor-runtime]');
-    if (existing) return;
-    const script = document.createElement('script');
-    script.src = `${basePath}/assets/js/visitor-store.js?v=${RUNTIME_VERSION}`;
-    script.setAttribute('data-inquiry-visitor-runtime', '');
-    script.onload = () => window.JNCOSVisitorStore?.trackPageView?.();
-    document.head.appendChild(script);
-  };
-  loadTraffic();
 })();
