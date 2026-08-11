@@ -24,6 +24,14 @@
     if (userLabel) userLabel.hidden = true;
   };
 
+  const loadDashboard = () => {
+    if (document.querySelector('script[data-admin-dashboard]')) return;
+    const script = document.createElement('script');
+    script.src = '../assets/js/admin.js';
+    script.setAttribute('data-admin-dashboard', '');
+    document.body.appendChild(script);
+  };
+
   const showApp = (user) => {
     if (loginScreen) loginScreen.hidden = true;
     if (appScreen) appScreen.hidden = false;
@@ -33,6 +41,7 @@
       userLabel.textContent = user.email || 'Admin';
     }
     window.JNCOS_ADMIN_READY = true;
+    loadDashboard();
     window.dispatchEvent(new CustomEvent('jncos:admin-ready', { detail: { user } }));
   };
 
