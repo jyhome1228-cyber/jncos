@@ -17,64 +17,83 @@
         <div><span>OPERATIONS</span><strong>Admin Dashboard</strong></div>
       </div>
       <div class="admin-top-actions">
+        <span class="admin-user" data-admin-user hidden></span>
         <span class="admin-mode" data-admin-mode>Checking data connection…</span>
         <a class="admin-btn ghost" href="../">Website</a>
         <a class="admin-btn ghost" href="../Inquiry/">Inquiry Form</a>
         <a class="admin-btn ghost" href="../Contact/">Contact</a>
+        <button class="admin-btn ghost" type="button" data-admin-logout hidden>Sign Out</button>
         <button class="admin-btn" type="button" data-refresh>Refresh</button>
       </div>
     </div>
   </header>
 
-  <main class="admin-page">
-    <div class="admin-shell">
-      <section class="admin-page-head">
-        <div><span class="admin-eyebrow">JN COS TECH · BUSINESS OPERATIONS</span><h1>Requests & Traffic</h1><p>Review customer requests, update response status, export project briefs, and monitor website traffic from one dashboard.</p></div>
-        <div class="admin-page-actions"><button class="admin-btn" type="button" data-export-csv>Export Requests CSV</button></div>
-      </section>
+  <main>
+    <section class="admin-login-screen" data-admin-login>
+      <div class="admin-login-card">
+        <span class="admin-eyebrow">JN COS TECH · SECURE ADMIN</span>
+        <h1>Administrator Sign In</h1>
+        <p>Sign in with the Firebase Authentication account registered in the <strong>admins</strong> collection.</p>
+        <form class="admin-login-form" data-admin-login-form>
+          <label>Email<input type="email" autocomplete="username" data-admin-email required placeholder="admin@company.com"></label>
+          <label>Password<input type="password" autocomplete="current-password" data-admin-password required placeholder="Password"></label>
+          <button class="admin-btn admin-login-submit" type="submit">Sign In</button>
+        </form>
+        <button class="admin-reset-btn" type="button" data-admin-reset>Forgot password?</button>
+        <div class="admin-login-message" data-admin-login-message hidden></div>
+      </div>
+    </section>
 
-      <section class="admin-overview" aria-label="Dashboard statistics">
-        <article class="admin-stat"><span>Today Visitors</span><strong data-stat="todayVisitors">0</strong><small>India date</small></article>
-        <article class="admin-stat"><span>7-Day Visitors</span><strong data-stat="weekVisitors">0</strong><small>Unique visitors</small></article>
-        <article class="admin-stat"><span>Total Visitors</span><strong data-stat="totalVisitors">0</strong><small>Tracked visitors</small></article>
-        <article class="admin-stat"><span>New Inquiries</span><strong data-stat="newInquiries">0</strong><small>Detailed project briefs</small></article>
-        <article class="admin-stat"><span>New Contacts</span><strong data-stat="newContacts">0</strong><small>Quick contact requests</small></article>
-        <article class="admin-stat accent"><span>Total Requests</span><strong data-stat="totalRequests">0</strong><small>Inquiry + Contact</small></article>
-      </section>
+    <div class="admin-page" data-admin-app hidden>
+      <div class="admin-shell">
+        <section class="admin-page-head">
+          <div><span class="admin-eyebrow">JN COS TECH · BUSINESS OPERATIONS</span><h1>Requests & Traffic</h1><p>Review customer requests, update response status, export project briefs, and monitor website traffic from one dashboard.</p></div>
+          <div class="admin-page-actions"><button class="admin-btn" type="button" data-export-csv>Export Requests CSV</button></div>
+        </section>
 
-      <section class="admin-traffic-grid">
-        <article class="admin-card traffic-card">
-          <div class="admin-card-head"><div><span class="admin-eyebrow">TRAFFIC</span><h2>Last 7 Days</h2></div><div class="traffic-totals"><span><b data-stat="totalSessions">0</b> sessions</span><span><b data-stat="pageViews">0</b> page views</span></div></div>
-          <div class="traffic-chart" data-traffic-chart></div>
-        </article>
-        <article class="admin-card traffic-note-card">
-          <span class="admin-eyebrow">MEASUREMENT</span>
-          <h2>Visitor Tracking</h2>
-          <p>Dashboard counts use the JN COS TECH session tracker. Google Analytics is also connected for acquisition, source, campaign and behavior analysis.</p>
-          <dl><div><dt>Google Analytics</dt><dd>G-9JRLB4KEVK</dd></div><div><dt>Visitor timezone</dt><dd>Asia / Kolkata</dd></div><div><dt>Data source</dt><dd data-data-source>Local backup</dd></div></dl>
-        </article>
-      </section>
+        <section class="admin-overview" aria-label="Dashboard statistics">
+          <article class="admin-stat"><span>Today Visitors</span><strong data-stat="todayVisitors">0</strong><small>India date</small></article>
+          <article class="admin-stat"><span>7-Day Visitors</span><strong data-stat="weekVisitors">0</strong><small>Unique visitors</small></article>
+          <article class="admin-stat"><span>Total Visitors</span><strong data-stat="totalVisitors">0</strong><small>Tracked visitors</small></article>
+          <article class="admin-stat"><span>New Inquiries</span><strong data-stat="newInquiries">0</strong><small>Detailed project briefs</small></article>
+          <article class="admin-stat"><span>New Contacts</span><strong data-stat="newContacts">0</strong><small>Quick contact requests</small></article>
+          <article class="admin-stat accent"><span>Total Requests</span><strong data-stat="totalRequests">0</strong><small>Inquiry + Contact</small></article>
+        </section>
 
-      <section class="admin-requests-section">
-        <div class="admin-section-head"><div><span class="admin-eyebrow">REQUEST CENTER</span><h2>Customer Requests</h2></div><p>Inquiry and Contact requests are combined chronologically. Use Source and Status filters to narrow the list.</p></div>
-        <div class="admin-panel">
-          <aside class="admin-list-pane">
-            <div class="admin-tools">
-              <input type="search" placeholder="Search company, name, email…" data-admin-search>
-              <select data-admin-filter-type><option value="All">All sources</option><option value="inquiry">Inquiry</option><option value="contact">Contact</option></select>
-              <select data-admin-filter-status><option>All</option><option>New</option><option>Reviewing</option><option>Replied</option><option>Closed</option></select>
-            </div>
-            <div class="admin-request-list" data-admin-list></div>
-            <div class="admin-empty" data-admin-empty hidden>No requests found.</div>
-          </aside>
-          <article class="admin-detail-pane" data-admin-detail></article>
-        </div>
-      </section>
+        <section class="admin-traffic-grid">
+          <article class="admin-card traffic-card">
+            <div class="admin-card-head"><div><span class="admin-eyebrow">TRAFFIC</span><h2>Last 7 Days</h2></div><div class="traffic-totals"><span><b data-stat="totalSessions">0</b> sessions</span><span><b data-stat="pageViews">0</b> page views</span></div></div>
+            <div class="traffic-chart" data-traffic-chart></div>
+          </article>
+          <article class="admin-card traffic-note-card">
+            <span class="admin-eyebrow">MEASUREMENT</span>
+            <h2>Visitor Tracking</h2>
+            <p>Dashboard counts use the JN COS TECH session tracker. Google Analytics is also connected for acquisition, source, campaign and behavior analysis.</p>
+            <dl><div><dt>Google Analytics</dt><dd>G-9JRLB4KEVK</dd></div><div><dt>Visitor timezone</dt><dd>Asia / Kolkata</dd></div><div><dt>Data source</dt><dd data-data-source>Firestore</dd></div></dl>
+          </article>
+        </section>
 
-      <section class="admin-foot-note">
-        <strong data-admin-storage-title>Local backup mode</strong>
-        <span data-admin-storage-note>Requests are backed up in this browser. Add the Firebase Web App configuration in <code>assets/js/firebase-config.js</code> to sync Inquiry, Contact and visitor data across devices.</span>
-      </section>
+        <section class="admin-requests-section">
+          <div class="admin-section-head"><div><span class="admin-eyebrow">REQUEST CENTER</span><h2>Customer Requests</h2></div><p>Inquiry and Contact requests are combined chronologically. Use Source and Status filters to narrow the list.</p></div>
+          <div class="admin-panel">
+            <aside class="admin-list-pane">
+              <div class="admin-tools">
+                <input type="search" placeholder="Search company, name, email…" data-admin-search>
+                <select data-admin-filter-type><option value="All">All sources</option><option value="inquiry">Inquiry</option><option value="contact">Contact</option></select>
+                <select data-admin-filter-status><option>All</option><option>New</option><option>Reviewing</option><option>Replied</option><option>Closed</option></select>
+              </div>
+              <div class="admin-request-list" data-admin-list></div>
+              <div class="admin-empty" data-admin-empty hidden>No requests found.</div>
+            </aside>
+            <article class="admin-detail-pane" data-admin-detail></article>
+          </div>
+        </section>
+
+        <section class="admin-foot-note">
+          <strong data-admin-storage-title>Cloud sync active</strong>
+          <span data-admin-storage-note>Inquiry, Contact and visitor data are synchronized through the JN COS TECH Firestore project.</span>
+        </section>
+      </div>
     </div>
   </main>
 
@@ -84,6 +103,7 @@
   <script src="../assets/js/inquiry-store.js"></script>
   <script src="../assets/js/contact-store.js"></script>
   <script src="../assets/js/visitor-store.js"></script>
+  <script src="../assets/js/admin-auth.js"></script>
   <script src="../assets/js/admin.js"></script>
 </body>
 </html>
