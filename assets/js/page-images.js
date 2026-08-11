@@ -21,6 +21,88 @@
 
   const path = normalizePath(window.location.pathname);
 
+  const setupCapabilitiesNav = () => {
+    const nav = document.querySelector('[data-nav]');
+    if (!nav || nav.querySelector('[data-capabilities]')) return;
+
+    const links = [...nav.querySelectorAll(':scope > a')];
+    const products = links.find((a) => a.textContent.trim() === 'Products & Services');
+    const oem = links.find((a) => a.textContent.trim() === 'OEM / ODM');
+    const technology = links.find((a) => a.textContent.trim() === 'Technology & R&D');
+    if (!products || !oem || !technology) return;
+
+    const root = document.createElement('div');
+    root.className = 'nav-capabilities';
+    root.setAttribute('data-capabilities', '');
+    root.innerHTML = `
+      <button class="nav-capabilities-trigger" type="button" aria-expanded="false" data-capabilities-trigger>
+        <span>Capabilities</span>
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+      </button>
+      <div class="nav-capabilities-menu" data-capabilities-menu>
+        <div class="nav-capabilities-eyebrow">WHAT WE DO</div>
+      </div>`;
+
+    nav.insertBefore(root, products);
+    const menu = root.querySelector('[data-capabilities-menu]');
+    const descriptions = new Map([
+      [products, 'Explore skincare, sun care, hair, body and treatment categories.'],
+      [oem, 'From project brief and formulation to packaging and scalable manufacturing.'],
+      [technology, 'Research platforms, functional ingredients and formulation technologies.']
+    ]);
+
+    [products, oem, technology].forEach((link) => {
+      link.classList.add('nav-capability-link');
+      const label = link.textContent.trim();
+      const description = descriptions.get(link) || '';
+      link.innerHTML = `<span>${label}</span><small>${description}</small><b aria-hidden="true">↗</b>`;
+      menu.appendChild(link);
+    });
+
+    const trigger = root.querySelector('[data-capabilities-trigger]');
+    const setOpen = (open) => {
+      root.classList.toggle('is-open', open);
+      trigger.setAttribute('aria-expanded', String(open));
+    };
+    const toggleOpen = () => setOpen(!root.classList.contains('is-open'));
+
+    trigger.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleOpen();
+    });
+
+    root.addEventListener('mouseenter', () => { if (window.innerWidth > 1024) setOpen(true); });
+    root.addEventListener('mouseleave', () => { if (window.innerWidth > 1024) setOpen(false); });
+    root.addEventListener('focusin', () => { if (window.innerWidth > 1024) setOpen(true); });
+    root.addEventListener('focusout', (event) => {
+      if (window.innerWidth > 1024 && !root.contains(event.relatedTarget)) setOpen(false);
+    });
+    menu.addEventListener('click', () => setOpen(false));
+    document.addEventListener('click', (event) => { if (!root.contains(event.target)) setOpen(false); });
+    document.addEventListener('keydown', (event) => { if (event.key === 'Escape') setOpen(false); });
+    window.addEventListener('resize', () => setOpen(false));
+  };
+
+  const setupHomeTechTriggers = () => {
+    const grid = document.querySelector('.home-technology .tech-grid');
+    if (!grid) return;
+    grid.querySelectorAll('a').forEach((link) => {
+      link.removeAttribute('href');
+      link.classList.add('tech-trigger');
+      link.setAttribute('role', 'button');
+      link.setAttribute('tabindex', '0');
+      link.setAttribute('aria-label', `Show details for ${link.textContent.replace(/\s+/g, ' ').trim()}`);
+      link.addEventListener('click', (event) => event.preventDefault(), true);
+      link.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          link.click();
+        }
+      });
+    });
+  };
+
   const setupLanguageSwitcher = () => {
     const nav = document.querySelector('[data-nav]');
     const languageRoot = document.querySelector('[data-language-switcher]');
@@ -28,7 +110,6 @@
     const inquiry = nav?.querySelector('.nav-cta');
     if (!nav || !languageRoot || !languageMenu || !inquiry) return;
 
-    /* Mobile and desktop order: ... Contact us → Inquiry → Language */
     if (inquiry.nextElementSibling !== languageRoot) inquiry.insertAdjacentElement('afterend', languageRoot);
 
     let engine = document.getElementById('google_translate_element');
@@ -44,11 +125,7 @@
       window.googleTranslateElementInit = () => {
         if (!window.google?.translate?.TranslateElement) return;
         if (engine.dataset.ready === 'true') return;
-        new window.google.translate.TranslateElement({
-          pageLanguage: 'en',
-          includedLanguages: 'hi',
-          autoDisplay: false
-        }, 'google_translate_element');
+        new window.google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'hi', autoDisplay: false }, 'google_translate_element');
         engine.dataset.ready = 'true';
       };
     }
@@ -80,8 +157,7 @@
         window.setTimeout(() => translateToHindi(attempt + 1), 180);
         return;
       }
-      const sourceUrl = window.location.href;
-      window.location.href = `https://translate.google.com/translate?sl=en&tl=hi&u=${encodeURIComponent(sourceUrl)}`;
+      window.location.href = `https://translate.google.com/translate?sl=en&tl=hi&u=${encodeURIComponent(window.location.href)}`;
     };
 
     const restoreEnglish = () => {
@@ -100,9 +176,7 @@
       if (lang === 'hi') {
         setGoogtransCookie('/en/hi');
         translateToHindi();
-      } else {
-        restoreEnglish();
-      }
+      } else restoreEnglish();
       const trigger = document.querySelector('[data-language-trigger]');
       if (trigger) trigger.querySelector('span').textContent = lang === 'hi' ? 'HI' : 'EN';
       languageMenu.hidden = true;
@@ -114,26 +188,22 @@
     if (path !== '/Inquiry/') return;
     const main = document.querySelector('main.inquiry-page');
     if (!main) return;
-
     const removeLegacyForms = (root = main) => {
-      root.querySelectorAll?.('form').forEach((form) => {
-        if (!form.matches('[data-inquiry-form]')) form.remove();
-      });
+      root.querySelectorAll?.('form').forEach((form) => { if (!form.matches('[data-inquiry-form]')) form.remove(); });
     };
-
     removeLegacyForms();
     const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
-          if (!(node instanceof Element)) return;
-          if (node.matches('form') && !node.matches('[data-inquiry-form]')) node.remove();
-          else removeLegacyForms(node);
-        });
-      });
+      mutations.forEach((mutation) => mutation.addedNodes.forEach((node) => {
+        if (!(node instanceof Element)) return;
+        if (node.matches('form') && !node.matches('[data-inquiry-form]')) node.remove();
+        else removeLegacyForms(node);
+      }));
     });
     observer.observe(main, { childList: true, subtree: true });
   };
 
+  setupCapabilitiesNav();
+  setupHomeTechTriggers();
   setupLanguageSwitcher();
   cleanupInquiryForms();
 
