@@ -9,16 +9,135 @@
     '/Contact/': [['https://cdn.imweb.me/upload/S2023030963558ef55ba8e/0867ff1868205.jpg','JNCOS TECH contact visual 01'],['https://cdn.imweb.me/upload/S2023030963558ef55ba8e/1ecde89c324d3.jpg','JNCOS TECH contact visual 02'],['https://cdn.imweb.me/upload/S2023030963558ef55ba8e/a6c9d4959838e.jpg','JNCOS TECH contact visual 03']]
   };
 
-  const normalizePath = (path) => {
+  const normalizePath = (pathname) => {
     const basePath = window.JNCOS_BASE_PATH || '';
-    let clean = path || '/';
+    let clean = pathname || '/';
     if (basePath && clean.startsWith(basePath)) clean = clean.slice(basePath.length) || '/';
     if (clean === '/index.html') return '/';
     clean = clean.replace(/index\.html$/i, '');
-    return clean.endsWith('/') ? clean : `${clean}/`;
+    if (!clean.startsWith('/')) clean = `/${clean}`;
+    return clean === '/' || clean.endsWith('/') ? clean : `${clean}/`;
   };
 
   const path = normalizePath(window.location.pathname);
+
+  /* ---------------------------------------------------------
+     Global language switcher enhancement
+     - Keep Inquiry first, language selector immediately after it.
+     - Translate the current DOM in place via Google Translate.
+     - Fall back to Google's website translator URL if the widget
+       is blocked or unavailable on the current browser.
+  --------------------------------------------------------- */
+  const setupLanguageSwitcher = () => {
+    const nav = document.querySelector('[data-nav]');
+    const languageRoot = document.querySelector('[data-language-switcher]');
+    const languageMenu = document.querySelector('[data-language-menu]');
+    const inquiry = nav?.querySelector('.nav-cta');
+    if (!nav || !languageRoot || !languageMenu || !inquiry) return;
+
+    /* Mobile and desktop order: ... Contact us → Inquiry → Language */
+    if (inquiry.nextElementSibling !== languageRoot) inquiry.insertAdjacentElement('afterend', languageRoot);
+
+    let engine = document.getElementById('google_translate_element');
+    if (!engine) {
+      engine = document.createElement('div');
+      engine.id = 'google_translate_element';
+      engine.className = 'google-translate-engine';
+      engine.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(engine);
+    }
+
+    if (!window.googleTranslateElementInit) {
+      window.googleTranslateElementInit = () => {
+        if (!window.google?.translate?.TranslateElement) return;
+        if (engine.dataset.ready === 'true') return;
+        new window.google.translate.TranslateElement({
+          pageLanguage: 'en',
+          includedLanguages: 'hi',
+          autoDisplay: false
+        }, 'google_translate_element');
+        engine.dataset.ready = 'true';
+      };
+    }
+
+    if (!document.querySelector('script[data-google-translate]')) {
+      const script = document.createElement('script');
+      script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      script.async = true;
+      script.setAttribute('data-google-translate', '');
+      document.body.appendChild(script);
+    }
+
+    const setGoogtransCookie = (value) => {
+      const expires = value ? '' : ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      document.cookie = `googtrans=${value}${expires};path=/;SameSite=Lax`;
+      const host = window.location.hostname;
+      if (host && !host.includes('localhost')) {
+        document.cookie = `googtrans=${value}${expires};path=/;domain=.${host};SameSite=Lax`;
+      }
+    };
+
+    const translateToHindi = (attempt = 0) => {
+      const combo = document.querySelector('.goog-te-combo');
+      if (combo) {
+        combo.value = 'hi';
+        combo.dispatchEvent(new Event('change', { bubbles: true }));
+        document.documentElement.setAttribute('data-translated-language', 'hi');
+        return;
+      }
+      if (attempt < 24) {
+        window.setTimeout(() => translateToHindi(attempt + 1), 180);
+        return;
+      }
+      /* Widget fallback: use Google's current-page website translation. */
+      const sourceUrl = window.location.href;
+      window.location.href = `https://translate.google.com/translate?sl=en&tl=hi&u=${encodeURIComponent(sourceUrl)}`;
+    };
+
+    const restoreEnglish = () => {
+      setGoogtransCookie('');
+      const clean = new URL(window.location.href);
+      clean.hash = '';
+      window.location.href = clean.toString();
+    };
+
+    /* Capture phase overrides the old redirect handler in common.js. */
+    languageMenu.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-language]');
+      if (!button) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const lang = button.dataset.language;
+      if (lang === 'hi') {
+        setGoogtransCookie('/en/hi');
+        translateToHindi();
+      } else {
+        restoreEnglish();
+      }
+      const trigger = document.querySelector('[data-language-trigger]');
+      if (trigger) trigger.querySelector('span').textContent = lang === 'hi' ? 'HI' : 'EN';
+      languageMenu.hidden = true;
+      trigger?.setAttribute('aria-expanded', 'false');
+    }, true);
+  };
+
+  /* ---------------------------------------------------------
+     Inquiry defensive cleanup
+     Only the 8-step project form should exist on this page.
+     This removes stale/legacy forms if a cached fragment is injected.
+  --------------------------------------------------------- */
+  const cleanupInquiryForms = () => {
+    if (path !== '/Inquiry/') return;
+    document.querySelectorAll('form').forEach((form) => {
+      if (!form.matches('[data-inquiry-form]') && !form.closest('#google_translate_element')) form.remove();
+    });
+  };
+
+  setupLanguageSwitcher();
+  cleanupInquiryForms();
+
+  /* Page image stack is only added to legacy pages that do not already
+     place their provided images explicitly in the layout. */
   const images = IMAGE_MAP[path];
   const main = document.querySelector('main');
   if (!main || !images || main.matches('[data-page-visuals]') || main.querySelector('[data-page-visuals]')) return;
@@ -35,10 +154,15 @@
   images.forEach(([src, alt], index) => {
     const figure = document.createElement('figure');
     const img = document.createElement('img');
-    img.src = src; img.alt = alt; img.decoding = 'async';
+    img.src = src;
+    img.alt = alt;
+    img.decoding = 'async';
     img.loading = path === '/' && index === 0 ? 'eager' : 'lazy';
-    figure.appendChild(img); list.appendChild(figure);
+    figure.appendChild(img);
+    list.appendChild(figure);
   });
 
-  inner.appendChild(list); section.appendChild(inner); main.appendChild(section);
+  inner.appendChild(list);
+  section.appendChild(inner);
+  main.appendChild(section);
 })();
