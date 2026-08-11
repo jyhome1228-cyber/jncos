@@ -1,7 +1,7 @@
 (() => {
   const config = window.JNCOS_FIREBASE_CONFIG || {};
   const configured = Boolean(config.apiKey && config.projectId && config.appId);
-  const FIREBASE_VERSION = '12.16.0';
+  const FIREBASE_VERSION = '12.17.1';
   let clientPromise = null;
 
   const normalizeValue = (value) => {
