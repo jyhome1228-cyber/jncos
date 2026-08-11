@@ -13,28 +13,21 @@ service cloud.firestore {
       allow create, update, delete: if false;
     }
 
-    // Anyone can submit a NEW detailed inquiry without signing in.
-    // Only an authenticated JN COS TECH admin can read or manage it.
+    // Public website visitors can submit new project inquiries without signing in.
     match /inquiries/{inquiryId} {
-      allow create: if request.resource.data.type == 'inquiry'
-                    && request.resource.data.id == inquiryId;
+      allow create: if true;
       allow read, update, delete: if isAdmin();
     }
 
-    // Anyone can submit a NEW quick contact request without signing in.
-    // Only an authenticated JN COS TECH admin can read or manage it.
+    // Public website visitors can submit new contact requests without signing in.
     match /contacts/{contactId} {
-      allow create: if request.resource.data.type == 'contact'
-                    && request.resource.data.id == contactId;
+      allow create: if true;
       allow read, update, delete: if isAdmin();
     }
 
-    // Public website sessions can create/update their own session document.
-    // Only an authenticated admin can read traffic data.
+    // Anonymous visitor/session measurement. Only administrators may read it.
     match /visits/{sessionId} {
-      allow create, update: if request.resource.data.type == 'visit'
-                            && request.resource.data.id == sessionId
-                            && request.resource.data.sessionId == sessionId;
+      allow create, update: if true;
       allow read, delete: if isAdmin();
     }
 
