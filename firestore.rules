@@ -8,6 +8,40 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == true;
     }
 
+    function validCounterValue(value) {
+      return value is int && value >= 0;
+    }
+
+    function validTrafficCreate(data, id, isSummary) {
+      return validCounterValue(data.visitors)
+        && validCounterValue(data.sessions)
+        && validCounterValue(data.pageViews)
+        && data.visitors <= 1
+        && data.sessions <= 1
+        && data.pageViews == 1
+        && data.updatedAtISO is string
+        && (
+          (isSummary && data.scope == 'total')
+          || (!isSummary && data.date == id)
+        );
+    }
+
+    function validTrafficUpdate(oldData, newData, id, isSummary) {
+      return validCounterValue(newData.visitors)
+        && validCounterValue(newData.sessions)
+        && validCounterValue(newData.pageViews)
+        && newData.visitors >= oldData.visitors
+        && newData.visitors <= oldData.visitors + 1
+        && newData.sessions >= oldData.sessions
+        && newData.sessions <= oldData.sessions + 1
+        && newData.pageViews == oldData.pageViews + 1
+        && newData.updatedAtISO is string
+        && (
+          (isSummary && newData.scope == 'total' && oldData.scope == 'total')
+          || (!isSummary && newData.date == id && oldData.date == id)
+        );
+    }
+
     match /admins/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;
       allow create, update, delete: if false;
@@ -25,10 +59,32 @@ service cloud.firestore {
       allow read, update, delete: if isAdmin();
     }
 
-    // Anonymous visitor/session measurement. Only administrators may read it.
+    // Raw anonymous session records stay private. They can contain referrer / UTM metadata.
     match /visits/{sessionId} {
       allow create, update: if true;
       allow read, delete: if isAdmin();
+    }
+
+    // Safe day-level traffic aggregates. Loginless admin may read counts only.
+    match /trafficDays/{dayId} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly(['date', 'visitors', 'sessions', 'pageViews', 'updatedAtISO'])
+        && validTrafficCreate(request.resource.data, dayId, false);
+      allow update: if request.resource.data.keys().hasOnly(['date', 'visitors', 'sessions', 'pageViews', 'updatedAtISO'])
+        && validTrafficUpdate(resource.data, request.resource.data, dayId, false);
+      allow delete: if false;
+    }
+
+    // Safe all-time traffic aggregate. No raw visitor metadata is exposed here.
+    match /trafficSummary/{summaryId} {
+      allow read: if true;
+      allow create: if summaryId == 'total'
+        && request.resource.data.keys().hasOnly(['scope', 'visitors', 'sessions', 'pageViews', 'updatedAtISO'])
+        && validTrafficCreate(request.resource.data, summaryId, true);
+      allow update: if summaryId == 'total'
+        && request.resource.data.keys().hasOnly(['scope', 'visitors', 'sessions', 'pageViews', 'updatedAtISO'])
+        && validTrafficUpdate(resource.data, request.resource.data, summaryId, true);
+      allow delete: if false;
     }
 
     match /{document=**} {
