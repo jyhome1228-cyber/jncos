@@ -146,9 +146,11 @@
       }
       window.scrollTo({ top: Math.max(0, (document.querySelector('.inquiry-shell')?.offsetTop || 0) - 100), behavior: 'smooth' });
     } catch (error) {
-      console.error('[JNCOS Inquiry Submit]', error, window.JNCOS_INQUIRY_LAST_RESULT || null);
-      const code = error?.code || window.JNCOS_INQUIRY_LAST_RESULT?.code || 'unknown';
-      alert(`We could not save your inquiry. Please try again.\n\nFirebase error: ${code}`);
+      const last = window.JNCOS_INQUIRY_LAST_RESULT || {};
+      console.error('[JNCOS Inquiry Submit]', error, last);
+      const code = error?.code || last.code || 'unknown';
+      const message = error?.message || last.message || 'Unknown Firebase error.';
+      alert(`We could not save your inquiry. Please try again.\n\nFirebase error: ${code}\n${message}`);
       submit.disabled = false;
       submit.textContent = 'Submit Inquiry';
     }
