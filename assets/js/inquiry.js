@@ -131,18 +131,30 @@
     event.preventDefault();
     if (!validateStep(current)) return;
     const submit = form.querySelector('[type="submit"]');
-    submit.disabled = true; submit.textContent = 'Submitting…';
+    submit.disabled = true;
+    submit.textContent = 'Submitting…';
+
     try {
       const saved = await window.JNCOSInquiryStore.create(data());
       workspace.hidden = true;
       document.querySelector('.inquiry-progress-head')?.setAttribute('hidden', '');
       document.querySelector('.inquiry-progress-track')?.setAttribute('hidden', '');
-      if (success) { success.hidden = false; const id = success.querySelector('[data-inquiry-id]'); if (id) id.textContent = saved.id.slice(0, 8).toUpperCase(); }
+      if (success) {
+        success.hidden = false;
+        const id = success.querySelector('[data-inquiry-id]');
+        if (id) id.textContent = saved.id.slice(0, 8).toUpperCase();
+      }
       window.scrollTo({ top: Math.max(0, (document.querySelector('.inquiry-shell')?.offsetTop || 0) - 100), behavior: 'smooth' });
     } catch (error) {
-      console.error(error); alert('We could not save your inquiry. Please try again.'); submit.disabled = false; submit.textContent = 'Submit Inquiry';
+      console.error('[JNCOS Inquiry Submit]', error, window.JNCOS_INQUIRY_LAST_RESULT || null);
+      const code = error?.code || window.JNCOS_INQUIRY_LAST_RESULT?.code || 'unknown';
+      alert(`We could not save your inquiry. Please try again.\n\nFirebase error: ${code}`);
+      submit.disabled = false;
+      submit.textContent = 'Submit Inquiry';
     }
   });
 
-  prefillFromQuery(); renderSummary(); show(0, false);
+  prefillFromQuery();
+  renderSummary();
+  show(0, false);
 })();
