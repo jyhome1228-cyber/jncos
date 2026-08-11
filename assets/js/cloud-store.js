@@ -20,11 +20,11 @@
     if (!clientPromise) {
       clientPromise = (async () => {
         const [{ initializeApp, getApps }, firestore] = await Promise.all([
-          import('https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js'),
-          import('https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js')
+          import('https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js'),
+          import('https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js')
         ]);
         const app = getApps().length ? getApps()[0] : initializeApp(config);
-        return { db: firestore.getFirestore(app), fs: firestore };
+        return { db: firestore.getFirestore(app), fs: firestore, app };
       })().catch((error) => {
         console.warn('[JNCOS] Firebase initialization failed. Local backup remains active.', error);
         return null;
@@ -46,6 +46,13 @@
   window.JNCOSCloudStore = {
     configured,
     mode: configured ? 'firestore' : 'local',
+    getClient,
+    async ping() {
+      return withClient(async ({ db, fs }) => {
+        await fs.getDoc(fs.doc(db, '__jncos_health__', 'connection'));
+        return { ok: true, projectId: config.projectId };
+      }, { ok: false, projectId: config.projectId || '' });
+    },
     async put(collectionName, id, payload) {
       return withClient(async ({ db, fs }) => {
         const ref = fs.doc(db, collectionName, id);
