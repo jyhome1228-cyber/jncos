@@ -45,3 +45,97 @@
 .public-page main :is(.home-hero-visual,.subpage-hero-visual,.about-hero-visual,.product-hero-visual,.contact-hero-visual) img {
   width:100%;
 }
+
+/* 2026-08-11 — editorial gallery system
+   Keep all supporting imagery in one consistent 3-column crop instead of mixing large portrait/landscape blocks. */
+body.public-page main .jn-editorial-grid,
+body.public-page main .jn-editorial-grid[data-cols="2"],
+body.public-page main .jn-editorial-grid[data-cols="3"] {
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:16px !important;
+  width:100% !important;
+  max-width:none !important;
+  margin:28px 0 0 !important;
+  align-items:stretch !important;
+}
+
+body.public-page main .jn-editorial-grid figure {
+  display:block !important;
+  width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  aspect-ratio:4 / 3 !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  background:#f1eee9 !important;
+}
+
+body.public-page main .jn-editorial-grid figure > img,
+body.public-page main .jn-editorial-grid img {
+  display:block !important;
+  width:100% !important;
+  max-width:none !important;
+  height:100% !important;
+  min-height:100% !important;
+  max-height:none !important;
+  aspect-ratio:auto !important;
+  object-fit:cover !important;
+  object-position:center !important;
+  margin:0 !important;
+  transform:none !important;
+}
+
+/* Two-image groups receive one additional, non-duplicated supporting visual so every desktop row remains a true 3-up grid. */
+body.public-page main .jn-editorial-grid[data-cols="2"]::after {
+  content:"";
+  display:block;
+  width:100%;
+  aspect-ratio:4 / 3;
+  background-color:#f1eee9;
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:cover;
+}
+
+body.public-page .manufacturing-page .mfg-two + .jn-editorial-grid[data-cols="2"]::after {
+  background-image:url("https://cdn.imweb.me/upload/S2023030963558ef55ba8e/271ff2c6e399e.jpg");
+}
+body.public-page .manufacturing-page .mfg-equipment-grid + .jn-editorial-grid[data-cols="2"]::after {
+  background-image:url("https://cdn.imweb.me/upload/S2023030963558ef55ba8e/9f66cd28df907.jpg");
+}
+body.public-page .manufacturing-page .mfg-support-grid + .jn-editorial-grid[data-cols="2"]::after {
+  background-image:url("https://cdn.imweb.me/upload/S2023030963558ef55ba8e/6bd2f78858152.jpg");
+}
+body.public-page .manufacturing-page .mfg-qc-grid + .jn-editorial-grid[data-cols="2"]::after {
+  background-image:url("https://cdn.imweb.me/upload/S2023030963558ef55ba8e/8987f5909172f.jpg");
+}
+body.public-page .about-page .about-narrow > p:last-of-type + .jn-editorial-grid[data-cols="2"]::after {
+  background-image:url("https://cdn.imweb.me/upload/S2023030963558ef55ba8e/4ec6a98aa3f21.jpg");
+}
+body.public-page .products-page .product-section.alt .product-grid + .jn-editorial-grid[data-cols="2"]::after {
+  background-image:url("https://cdn.imweb.me/upload/S2023030963558ef55ba8e/6080c78501663.jpg");
+}
+body.public-page .oem-page .oem-process-grid + .jn-editorial-grid[data-cols="2"]::after {
+  background-image:url("https://cdn.imweb.me/upload/S2023030963558ef55ba8e/595c3d044bba9.jpg");
+}
+body.public-page .technology-page .tech-optimization-inner + .jn-editorial-grid[data-cols="2"]::after {
+  background-image:url("https://cdn.imweb.me/upload/S2023030963558ef55ba8e/33f5d0e3fb168.jpg");
+}
+
+@media (max-width:760px) {
+  body.public-page main .jn-editorial-grid,
+  body.public-page main .jn-editorial-grid[data-cols="2"],
+  body.public-page main .jn-editorial-grid[data-cols="3"] {
+    grid-template-columns:1fr !important;
+    gap:10px !important;
+    margin-top:22px !important;
+  }
+
+  body.public-page main .jn-editorial-grid figure,
+  body.public-page main .jn-editorial-grid[data-cols="2"]::after {
+    aspect-ratio:4 / 3 !important;
+  }
+}
