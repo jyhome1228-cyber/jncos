@@ -1,6 +1,27 @@
 (() => {
   const form = document.querySelector('[data-inquiry-form]');
-  if (!form || !window.JNCOSInquiryStore) return;
+  if (!form) return;
+
+  const STORE_RUNTIME = '20260812-0132-rest';
+  const ensureInquiryStore = () => new Promise((resolve, reject) => {
+    const current = window.JNCOSInquiryStore?.diagnostics;
+    if (current?.runtimeVersion === STORE_RUNTIME && current?.mode === 'firestore-rest+local') {
+      resolve(window.JNCOSInquiryStore);
+      return;
+    }
+
+    document.querySelectorAll('script[data-inquiry-store-refresh]').forEach((node) => node.remove());
+    const script = document.createElement('script');
+    script.src = `../assets/js/inquiry-store.js?v=${STORE_RUNTIME}`;
+    script.setAttribute('data-inquiry-store-refresh', '');
+    script.onload = () => {
+      const loaded = window.JNCOSInquiryStore;
+      if (loaded?.diagnostics?.runtimeVersion === STORE_RUNTIME) resolve(loaded);
+      else reject(Object.assign(new Error('Updated inquiry storage runtime did not initialize.'), { code:'inquiry/runtime-not-loaded' }));
+    };
+    script.onerror = () => reject(Object.assign(new Error('Updated inquiry storage runtime could not be loaded.'), { code:'inquiry/runtime-load-failed' }));
+    document.head.appendChild(script);
+  });
 
   const style = document.createElement('style');
   style.textContent = `
@@ -135,7 +156,8 @@
     submit.textContent = 'Submitting…';
 
     try {
-      const saved = await window.JNCOSInquiryStore.create(data());
+      const store = await ensureInquiryStore();
+      const saved = await store.create(data());
       workspace.hidden = true;
       document.querySelector('.inquiry-progress-head')?.setAttribute('hidden', '');
       document.querySelector('.inquiry-progress-track')?.setAttribute('hidden', '');
@@ -150,7 +172,8 @@
       console.error('[JNCOS Inquiry Submit]', error, last);
       const code = error?.code || last.code || 'unknown';
       const message = error?.message || last.message || 'Unknown Firebase error.';
-      alert(`We could not save your inquiry. Please try again.\n\nFirebase error: ${code}\n${message}`);
+      const status = error?.httpStatus || last.httpStatus || '';
+      alert(`We could not save your inquiry. Please try again.\n\nFirebase error: ${code}${status ? ` (HTTP ${status})` : ''}\n${message}`);
       submit.disabled = false;
       submit.textContent = 'Submit Inquiry';
     }
