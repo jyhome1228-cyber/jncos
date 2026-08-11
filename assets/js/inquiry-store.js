@@ -1,7 +1,7 @@
 (() => {
   const STORAGE_KEY = 'jncos_inquiries_v1';
   const STATUS_KEY = 'jncos_inquiry_status_v1';
-  const RUNTIME_VERSION = '20260812-0132-rest';
+  const RUNTIME_VERSION = '20260812-0138-rest';
   const FIREBASE_PROJECT_ID = 'jncostech';
   const FIREBASE_API_KEY = 'AIzaSyC-QT7LqvH4qXwhZDHDyyzV4r1y8rZTLcM';
 
@@ -9,9 +9,21 @@
     try { return JSON.parse(value); } catch (_) { return fallback; }
   };
 
-  const listLocal = () => safeParse(localStorage.getItem(STORAGE_KEY), []);
-  const writeLocal = (items) => localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  const statusMap = () => safeParse(localStorage.getItem(STATUS_KEY), {});
+  const listLocal = () => {
+    const parsed = safeParse(localStorage.getItem(STORAGE_KEY), []);
+    return Array.isArray(parsed) ? parsed : [];
+  };
+
+  const writeLocal = (items) => {
+    const safeItems = Array.isArray(items) ? items : [];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(safeItems));
+  };
+
+  const statusMap = () => {
+    const parsed = safeParse(localStorage.getItem(STATUS_KEY), {});
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+  };
+
   const uid = () => window.crypto?.randomUUID?.() || `jnc-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
   const normalize = (record) => ({
@@ -91,6 +103,7 @@
         mode: 'firestore-rest+local',
         projectId: FIREBASE_PROJECT_ID,
         runtimeVersion: RUNTIME_VERSION,
+        localCount: listLocal().length,
         lastResult: window.JNCOS_INQUIRY_LAST_RESULT || null
       };
     },
@@ -101,7 +114,7 @@
 
       try {
         const cloud = await createViaRest(item);
-        writeLocal([item, ...previous.filter((x) => x.id !== item.id)]);
+        writeLocal([item, ...previous.filter((x) => x && x.id !== item.id)]);
         window.JNCOS_INQUIRY_LAST_RESULT = {
           ok: true,
           id: item.id,
@@ -132,6 +145,7 @@
     async list() {
       const statuses = statusMap();
       return listLocal()
+        .filter((item) => item && typeof item === 'object')
         .map((item) => ({ ...item, status: statuses[item.id] || item.status || 'New' }))
         .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
     },
@@ -148,7 +162,7 @@
     },
 
     async remove(id) {
-      writeLocal(listLocal().filter((item) => item.id !== id));
+      writeLocal(listLocal().filter((item) => item && item.id !== id));
       const statuses = statusMap();
       delete statuses[id];
       localStorage.setItem(STATUS_KEY, JSON.stringify(statuses));
