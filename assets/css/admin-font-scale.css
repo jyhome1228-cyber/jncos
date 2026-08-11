@@ -1,0 +1,58 @@
+/* JN COS TECH admin typography scale — +2px from existing dashboard sizes */
+body.admin-body{font-size:15px}
+
+.admin-brand-group span{font-size:10px}
+.admin-brand-group strong{font-size:14px}
+.admin-user,.admin-mode{font-size:11.5px}
+.admin-btn{font-size:12.5px}
+
+.admin-page-head h1{font-size:40px}
+.admin-page-head p{font-size:14px}
+.admin-eyebrow{font-size:10px}
+
+.admin-stat>span{font-size:10px}
+.admin-stat strong{font-size:32px}
+.admin-stat small{font-size:11px}
+
+.admin-card h2,.admin-section-head h2{font-size:25px}
+.traffic-totals{font-size:11px}
+.traffic-totals b{font-size:14px}
+.traffic-bar-item small{font-size:10px}
+.traffic-bar-item b{font-size:10px}
+.traffic-note-card>p{font-size:13px}
+.traffic-note-card dl>div{font-size:11.5px}
+
+.admin-section-head>p{font-size:12.5px}
+.admin-tools input,.admin-tools select,.detail-status select{font-size:12px}
+.admin-row-main strong{font-size:14px}
+.admin-row-main small{font-size:11px}
+.admin-row-meta small{font-size:10px}
+.source-pill,.status-pill{font-size:9.5px}
+.admin-empty{font-size:12px}
+
+.admin-detail-placeholder h2{font-size:32px}
+.admin-detail-placeholder p{font-size:13px}
+.detail-head h2{font-size:32px}
+.detail-head p{font-size:11.5px}
+.detail-status label{font-size:11.5px}
+.detail-contact-actions a{font-size:11.5px}
+.detail-section-title{font-size:10px}
+.detail-field span{font-size:9.8px}
+.detail-field strong{font-size:12.8px}
+.detail-message{font-size:13px}
+.admin-foot-note{font-size:11.5px}
+
+/* Login / authentication screen */
+.admin-login-card h1{font-size:36px}
+.admin-login-card>p{font-size:14px}
+.admin-login-form label{font-size:12px}
+.admin-login-form input{font-size:15px}
+.admin-reset-btn{font-size:12.5px}
+.admin-login-message{font-size:12.5px}
+.admin-user{font-size:12px}
+
+@media(max-width:640px){
+  .admin-stat strong{font-size:29px}
+  .admin-page-head h1{font-size:34px}
+  .admin-login-card h1{font-size:31px}
+}
