@@ -1,7 +1,7 @@
 (() => {
   const STORAGE_KEY = 'jncos_inquiries_v1';
   const STATUS_KEY = 'jncos_inquiry_status_v1';
-  const RUNTIME_VERSION = '20260812-0042';
+  const RUNTIME_VERSION = '20260812-0050';
   const basePath = window.JNCOS_BASE_PATH || (location.hostname.endsWith('github.io') ? '/jncos' : '');
   const safeParse = (value, fallback) => { try { return JSON.parse(value); } catch (_) { return fallback; } };
   const listLocal = () => safeParse(localStorage.getItem(STORAGE_KEY), []);
@@ -14,11 +14,16 @@
   const loadScript = (src,key) => new Promise((resolve) => {
     if(window[key]) return resolve();
     const existing=document.querySelector(`script[data-loader="${key}"]`);
-    if(existing){ existing.addEventListener('load',resolve,{once:true}); existing.addEventListener('error',resolve,{once:true}); return; }
+    if(existing){
+      if (existing.dataset.loaded === 'true' || window[key]) return resolve();
+      existing.addEventListener('load',resolve,{once:true});
+      existing.addEventListener('error',resolve,{once:true});
+      return;
+    }
     const script=document.createElement('script');
     script.src=withVersion(src);
     script.setAttribute('data-loader',key);
-    script.onload=resolve;
+    script.onload=()=>{ script.dataset.loaded='true'; resolve(); };
     script.onerror=resolve;
     document.head.appendChild(script);
   });
@@ -75,4 +80,9 @@
     },
     async clear(){ localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(STATUS_KEY); }
   };
+
+  Promise.resolve().then(async () => {
+    if (!window.JNCOSVisitorStore) await loadScript('/assets/js/visitor-store.js','JNCOSVisitorStore');
+    window.JNCOSVisitorStore?.trackPageView?.();
+  }).catch((error) => console.error('[JNCOS Inquiry Traffic]', error));
 })();
