@@ -36,8 +36,8 @@
 
 .home-technology{padding:92px 0 98px;background:#fff}
 .tech-grid{width:100%;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 18px}
-.tech-grid a{display:flex;align-items:center;justify-content:center;min-height:64px;padding:13px 17px;background:#f2ece6;border:1px solid #d9c8bb;color:#352018;text-align:center;font-size:12.5px;font-weight:680;line-height:1.42;letter-spacing:-.02em;transition:transform .22s ease,background .22s ease,border-color .22s ease,box-shadow .22s ease}
-.tech-grid a:hover{transform:translateY(-3px);background:#eadfd7;border-color:#b9957f;box-shadow:0 10px 24px rgba(54,31,21,.05)}
+.tech-grid .tech-trigger{appearance:none;-webkit-appearance:none;width:100%;display:flex;align-items:center;justify-content:center;min-height:64px;padding:13px 17px;background:#f2ece6;border:1px solid #d9c8bb;color:#352018;text-align:center;font:inherit;font-size:12.5px;font-weight:680;line-height:1.42;letter-spacing:-.02em;cursor:pointer;transition:transform .22s ease,background .22s ease,border-color .22s ease,box-shadow .22s ease}
+.tech-grid .tech-trigger:hover,.tech-grid .tech-trigger:focus-visible{transform:translateY(-3px);background:#eadfd7;border-color:#b9957f;box-shadow:0 10px 24px rgba(54,31,21,.05);outline:none}
 .technology-action{margin-top:38px;text-align:left}
 .technology-action .home-button{min-width:248px}
 
@@ -49,9 +49,7 @@
 .home-button-light-outline:hover{background:rgba(255,255,255,.08)}
 .desktop-only{display:initial}
 
-@media(max-width:1180px){
-  .home-hero-grid{gap:44px}
-}
+@media(max-width:1180px){.home-hero-grid{gap:44px}}
 @media(max-width:1024px){
   .home-hero{padding:70px 0}
   .home-hero-grid{grid-template-columns:1fr}
@@ -73,7 +71,7 @@
   .business-card{min-height:auto;padding:28px 24px}
   .business-icon{margin-bottom:20px}
   .tech-grid{grid-template-columns:1fr;gap:10px}
-  .tech-grid a{min-height:56px;font-size:12px}
+  .tech-grid .tech-trigger{min-height:56px;font-size:12px}
   .technology-action{margin-top:26px}
   .home-actions-center{margin-top:30px}
   .desktop-only{display:none}
