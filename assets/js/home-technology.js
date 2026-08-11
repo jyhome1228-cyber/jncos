@@ -23,16 +23,18 @@
   grid.insertAdjacentElement('afterend', panel);
 
   const triggers = [...grid.querySelectorAll('.tech-trigger')];
-  const normalize = (el) => el.textContent.replace(/\s+/g, ' ').trim();
+  const keyFor = (el) => el.dataset.techKey || el.textContent.replace(/\s+/g, ' ').trim();
 
   const render = (key) => {
     const d = data[key];
     if (!d) return;
+
     triggers.forEach((trigger) => {
-      const active = normalize(trigger) === key;
+      const active = keyFor(trigger) === key;
       trigger.classList.toggle('is-active', active);
       trigger.setAttribute('aria-pressed', String(active));
     });
+
     panel.innerHTML = `
       <div class="home-tech-detail-head"><span>TECHNOLOGY PROFILE</span><h3>${key}</h3><p>${d.intro}</p></div>
       <div class="home-tech-detail-grid">
@@ -44,7 +46,7 @@
 
   triggers.forEach((trigger) => {
     trigger.setAttribute('aria-pressed', 'false');
-    trigger.addEventListener('click', () => render(normalize(trigger)));
+    trigger.addEventListener('click', () => render(keyFor(trigger)));
   });
 
   render('Barrier Repair Technology');
