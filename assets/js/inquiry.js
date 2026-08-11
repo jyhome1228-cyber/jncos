@@ -2,7 +2,7 @@
   const form = document.querySelector('[data-inquiry-form]');
   if (!form) return;
 
-  const STORE_RUNTIME = '20260812-0132-rest';
+  const STORE_RUNTIME = '20260812-0138-rest';
   const ensureInquiryStore = () => new Promise((resolve, reject) => {
     const current = window.JNCOSInquiryStore?.diagnostics;
     if (current?.runtimeVersion === STORE_RUNTIME && current?.mode === 'firestore-rest+local') {
