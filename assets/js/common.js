@@ -230,8 +230,15 @@
 
     if (!document.querySelector('script[data-page-images]')) {
       const script = document.createElement('script');
-      script.src = withBase('/assets/js/page-images.js');
+      script.src = withBase('/assets/js/page-images.js?v=20260812-0037');
       script.setAttribute('data-page-images', '');
+      document.body.appendChild(script);
+    }
+
+    if (!document.querySelector('script[data-image-layout-fix]')) {
+      const script = document.createElement('script');
+      script.src = withBase('/assets/js/image-layout-fix.js?v=20260812-0037');
+      script.setAttribute('data-image-layout-fix', '');
       document.body.appendChild(script);
     }
   };
