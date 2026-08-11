@@ -4,43 +4,86 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <title>Admin — Inquiries | JNCOS TECH</title>
+  <title>Operations Admin | JN COS TECH</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
   <link rel="stylesheet" href="../assets/css/common.css">
   <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
 <body class="admin-body">
   <header class="admin-topbar">
-    <div class="site-container admin-topbar-inner">
-      <div class="admin-title"><a class="brand" href="../"><span class="brand-mark">JNCOS</span><span class="brand-sub">TECH</span></a><strong>Inquiry Admin</strong></div>
-      <div class="admin-top-actions"><a class="admin-btn" href="../Inquiry/">Open Inquiry Form</a><button class="admin-btn" type="button" data-export-csv>Export CSV</button></div>
+    <div class="admin-shell admin-topbar-inner">
+      <div class="admin-brand-group">
+        <a class="admin-brand" href="../" aria-label="JN COS TECH website"><img src="../assets/logo/jncos-logo.svg" alt="JN COS TECH"></a>
+        <div><span>OPERATIONS</span><strong>Admin Dashboard</strong></div>
+      </div>
+      <div class="admin-top-actions">
+        <span class="admin-mode" data-admin-mode>Checking data connection…</span>
+        <a class="admin-btn ghost" href="../">Website</a>
+        <a class="admin-btn ghost" href="../Inquiry/">Inquiry Form</a>
+        <a class="admin-btn ghost" href="../Contact/">Contact</a>
+        <button class="admin-btn" type="button" data-refresh>Refresh</button>
+      </div>
     </div>
   </header>
 
   <main class="admin-page">
-    <div class="site-container">
-      <section class="admin-overview" aria-label="Inquiry statistics">
-        <div class="admin-stat"><span>All inquiries</span><strong data-count="All">0</strong></div>
-        <div class="admin-stat"><span>New</span><strong data-count="New">0</strong></div>
-        <div class="admin-stat"><span>Reviewing</span><strong data-count="Reviewing">0</strong></div>
-        <div class="admin-stat"><span>Replied</span><strong data-count="Replied">0</strong></div>
-        <div class="admin-stat"><span>Closed</span><strong data-count="Closed">0</strong></div>
+    <div class="admin-shell">
+      <section class="admin-page-head">
+        <div><span class="admin-eyebrow">JN COS TECH · BUSINESS OPERATIONS</span><h1>Requests & Traffic</h1><p>Review customer requests, update response status, export project briefs, and monitor website traffic from one dashboard.</p></div>
+        <div class="admin-page-actions"><button class="admin-btn" type="button" data-export-csv>Export Requests CSV</button></div>
       </section>
 
-      <section class="admin-panel">
-        <aside class="admin-list-pane">
-          <div class="admin-tools"><input type="search" placeholder="Search company, contact, email…" data-admin-search><select data-admin-filter-status><option>All</option><option>New</option><option>Reviewing</option><option>Replied</option><option>Closed</option></select></div>
-          <div class="admin-inquiry-list" data-admin-list></div>
-          <div class="admin-empty" data-admin-empty hidden>No inquiries found.</div>
-        </aside>
-        <article class="admin-detail-pane" data-admin-detail></article>
+      <section class="admin-overview" aria-label="Dashboard statistics">
+        <article class="admin-stat"><span>Today Visitors</span><strong data-stat="todayVisitors">0</strong><small>India date</small></article>
+        <article class="admin-stat"><span>7-Day Visitors</span><strong data-stat="weekVisitors">0</strong><small>Unique visitors</small></article>
+        <article class="admin-stat"><span>Total Visitors</span><strong data-stat="totalVisitors">0</strong><small>Tracked visitors</small></article>
+        <article class="admin-stat"><span>New Inquiries</span><strong data-stat="newInquiries">0</strong><small>Detailed project briefs</small></article>
+        <article class="admin-stat"><span>New Contacts</span><strong data-stat="newContacts">0</strong><small>Quick contact requests</small></article>
+        <article class="admin-stat accent"><span>Total Requests</span><strong data-stat="totalRequests">0</strong><small>Inquiry + Contact</small></article>
       </section>
-      <div class="admin-dev-note"><strong>Development mode:</strong> inquiries are currently stored in this browser only. The admin interface is intentionally accessible without login during development. Before launch, connect the store to Firebase and add administrator authentication so customer inquiry data is not publicly readable.</div>
+
+      <section class="admin-traffic-grid">
+        <article class="admin-card traffic-card">
+          <div class="admin-card-head"><div><span class="admin-eyebrow">TRAFFIC</span><h2>Last 7 Days</h2></div><div class="traffic-totals"><span><b data-stat="totalSessions">0</b> sessions</span><span><b data-stat="pageViews">0</b> page views</span></div></div>
+          <div class="traffic-chart" data-traffic-chart></div>
+        </article>
+        <article class="admin-card traffic-note-card">
+          <span class="admin-eyebrow">MEASUREMENT</span>
+          <h2>Visitor Tracking</h2>
+          <p>Dashboard counts use the JN COS TECH session tracker. Google Analytics is also connected for acquisition, source, campaign and behavior analysis.</p>
+          <dl><div><dt>Google Analytics</dt><dd>G-9JRLB4KEVK</dd></div><div><dt>Visitor timezone</dt><dd>Asia / Kolkata</dd></div><div><dt>Data source</dt><dd data-data-source>Local backup</dd></div></dl>
+        </article>
+      </section>
+
+      <section class="admin-requests-section">
+        <div class="admin-section-head"><div><span class="admin-eyebrow">REQUEST CENTER</span><h2>Customer Requests</h2></div><p>Inquiry and Contact requests are combined chronologically. Use Source and Status filters to narrow the list.</p></div>
+        <div class="admin-panel">
+          <aside class="admin-list-pane">
+            <div class="admin-tools">
+              <input type="search" placeholder="Search company, name, email…" data-admin-search>
+              <select data-admin-filter-type><option value="All">All sources</option><option value="inquiry">Inquiry</option><option value="contact">Contact</option></select>
+              <select data-admin-filter-status><option>All</option><option>New</option><option>Reviewing</option><option>Replied</option><option>Closed</option></select>
+            </div>
+            <div class="admin-request-list" data-admin-list></div>
+            <div class="admin-empty" data-admin-empty hidden>No requests found.</div>
+          </aside>
+          <article class="admin-detail-pane" data-admin-detail></article>
+        </div>
+      </section>
+
+      <section class="admin-foot-note">
+        <strong data-admin-storage-title>Local backup mode</strong>
+        <span data-admin-storage-note>Requests are backed up in this browser. Add the Firebase Web App configuration in <code>assets/js/firebase-config.js</code> to sync Inquiry, Contact and visitor data across devices.</span>
+      </section>
     </div>
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+  <script src="../assets/js/firebase-config.js"></script>
+  <script src="../assets/js/cloud-store.js"></script>
   <script src="../assets/js/inquiry-store.js"></script>
+  <script src="../assets/js/contact-store.js"></script>
+  <script src="../assets/js/visitor-store.js"></script>
   <script src="../assets/js/admin.js"></script>
 </body>
 </html>
