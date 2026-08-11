@@ -5,7 +5,7 @@
   const TOTAL_COUNTED_KEY = 'jncos_traffic_total_counted_v2';
   const DAY_COUNTED_KEY = 'jncos_traffic_day_counted_v2';
   const SESSION_COUNTED_KEY = 'jncos_traffic_session_counted_v2';
-  const RUNTIME_VERSION = '20260812-0050';
+  const RUNTIME_VERSION = '20260812-0138';
   const basePath = window.JNCOS_BASE_PATH || (location.hostname.endsWith('github.io') ? '/jncos' : '');
   const safeParse = (value, fallback) => { try { return JSON.parse(value); } catch (_) { return fallback; } };
   const uid = (prefix) => window.crypto?.randomUUID?.() || `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -13,8 +13,14 @@
   localStorage.setItem(VISITOR_KEY, visitorId);
   const sessionId = sessionStorage.getItem(SESSION_KEY) || uid('session');
   sessionStorage.setItem(SESSION_KEY, sessionId);
-  const localList = () => safeParse(localStorage.getItem(STORAGE_KEY), []);
-  const writeLocal = (items) => localStorage.setItem(STORAGE_KEY, JSON.stringify(items.slice(0, 1500)));
+  const localList = () => {
+    const parsed = safeParse(localStorage.getItem(STORAGE_KEY), []);
+    return Array.isArray(parsed) ? parsed : [];
+  };
+  const writeLocal = (items) => {
+    const safeItems = Array.isArray(items) ? items : [];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(safeItems.slice(0, 1500)));
+  };
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const indiaDate = (date = new Date()) => {
@@ -25,7 +31,7 @@
 
   const merge = (local, cloud) => {
     const map = new Map();
-    [...local, ...cloud].forEach((item) => {
+    [...(Array.isArray(local) ? local : []), ...(Array.isArray(cloud) ? cloud : [])].forEach((item) => {
       if (item?.id) map.set(item.id, { ...(map.get(item.id) || {}), ...item });
     });
     return [...map.values()].sort((a,b) => new Date(b.lastSeen || b.createdAt || 0) - new Date(a.lastSeen || a.createdAt || 0));
@@ -62,21 +68,21 @@
     const since = new Date(now.getTime() - 6 * 86400000);
     const days = [];
     for (let i=6;i>=0;i--) days.push(indiaDate(new Date(now.getTime()-i*86400000)));
-    const unique = (rows) => new Set(rows.map((v) => v.visitorId || v.id)).size;
-    const todayRows = visits.filter((v) => v.date === today);
-    const weekRows = visits.filter((v) => v.date && v.date >= indiaDate(since));
+    const unique = (rows) => new Set((Array.isArray(rows) ? rows : []).map((v) => v.visitorId || v.id)).size;
+    const todayRows = visits.filter((v) => v?.date === today);
+    const weekRows = visits.filter((v) => v?.date && v.date >= indiaDate(since));
     const daily = days.map((date) => ({
       date,
-      visitors:unique(visits.filter((v)=>v.date===date)),
-      sessions:visits.filter((v)=>v.date===date).length,
-      pageViews:visits.filter((v)=>v.date===date).reduce((sum,v)=>sum+(Number(v.pageViews)||0),0)
+      visitors:unique(visits.filter((v)=>v?.date===date)),
+      sessions:visits.filter((v)=>v?.date===date).length,
+      pageViews:visits.filter((v)=>v?.date===date).reduce((sum,v)=>sum+(Number(v?.pageViews)||0),0)
     }));
     return {
       todayVisitors:unique(todayRows),
       weekVisitors:unique(weekRows),
       totalVisitors:unique(visits),
       totalSessions:visits.length,
-      pageViews:visits.reduce((sum,v)=>sum+(Number(v.pageViews)||0),0),
+      pageViews:visits.reduce((sum,v)=>sum+(Number(v?.pageViews)||0),0),
       daily,
       recent:visits.slice(0,20),
       source:'local'
@@ -87,10 +93,11 @@
     await ensureBackend();
     if (!window.JNCOSCloudStore?.configured) return null;
 
-    const [dayRows, summary] = await Promise.all([
+    const [rawDayRows, summary] = await Promise.all([
       window.JNCOSCloudStore.list('trafficDays', 400),
       window.JNCOSCloudStore.get('trafficSummary', 'total')
     ]);
+    const dayRows = Array.isArray(rawDayRows) ? rawDayRows : [];
 
     if (!summary && !dayRows.length) return null;
 
@@ -98,7 +105,7 @@
     const now = new Date();
     const days = [];
     for (let i=6;i>=0;i--) days.push(indiaDate(new Date(now.getTime()-i*86400000)));
-    const byDate = new Map(dayRows.map((row) => [row.date || row.id, row]));
+    const byDate = new Map(dayRows.filter(Boolean).map((row) => [row.date || row.id, row]));
     const daily = days.map((date) => {
       const row = byDate.get(date) || {};
       return {
@@ -156,7 +163,7 @@
       const now = new Date().toISOString();
       const dateKey = indiaDate();
       const list = localList();
-      const existing = list.find((item) => item.id === sessionId);
+      const existing = list.find((item) => item?.id === sessionId);
       const params = new URLSearchParams(location.search);
       const record = existing ? {
         ...existing,
@@ -185,7 +192,7 @@
         host:location.hostname
       };
 
-      writeLocal([record, ...list.filter((item) => item.id !== sessionId)]);
+      writeLocal([record, ...list.filter((item) => item?.id !== sessionId)]);
 
       const firstTotalVisit = localStorage.getItem(TOTAL_COUNTED_KEY) !== '1';
       const firstVisitToday = localStorage.getItem(DAY_COUNTED_KEY) !== dateKey;
@@ -230,11 +237,12 @@
   window.JNCOSVisitorStore = {
     get mode() { return window.JNCOSCloudStore?.configured ? 'firestore+local' : 'local'; },
     get lastResult() { return window.JNCOS_TRAFFIC_LAST_RESULT || null; },
-    get diagnostics() { return { host:location.hostname, projectId:window.JNCOS_FIREBASE_CONFIG?.projectId || '', runtimeVersion:RUNTIME_VERSION, lastResult:window.JNCOS_TRAFFIC_LAST_RESULT || null }; },
+    get diagnostics() { return { host:location.hostname, projectId:window.JNCOS_FIREBASE_CONFIG?.projectId || '', runtimeVersion:RUNTIME_VERSION, localCount:localList().length, lastResult:window.JNCOS_TRAFFIC_LAST_RESULT || null }; },
     trackPageView,
     async list() {
       await ensureBackend();
-      return merge(localList(), await window.JNCOSCloudStore?.list?.('visits',1500) || []);
+      const cloud = await window.JNCOSCloudStore?.list?.('visits',1500) || [];
+      return merge(localList(), cloud);
     },
     async stats() {
       const aggregate = await aggregateStats();
