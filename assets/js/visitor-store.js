@@ -43,8 +43,8 @@
 
   let backendPromise;
   const ensureBackend = () => backendPromise ||= (async () => {
-    if (!window.JNCOS_FIREBASE_CONFIG) await loadScript('/assets/js/firebase-config.js', 'JNCOS_FIREBASE_CONFIG');
-    if (!window.JNCOSCloudStore) await loadScript('/assets/js/cloud-store.js', 'JNCOSCloudStore');
+    if (!window.JNCOS_FIREBASE_CONFIG) await loadScript('/assets/js/firebase-config.js?v=20260811-2150', 'JNCOS_FIREBASE_CONFIG');
+    if (!window.JNCOSCloudStore) await loadScript('/assets/js/cloud-store.js?v=20260811-2150', 'JNCOSCloudStore');
   })();
 
   const localStats = () => {
