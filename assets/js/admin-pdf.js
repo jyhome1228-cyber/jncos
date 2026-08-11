@@ -1,6 +1,13 @@
 (() => {
   const PRINT_ID = 'jncos-admin-print-root';
 
+  const esc = (value = '') => String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
   const ensurePrintStyle = () => {
     if (document.querySelector('style[data-admin-pdf-print]')) return;
     const style = document.createElement('style');
@@ -8,28 +15,131 @@
     style.textContent = `
       #${PRINT_ID}{display:none}
       @media print{
-        @page{size:A4;margin:15mm}
+        @page{size:A4;margin:15mm 16mm 14mm}
+        html,body{background:#fff!important}
         body.admin-body > *:not(#${PRINT_ID}){display:none!important}
-        #${PRINT_ID}{display:block!important;position:static!important;width:auto!important;margin:0!important;padding:0!important;background:#fff!important;color:#2f1b13!important;font-family:Pretendard,Arial,"Noto Sans KR",sans-serif!important}
+        #${PRINT_ID}{
+          display:block!important;
+          width:100%!important;
+          margin:0!important;
+          padding:0!important;
+          background:#fff!important;
+          color:#2f211c!important;
+          font-family:Pretendard,Arial,"Noto Sans KR",sans-serif!important;
+          font-size:10px!important;
+          line-height:1.55!important;
+        }
         #${PRINT_ID} *{box-sizing:border-box!important}
-        #${PRINT_ID} .pdf-head{padding:16px 18px;background:#2f1b13!important;color:#fff!important;margin-bottom:20px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-        #${PRINT_ID} .pdf-head strong{display:block;font-size:22px;line-height:1.1;margin-bottom:5px}
-        #${PRINT_ID} .pdf-head span{font-size:9px;letter-spacing:.12em;color:#d8c7be!important}
-        #${PRINT_ID} .detail-actions,#${PRINT_ID} .detail-status,#${PRINT_ID} .detail-contact-actions{display:none!important}
-        #${PRINT_ID} .detail-head{display:block!important;padding:0 0 16px!important;border-bottom:1px solid #d9c8bb!important}
-        #${PRINT_ID} .detail-title-group h2{margin:6px 0!important;font-size:23px!important;line-height:1.15!important;color:#2f1b13!important}
-        #${PRINT_ID} .detail-title-group p{margin:0!important;color:#7f7068!important;font-size:9px!important}
-        #${PRINT_ID} .source-pill{display:inline-block!important;padding:4px 7px!important;border:1px solid #d9c8bb!important;font-size:8px!important;font-weight:700!important;text-transform:uppercase!important}
-        #${PRINT_ID} .detail-section{padding-top:18px!important;break-inside:avoid-page}
-        #${PRINT_ID} .detail-section-title{margin:0 0 9px!important;color:#8f6a53!important;font-size:9px!important;letter-spacing:.14em!important;text-transform:uppercase!important}
-        #${PRINT_ID} .detail-grid{display:grid!important;grid-template-columns:1fr 1fr!important;border-top:1px solid #d9c8bb!important}
-        #${PRINT_ID} .detail-field{padding:10px 12px 11px 0!important;border-bottom:1px solid #d9c8bb!important;page-break-inside:avoid!important;min-width:0!important}
-        #${PRINT_ID} .detail-field:nth-child(even){padding-left:12px!important;border-left:1px solid #d9c8bb!important}
-        #${PRINT_ID} .detail-field.full{grid-column:1/-1!important;padding-left:0!important;border-left:0!important}
-        #${PRINT_ID} .detail-field span{display:block!important;margin-bottom:4px!important;color:#95877f!important;font-size:7.5px!important;font-weight:700!important;letter-spacing:.07em!important;text-transform:uppercase!important}
-        #${PRINT_ID} .detail-field strong{display:block!important;font-size:10px!important;font-weight:500!important;line-height:1.55!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important;color:#2f1b13!important}
-        #${PRINT_ID} .detail-message{padding:12px!important;border:1px solid #d9c8bb!important;background:#f8f4f1!important;font-size:10px!important;line-height:1.6!important;white-space:pre-wrap!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-        #${PRINT_ID} .pdf-foot{margin-top:20px;padding-top:9px;border-top:1px solid #d9c8bb;color:#8b7d75;font-size:8px}
+        #${PRINT_ID} .pdf-top{
+          display:flex!important;
+          justify-content:space-between!important;
+          align-items:flex-start!important;
+          gap:24px!important;
+          padding:0 0 13px!important;
+          margin:0 0 23px!important;
+          border-bottom:.6px solid #cdbfb5!important;
+        }
+        #${PRINT_ID} .pdf-brand strong{
+          display:block!important;
+          margin:0 0 5px!important;
+          color:#2f211c!important;
+          font-size:21px!important;
+          line-height:1!important;
+          font-weight:800!important;
+          letter-spacing:-.035em!important;
+        }
+        #${PRINT_ID} .pdf-brand span,
+        #${PRINT_ID} .pdf-meta-label,
+        #${PRINT_ID} .pdf-section-title,
+        #${PRINT_ID} .pdf-label{
+          color:#927463!important;
+          font-size:7.4px!important;
+          font-weight:750!important;
+          letter-spacing:.13em!important;
+          text-transform:uppercase!important;
+        }
+        #${PRINT_ID} .pdf-top-meta{text-align:right!important}
+        #${PRINT_ID} .pdf-top-meta p{margin:0 0 7px!important;color:#75645a!important;font-size:8px!important}
+        #${PRINT_ID} .pdf-top-meta p:last-child{margin-bottom:0!important}
+        #${PRINT_ID} .pdf-request-head{margin:0 0 25px!important;page-break-inside:avoid!important}
+        #${PRINT_ID} .pdf-badge{
+          display:inline-flex!important;
+          align-items:center!important;
+          min-height:22px!important;
+          padding:0 8px!important;
+          margin:0 0 11px!important;
+          border:.6px solid #cdbfb5!important;
+          color:#6e584c!important;
+          background:#fff!important;
+          font-size:7.3px!important;
+          font-weight:750!important;
+          letter-spacing:.11em!important;
+          text-transform:uppercase!important;
+        }
+        #${PRINT_ID} .pdf-request-head h1{
+          margin:0 0 6px!important;
+          color:#2f211c!important;
+          font-size:25px!important;
+          line-height:1.08!important;
+          font-weight:800!important;
+          letter-spacing:-.045em!important;
+        }
+        #${PRINT_ID} .pdf-request-head p{margin:0!important;color:#85746b!important;font-size:8.5px!important}
+        #${PRINT_ID} .pdf-summary{
+          display:grid!important;
+          grid-template-columns:repeat(4,minmax(0,1fr))!important;
+          margin:0 0 24px!important;
+          border-top:.6px solid #d7cbc3!important;
+          border-left:.6px solid #d7cbc3!important;
+          page-break-inside:avoid!important;
+        }
+        #${PRINT_ID} .pdf-summary-item{
+          min-height:58px!important;
+          padding:10px 11px!important;
+          border-right:.6px solid #d7cbc3!important;
+          border-bottom:.6px solid #d7cbc3!important;
+        }
+        #${PRINT_ID} .pdf-summary-item strong{display:block!important;margin-top:6px!important;color:#2f211c!important;font-size:9.5px!important;font-weight:650!important;line-height:1.35!important;overflow-wrap:anywhere!important}
+        #${PRINT_ID} .pdf-section{margin:0 0 22px!important}
+        #${PRINT_ID} .pdf-section-head{display:flex!important;align-items:center!important;gap:12px!important;margin:0 0 9px!important}
+        #${PRINT_ID} .pdf-section-head::after{content:""!important;display:block!important;flex:1!important;height:.6px!important;background:#d7cbc3!important}
+        #${PRINT_ID} .pdf-grid{
+          display:grid!important;
+          grid-template-columns:repeat(2,minmax(0,1fr))!important;
+          border-top:.6px solid #d7cbc3!important;
+          border-left:.6px solid #d7cbc3!important;
+        }
+        #${PRINT_ID} .pdf-field{
+          min-height:62px!important;
+          padding:10px 11px!important;
+          border-right:.6px solid #d7cbc3!important;
+          border-bottom:.6px solid #d7cbc3!important;
+          page-break-inside:avoid!important;
+        }
+        #${PRINT_ID} .pdf-field.full{grid-column:1/-1!important}
+        #${PRINT_ID} .pdf-value{display:block!important;margin-top:6px!important;color:#2f211c!important;font-size:9.5px!important;font-weight:520!important;line-height:1.52!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important}
+        #${PRINT_ID} .pdf-message{
+          padding:12px 13px!important;
+          border:.6px solid #d7cbc3!important;
+          background:#fbf9f7!important;
+          color:#2f211c!important;
+          font-size:9.5px!important;
+          line-height:1.55!important;
+          white-space:pre-wrap!important;
+          -webkit-print-color-adjust:exact!important;
+          print-color-adjust:exact!important;
+          page-break-inside:avoid!important;
+        }
+        #${PRINT_ID} .pdf-foot{
+          margin-top:25px!important;
+          padding-top:8px!important;
+          border-top:.6px solid #d7cbc3!important;
+          color:#9b8b82!important;
+          font-size:7.2px!important;
+        }
+        #${PRINT_ID} .pdf-section,
+        #${PRINT_ID} .pdf-grid,
+        #${PRINT_ID} .pdf-summary{break-inside:auto!important}
       }
     `;
     document.head.appendChild(style);
@@ -37,57 +147,103 @@
 
   const removePrintRoot = () => document.getElementById(PRINT_ID)?.remove();
 
+  const text = (root, selector, fallback = '—') => root.querySelector(selector)?.textContent?.trim() || fallback;
+
+  const collectSections = (detail) => {
+    const sections = [];
+    detail.querySelectorAll('.detail-section').forEach((section) => {
+      const title = text(section, '.detail-section-title', 'Details');
+      const isCustomerMessage = title.toLowerCase() === 'customer message';
+      if (isCustomerMessage) return;
+
+      const fields = [];
+      section.querySelectorAll('.detail-field').forEach((field) => {
+        fields.push({
+          label: text(field, 'span', 'Field'),
+          value: text(field, 'strong', '—'),
+          full: field.classList.contains('full')
+        });
+      });
+      if (fields.length) sections.push({ title, fields });
+    });
+    return sections;
+  };
+
   const buildPrintRoot = () => {
     const detail = document.querySelector('[data-admin-detail]');
     if (!detail || !detail.querySelector('.detail-head')) return null;
 
     removePrintRoot();
 
+    const source = text(detail, '.detail-source', 'Request');
+    const company = text(detail, '.detail-title-group h2', 'JN COS TECH Request');
+    const meta = text(detail, '.detail-title-group p', '—');
+    const status = detail.querySelector('[data-detail-status]')?.value || 'New';
+    const email = detail.querySelector('.detail-contact-actions a[href^="mailto:"]')?.textContent?.replace(/^Email\s*/i, '').trim() || '—';
+    const phone = detail.querySelector('.detail-contact-actions a[href^="tel:"]')?.textContent?.replace(/^Call\s*\/\s*WhatsApp\s*/i, '').trim() || '—';
+    const message = detail.querySelector('.detail-message')?.textContent?.trim() || '';
+    const sections = collectSections(detail);
+    const now = new Date().toLocaleString('en-IN', { timeZone:'Asia/Kolkata', dateStyle:'medium', timeStyle:'short' });
+
     const root = document.createElement('section');
     root.id = PRINT_ID;
 
-    const head = document.createElement('div');
-    head.className = 'pdf-head';
-    head.innerHTML = '<strong>JN COS TECH</strong><span>PROJECT REQUEST SUMMARY</span>';
-    root.appendChild(head);
+    const summary = [
+      ['Type', source],
+      ['Status', status],
+      ['Email', email],
+      ['Phone / WhatsApp', phone]
+    ];
 
-    const clone = detail.cloneNode(true);
-    clone.querySelectorAll('button,select,.detail-actions,.detail-status,.detail-contact-actions').forEach(el => el.remove());
-    clone.querySelectorAll('[hidden]').forEach(el => el.removeAttribute('hidden'));
-    root.appendChild(clone);
-
-    const foot = document.createElement('div');
-    foot.className = 'pdf-foot';
-    foot.textContent = `Generated from JN COS TECH Admin Dashboard · ${new Date().toLocaleString('en-IN', { timeZone:'Asia/Kolkata' })}`;
-    root.appendChild(foot);
+    root.innerHTML = `
+      <div class="pdf-top">
+        <div class="pdf-brand"><strong>JN COS TECH</strong><span>Project Request Summary</span></div>
+        <div class="pdf-top-meta"><p><span class="pdf-meta-label">Exported</span><br>${esc(now)}</p><p><span class="pdf-meta-label">Document</span><br>${esc(meta.split('·')[0]?.trim() || '—')}</p></div>
+      </div>
+      <header class="pdf-request-head">
+        <span class="pdf-badge">${esc(source)}</span>
+        <h1>${esc(company)}</h1>
+        <p>${esc(meta)}</p>
+      </header>
+      <div class="pdf-summary">
+        ${summary.map(([label,value]) => `<div class="pdf-summary-item"><span class="pdf-label">${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('')}
+      </div>
+      ${message ? `<section class="pdf-section"><div class="pdf-section-head"><span class="pdf-section-title">Customer Message</span></div><div class="pdf-message">${esc(message)}</div></section>` : ''}
+      ${sections.map(section => `
+        <section class="pdf-section">
+          <div class="pdf-section-head"><span class="pdf-section-title">${esc(section.title)}</span></div>
+          <div class="pdf-grid">
+            ${section.fields.map(field => `<div class="pdf-field${field.full ? ' full' : ''}"><span class="pdf-label">${esc(field.label)}</span><span class="pdf-value">${esc(field.value)}</span></div>`).join('')}
+          </div>
+        </section>`).join('')}
+      <footer class="pdf-foot">JN COS TECH Pvt. Ltd. · Generated from Admin Dashboard · ${esc(now)}</footer>`;
 
     document.body.appendChild(root);
-    return root;
+    return { root, company };
   };
 
   const printCurrentRequest = () => {
-    const root = buildPrintRoot();
-    if (!root) {
+    const built = buildPrintRoot();
+    if (!built) {
       alert('Select a request before exporting a PDF.');
       return;
     }
 
     const oldTitle = document.title;
-    const company = root.querySelector('.detail-title-group h2')?.textContent?.trim() || 'JN COS TECH Request';
-    document.title = `${company} · JN COS TECH Request`;
+    document.title = `${built.company} · JN COS TECH Request`;
 
     let restored = false;
     const restore = () => {
       if (restored) return;
       restored = true;
       document.title = oldTitle;
-      setTimeout(removePrintRoot, 40);
+      setTimeout(removePrintRoot, 80);
       window.removeEventListener('afterprint', restore);
     };
 
     window.addEventListener('afterprint', restore);
     requestAnimationFrame(() => requestAnimationFrame(() => window.print()));
-    setTimeout(restore, 5000);
+    setTimeout(restore, 8000);
   };
 
   ensurePrintStyle();
