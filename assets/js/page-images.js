@@ -175,3 +175,131 @@
   images.forEach(([src,alt],index)=>{ const figure=document.createElement('figure'); const img=document.createElement('img'); img.src=src; img.alt=alt; img.decoding='async'; img.loading=path==='/'&&index===0?'eager':'lazy'; figure.appendChild(img); list.appendChild(figure); });
   inner.appendChild(list); section.appendChild(inner); main.appendChild(section);
 })();
+
+(() => {
+  const basePath = window.JNCOS_BASE_PATH || '';
+  const normalizePath = (pathname) => {
+    let clean = pathname || '/';
+    if (basePath && clean.startsWith(basePath)) clean = clean.slice(basePath.length) || '/';
+    clean = clean.replace(/index\.html$/i, '');
+    if (!clean.startsWith('/')) clean = `/${clean}`;
+    return clean === '/' || clean.endsWith('/') ? clean : `${clean}/`;
+  };
+
+  const path = normalizePath(window.location.pathname);
+  const main = document.querySelector('main');
+  if (!main || main.dataset.editorialImagesReady === 'true') return;
+
+  const CDN = 'https://cdn.imweb.me/upload/S20260219b829e728b3f2e/';
+  const IMG = {
+    i01: [`${CDN}99121536287eb.jpg`, 'Cosmetic laboratory formulation detail'],
+    i02: [`${CDN}fd30585007c1c.jpg`, 'JN COS TECH raw material and production storage'],
+    i03: [`${CDN}653fd120d0915.jpg`, 'Cosmetic vacuum mixing and emulsification equipment'],
+    i04: [`${CDN}d5f0dd70fc93b.jpg`, 'Cosmetic production control equipment'],
+    i05: [`${CDN}0403b526ac279.jpg`, 'JN COS TECH manufacturing process equipment'],
+    i06: [`${CDN}05581142872df.jpg`, 'Cosmetic bottle filling and production line'],
+    i07: [`${CDN}61b174e5225d7.jpg`, 'JN COS TECH manufacturing facility interior'],
+    i08: [`${CDN}1e46378966de6.jpg`, 'JN COS TECH production team and safety standards'],
+    i09: [`${CDN}8fc174e30f58d.jpg`, 'JN COS TECH corporate identity application'],
+    i10: [`${CDN}bb85277738e1f.jpg`, 'JN COS TECH brand identity detail'],
+    i11: [`${CDN}cb2416a031930.jpg`, 'JN COS TECH brand material detail'],
+    i12: [`${CDN}be2baef009810.jpg`, 'JN COS TECH embossed identity detail'],
+    i13: [`${CDN}8e157201c8d2b.jpg`, 'JN COS TECH premium brand application'],
+    i14: [`${CDN}1a5b6412d53da.jpg`, 'Cosmetic skincare product still life'],
+    i15: [`${CDN}f8a25aa3235e0.jpg`, 'Cosmetic packaging and skincare product range'],
+    i16: [`${CDN}aa57a4c9a2de4.jpg`, 'Skincare formulation bottle packaging'],
+    i17: [`${CDN}e01aacb1e3873.jpg`, 'Skincare product bottle and label detail'],
+    i18: [`${CDN}27881a15784d9.jpg`, 'Cosmetic secondary packaging box'],
+    i19: [`${CDN}44ac3075eef4f.jpg`, 'Cosmetic carton and label packaging'],
+    i20: [`${CDN}80508253fdc1a.jpg`, 'JN COS TECH hang tag and packaging detail'],
+    i21: [`${CDN}c2b119f52bcd7.jpg`, 'JN COS TECH printed packaging card'],
+    i22: [`${CDN}9661210ccf9c5.jpg`, 'JN COS TECH pouch and secondary packaging'],
+    i23: [`${CDN}4448d729ca352.jpg`, 'Skincare product family and cosmetic packaging'],
+    i24: [`${CDN}9837335aec34f.jpg`, 'Cosmetic research laboratory and formulation samples'],
+    i25: [`${CDN}67b7b2ed5283b.jpg`, 'Cosmetic laboratory filling and formulation research']
+  };
+
+  const styleId = 'jn-editorial-image-style';
+  if (!document.getElementById(styleId)) {
+    const style = document.createElement('style');
+    style.id = styleId;
+    style.textContent = `
+      .public-page main .jn-editorial-grid{display:grid;gap:18px;width:100%;max-width:1040px;margin:34px auto 0;align-items:stretch}
+      .public-page main .jn-editorial-grid[data-cols="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .public-page main .jn-editorial-grid[data-cols="3"]{grid-template-columns:repeat(3,minmax(0,1fr));max-width:1120px}
+      .public-page main .jn-editorial-grid figure{margin:0!important;padding:0!important;width:100%;height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:1/1!important;overflow:hidden!important;background:#f4f2ef!important}
+      .public-page main .jn-editorial-grid img{display:block!important;width:100%!important;max-width:none!important;height:100%!important;min-height:0!important;max-height:none!important;aspect-ratio:1/1!important;object-fit:cover!important;object-position:center!important;margin:0!important;transform:none!important}
+      .public-page main .jn-editorial-grid + .jn-editorial-grid{margin-top:18px}
+      .technology-page .tech-philosophy-grid.jn-editorial-text-only{grid-template-columns:minmax(0,760px)!important;justify-content:start!important}
+      .technology-page .tech-optimization-inner.jn-editorial-text-only{max-width:820px}
+      @media(max-width:760px){
+        .public-page main .jn-editorial-grid,.public-page main .jn-editorial-grid[data-cols="2"],.public-page main .jn-editorial-grid[data-cols="3"]{grid-template-columns:1fr;gap:12px;max-width:none;margin-top:24px}
+        .public-page main .jn-editorial-grid figure,.public-page main .jn-editorial-grid img{aspect-ratio:4/3!important}
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  const makeGrid = (keys, cols = 2) => {
+    const grid = document.createElement('div');
+    grid.className = 'jn-editorial-grid';
+    grid.dataset.cols = String(cols);
+    grid.setAttribute('role', 'group');
+    grid.setAttribute('aria-label', 'JN COS TECH visual gallery');
+    keys.forEach((key) => {
+      const [src, alt] = IMG[key];
+      const figure = document.createElement('figure');
+      const image = document.createElement('img');
+      image.src = src;
+      image.alt = alt;
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      figure.appendChild(image);
+      grid.appendChild(figure);
+    });
+    return grid;
+  };
+
+  const insertAfter = (selector, keys, cols = 2) => {
+    const target = document.querySelector(selector);
+    if (!target || !keys.every((key) => IMG[key])) return;
+    target.insertAdjacentElement('afterend', makeGrid(keys, cols));
+  };
+
+  const removeAll = (selector) => document.querySelectorAll(selector).forEach((el) => el.remove());
+
+  if (path === '/Manufacturing/') {
+    removeAll('.mfg-wide-image, .mfg-collage');
+    insertAfter('.mfg-two', ['i01','i02'], 2);
+    insertAfter('.mfg-equipment-grid', ['i03','i04'], 2);
+    insertAfter('.mfg-support-grid', ['i05','i06'], 2);
+    insertAfter('.mfg-qc-grid', ['i07','i08'], 2);
+  }
+
+  if (path === '/About/') {
+    removeAll('.about-story-visual');
+    insertAfter('.about-narrow > p:last-of-type', ['i09','i10'], 2);
+    insertAfter('.about-values-grid', ['i11','i12','i13'], 3);
+  }
+
+  if (path === '/Products/') {
+    removeAll('.product-wide-visual, .product-visual-strip');
+    insertAfter('.product-capability-grid', ['i14','i15','i23'], 3);
+    insertAfter('.product-section.alt .product-grid', ['i16','i17'], 2);
+  }
+
+  if (path === '/OEMODM/') {
+    removeAll('.oem-wide-image, .oem-pack-image');
+    insertAfter('.oem-process-grid', ['i18','i19'], 2);
+    insertAfter('.oem-pack-grid', ['i20','i21','i22'], 3);
+  }
+
+  if (path === '/Technology/') {
+    removeAll('.tech-philosophy figure, .tech-optimization figure');
+    document.querySelector('.tech-philosophy-grid')?.classList.add('jn-editorial-text-only');
+    document.querySelector('.tech-optimization-inner')?.classList.add('jn-editorial-text-only');
+    insertAfter('.tech-optimization-inner', ['i24','i25'], 2);
+  }
+
+  main.dataset.editorialImagesReady = 'true';
+})();
