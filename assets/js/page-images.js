@@ -63,13 +63,36 @@
       link.innerHTML = `<span>${label}</span><small>${descriptions.get(link)}</small><b aria-hidden="true">↗</b>`;
       menu.appendChild(link);
     });
+
     const trigger = root.querySelector('[data-capabilities-trigger]');
-    const setOpen = (open) => { root.classList.toggle('is-open', open); trigger.setAttribute('aria-expanded', String(open)); };
-    trigger.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); setOpen(!root.classList.contains('is-open')); });
+    let closeTimer = null;
+    const cancelClose = () => {
+      if (closeTimer) {
+        window.clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+    };
+    const setOpen = (open) => {
+      cancelClose();
+      root.classList.toggle('is-open', open);
+      trigger.setAttribute('aria-expanded', String(open));
+    };
+    const scheduleClose = () => {
+      cancelClose();
+      closeTimer = window.setTimeout(() => setOpen(false), 360);
+    };
+
+    trigger.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setOpen(!root.classList.contains('is-open'));
+    });
     root.addEventListener('mouseenter', () => { if (window.innerWidth > 1024) setOpen(true); });
-    root.addEventListener('mouseleave', () => { if (window.innerWidth > 1024) setOpen(false); });
+    root.addEventListener('mouseleave', () => { if (window.innerWidth > 1024) scheduleClose(); });
+    menu.addEventListener('mouseenter', cancelClose);
+    menu.addEventListener('mouseleave', () => { if (window.innerWidth > 1024) scheduleClose(); });
     root.addEventListener('focusin', () => { if (window.innerWidth > 1024) setOpen(true); });
-    root.addEventListener('focusout', (event) => { if (window.innerWidth > 1024 && !root.contains(event.relatedTarget)) setOpen(false); });
+    root.addEventListener('focusout', (event) => { if (window.innerWidth > 1024 && !root.contains(event.relatedTarget)) scheduleClose(); });
     menu.addEventListener('click', () => setOpen(false));
     document.addEventListener('click', (event) => { if (!root.contains(event.target)) setOpen(false); });
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape') setOpen(false); });
