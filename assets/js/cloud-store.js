@@ -49,6 +49,8 @@
     }
   };
 
+  const counter = (value) => Math.max(0, Math.min(1, Number(value) || 0));
+
   window.JNCOSCloudStore = {
     configured,
     mode: configured ? 'firestore' : 'local',
@@ -85,6 +87,13 @@
         return { ok:true, id, collection:collectionName };
       });
     },
+    async get(collectionName, id) {
+      const result = await withClient(async ({ db, fs }) => {
+        const snapshot = await fs.getDoc(fs.doc(db, collectionName, id));
+        return { ok:true, item:snapshot.exists() ? normalizeValue({ id:snapshot.id, ...snapshot.data() }) : null };
+      });
+      return result?.ok ? result.item : null;
+    },
     async list(collectionName, max = 1000) {
       const result = await withClient(async ({ db, fs }) => {
         const q = fs.query(fs.collection(db, collectionName), fs.limit(max));
@@ -92,6 +101,33 @@
         return { ok:true, items:snapshot.docs.map((doc) => normalizeValue({ id:doc.id, ...doc.data() })) };
       });
       return result?.ok ? result.items : [];
+    },
+    async incrementTraffic(dateKey, dayDelta = {}, totalDelta = {}) {
+      return withClient(async ({ db, fs }) => {
+        const dayRef = fs.doc(db, 'trafficDays', dateKey);
+        const totalRef = fs.doc(db, 'trafficSummary', 'total');
+        const batch = fs.writeBatch(db);
+        const now = new Date().toISOString();
+
+        batch.set(dayRef, {
+          date: dateKey,
+          visitors: fs.increment(counter(dayDelta.visitors)),
+          sessions: fs.increment(counter(dayDelta.sessions)),
+          pageViews: fs.increment(counter(dayDelta.pageViews)),
+          updatedAtISO: now
+        }, { merge:true });
+
+        batch.set(totalRef, {
+          scope: 'total',
+          visitors: fs.increment(counter(totalDelta.visitors)),
+          sessions: fs.increment(counter(totalDelta.sessions)),
+          pageViews: fs.increment(counter(totalDelta.pageViews)),
+          updatedAtISO: now
+        }, { merge:true });
+
+        await batch.commit();
+        return { ok:true, date:dateKey };
+      });
     }
   };
 })();
