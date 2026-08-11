@@ -14,6 +14,15 @@
   const main = document.querySelector('main');
   if (!main) return;
 
+  /* Load the final visual-polish layer after all page styles. */
+  if (!document.querySelector('link[data-legacy-site-polish]')) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = `${basePath}/assets/css/legacy-site-polish.css?v=20260812-0106`;
+    link.setAttribute('data-legacy-site-polish','');
+    document.head.appendChild(link);
+  }
+
   const NEW = 'https://cdn.imweb.me/upload/S20260219b829e728b3f2e/';
   const OLD = 'https://cdn.imweb.me/upload/S2023030963558ef55ba8e/';
 
@@ -91,8 +100,28 @@
     return heading?.textContent?.trim() === title;
   });
 
+  const enhanceProductCapabilities = () => {
+    if (path !== '/Products/') return;
+    const descriptions = [
+      ['Skincare Systems','Serums, creams, essences and barrier-care formats.'],
+      ['Sun Care Solutions','Daily UV fluids, hybrid sunscreens and functional SPF care.'],
+      ['Hair & Scalp Care','Shampoo, treatment, conditioner and scalp-focused systems.'],
+      ['Body Care Products','Cleansers, lotions, creams and targeted body treatments.'],
+      ['Treatment Masks','Hydrogel, bio-cellulose, sleeping and eye-patch formats.'],
+      ['Specialty Formulations','Customized textures, delivery systems and market-specific concepts.']
+    ];
+    document.querySelectorAll('.product-capability-item').forEach((item,index)=>{
+      if (item.dataset.enhanced === 'true') return;
+      const data = descriptions[index];
+      if (!data) return;
+      item.innerHTML = `<strong>${data[0]}</strong><small>${data[1]}</small>`;
+      item.dataset.enhanced = 'true';
+    });
+  };
+
   const apply = () => {
     cleanup();
+    enhanceProductCapabilities();
 
     if (path === '/About/') {
       const story = document.querySelector('.about-narrow > p:last-of-type');
