@@ -89,16 +89,74 @@
   };
 
   const setupLanguageSwitcher = () => {
-    const nav = document.querySelector('[data-nav]'); const languageRoot = document.querySelector('[data-language-switcher]'); const languageMenu = document.querySelector('[data-language-menu]'); const inquiry = nav?.querySelector('.nav-cta');
+    const nav = document.querySelector('[data-nav]');
+    const languageRoot = document.querySelector('[data-language-switcher]');
+    const languageMenu = document.querySelector('[data-language-menu]');
+    const inquiry = nav?.querySelector('.nav-cta');
     if (!nav || !languageRoot || !languageMenu || !inquiry) return;
+
     if (inquiry.nextElementSibling !== languageRoot) inquiry.insertAdjacentElement('afterend', languageRoot);
+
+    const triggerText = languageRoot.querySelector('[data-language-trigger] span');
+    if (triggerText) triggerText.textContent = 'EN';
+
+    languageMenu.innerHTML = `
+      <button type="button" data-language="en"><strong>English</strong><span>Original</span></button>
+      <button type="button" data-language="ko"><strong>한국어</strong><span>Google Translate</span></button>`;
+
     let engine = document.getElementById('google_translate_element');
-    if (!engine) { engine = document.createElement('div'); engine.id='google_translate_element'; engine.className='google-translate-engine'; engine.setAttribute('aria-hidden','true'); document.body.appendChild(engine); }
-    if (!window.googleTranslateElementInit) window.googleTranslateElementInit = () => { if (!window.google?.translate?.TranslateElement || engine.dataset.ready === 'true') return; new window.google.translate.TranslateElement({ pageLanguage:'en', includedLanguages:'hi', autoDisplay:false }, 'google_translate_element'); engine.dataset.ready='true'; };
-    if (!document.querySelector('script[data-google-translate]')) { const script=document.createElement('script'); script.src='https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'; script.async=true; script.setAttribute('data-google-translate',''); document.body.appendChild(script); }
-    const setCookie = (value) => { const expires=value?'':';expires=Thu, 01 Jan 1970 00:00:00 GMT'; document.cookie=`googtrans=${value}${expires};path=/;SameSite=Lax`; };
-    const translateToHindi = (attempt=0) => { const combo=document.querySelector('.goog-te-combo'); if (combo) { combo.value='hi'; combo.dispatchEvent(new Event('change',{bubbles:true})); return; } if (attempt<24) return setTimeout(()=>translateToHindi(attempt+1),180); location.href=`https://translate.google.com/translate?sl=en&tl=hi&u=${encodeURIComponent(location.href)}`; };
-    languageMenu.addEventListener('click',(e)=>{ const button=e.target.closest('[data-language]'); if(!button)return; e.preventDefault(); e.stopImmediatePropagation(); if(button.dataset.language==='hi'){setCookie('/en/hi');translateToHindi();}else{setCookie('');location.reload();} languageMenu.hidden=true; },true);
+    if (!engine) {
+      engine = document.createElement('div');
+      engine.id = 'google_translate_element';
+      engine.className = 'google-translate-engine';
+      engine.setAttribute('aria-hidden','true');
+      document.body.appendChild(engine);
+    }
+
+    window.googleTranslateElementInit = () => {
+      if (!window.google?.translate?.TranslateElement || engine.dataset.ready === 'true') return;
+      new window.google.translate.TranslateElement({ pageLanguage:'en', includedLanguages:'ko', autoDisplay:false }, 'google_translate_element');
+      engine.dataset.ready = 'true';
+    };
+
+    if (!document.querySelector('script[data-google-translate]')) {
+      const script = document.createElement('script');
+      script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      script.async = true;
+      script.setAttribute('data-google-translate','');
+      document.body.appendChild(script);
+    }
+
+    const setCookie = (value) => {
+      const expires = value ? '' : ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      document.cookie = `googtrans=${value}${expires};path=/;SameSite=Lax`;
+    };
+
+    const translateToKorean = (attempt = 0) => {
+      const combo = document.querySelector('.goog-te-combo');
+      if (combo) {
+        combo.value = 'ko';
+        combo.dispatchEvent(new Event('change', { bubbles:true }));
+        return;
+      }
+      if (attempt < 24) return setTimeout(() => translateToKorean(attempt + 1), 180);
+      location.href = `https://translate.google.com/translate?sl=en&tl=ko&u=${encodeURIComponent(location.href)}`;
+    };
+
+    languageMenu.addEventListener('click', (e) => {
+      const button = e.target.closest('[data-language]');
+      if (!button) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      if (button.dataset.language === 'ko') {
+        setCookie('/en/ko');
+        translateToKorean();
+      } else {
+        setCookie('');
+        location.reload();
+      }
+      languageMenu.hidden = true;
+    }, true);
   };
 
   const cleanupInquiryForms = () => {
