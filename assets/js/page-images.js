@@ -9,8 +9,8 @@
     '/Contact/': [['https://cdn.imweb.me/upload/S2023030963558ef55ba8e/0867ff1868205.jpg','JNCOS TECH contact visual 01'],['https://cdn.imweb.me/upload/S2023030963558ef55ba8e/1ecde89c324d3.jpg','JNCOS TECH contact visual 02'],['https://cdn.imweb.me/upload/S2023030963558ef55ba8e/a6c9d4959838e.jpg','JNCOS TECH contact visual 03']]
   };
 
+  const basePath = window.JNCOS_BASE_PATH || '';
   const normalizePath = (pathname) => {
-    const basePath = window.JNCOS_BASE_PATH || '';
     let clean = pathname || '/';
     if (basePath && clean.startsWith(basePath)) clean = clean.slice(basePath.length) || '/';
     if (clean === '/index.html') return '/';
@@ -18,13 +18,20 @@
     if (!clean.startsWith('/')) clean = `/${clean}`;
     return clean === '/' || clean.endsWith('/') ? clean : `${clean}/`;
   };
-
   const path = normalizePath(window.location.pathname);
+
+  const fixInternalLinks = (root = document) => {
+    if (!basePath) return;
+    root.querySelectorAll?.('a[href^="/"]').forEach((link) => {
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('//') || href === basePath || href.startsWith(`${basePath}/`)) return;
+      link.setAttribute('href', `${basePath}${href}`);
+    });
+  };
 
   const setupCapabilitiesNav = () => {
     const nav = document.querySelector('[data-nav]');
     if (!nav || nav.querySelector('[data-capabilities]')) return;
-
     const links = [...nav.querySelectorAll(':scope > a')];
     const products = links.find((a) => a.textContent.trim() === 'Products & Services');
     const oem = links.find((a) => a.textContent.trim() === 'OEM / ODM');
@@ -34,15 +41,7 @@
     const root = document.createElement('div');
     root.className = 'nav-capabilities';
     root.setAttribute('data-capabilities', '');
-    root.innerHTML = `
-      <button class="nav-capabilities-trigger" type="button" aria-expanded="false" data-capabilities-trigger>
-        <span>Capabilities</span>
-        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
-      </button>
-      <div class="nav-capabilities-menu" data-capabilities-menu>
-        <div class="nav-capabilities-eyebrow">WHAT WE DO</div>
-      </div>`;
-
+    root.innerHTML = `<button class="nav-capabilities-trigger" type="button" aria-expanded="false" data-capabilities-trigger><span>Capabilities</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button><div class="nav-capabilities-menu" data-capabilities-menu><div class="nav-capabilities-eyebrow">WHAT WE DO</div></div>`;
     nav.insertBefore(root, products);
     const menu = root.querySelector('[data-capabilities-menu]');
     const descriptions = new Map([
@@ -50,34 +49,19 @@
       [oem, 'From project brief and formulation to packaging and scalable manufacturing.'],
       [technology, 'Research platforms, functional ingredients and formulation technologies.']
     ]);
-
     [products, oem, technology].forEach((link) => {
       link.classList.add('nav-capability-link');
       const label = link.textContent.trim();
-      const description = descriptions.get(link) || '';
-      link.innerHTML = `<span>${label}</span><small>${description}</small><b aria-hidden="true">↗</b>`;
+      link.innerHTML = `<span>${label}</span><small>${descriptions.get(link)}</small><b aria-hidden="true">↗</b>`;
       menu.appendChild(link);
     });
-
     const trigger = root.querySelector('[data-capabilities-trigger]');
-    const setOpen = (open) => {
-      root.classList.toggle('is-open', open);
-      trigger.setAttribute('aria-expanded', String(open));
-    };
-    const toggleOpen = () => setOpen(!root.classList.contains('is-open'));
-
-    trigger.addEventListener('click', (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      toggleOpen();
-    });
-
+    const setOpen = (open) => { root.classList.toggle('is-open', open); trigger.setAttribute('aria-expanded', String(open)); };
+    trigger.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); setOpen(!root.classList.contains('is-open')); });
     root.addEventListener('mouseenter', () => { if (window.innerWidth > 1024) setOpen(true); });
     root.addEventListener('mouseleave', () => { if (window.innerWidth > 1024) setOpen(false); });
     root.addEventListener('focusin', () => { if (window.innerWidth > 1024) setOpen(true); });
-    root.addEventListener('focusout', (event) => {
-      if (window.innerWidth > 1024 && !root.contains(event.relatedTarget)) setOpen(false);
-    });
+    root.addEventListener('focusout', (event) => { if (window.innerWidth > 1024 && !root.contains(event.relatedTarget)) setOpen(false); });
     menu.addEventListener('click', () => setOpen(false));
     document.addEventListener('click', (event) => { if (!root.contains(event.target)) setOpen(false); });
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape') setOpen(false); });
@@ -87,19 +71,11 @@
   const setupHomeTechTriggers = () => {
     const grid = document.querySelector('.home-technology .tech-grid');
     if (!grid) return;
-    grid.querySelectorAll('a').forEach((link) => {
-      link.removeAttribute('href');
-      link.classList.add('tech-trigger');
-      link.setAttribute('role', 'button');
-      link.setAttribute('tabindex', '0');
-      link.setAttribute('aria-label', `Show details for ${link.textContent.replace(/\s+/g, ' ').trim()}`);
-      link.addEventListener('click', (event) => event.preventDefault(), true);
-      link.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          link.click();
-        }
-      });
+    grid.querySelectorAll('.tech-trigger, a').forEach((el) => {
+      if (el.tagName === 'A') el.removeAttribute('href');
+      el.classList.add('tech-trigger');
+      el.setAttribute('type', 'button');
+      el.setAttribute('aria-label', `Show details for ${el.textContent.replace(/\s+/g, ' ').trim()}`);
     });
   };
 
@@ -109,96 +85,41 @@
     const languageMenu = document.querySelector('[data-language-menu]');
     const inquiry = nav?.querySelector('.nav-cta');
     if (!nav || !languageRoot || !languageMenu || !inquiry) return;
-
     if (inquiry.nextElementSibling !== languageRoot) inquiry.insertAdjacentElement('afterend', languageRoot);
 
     let engine = document.getElementById('google_translate_element');
     if (!engine) {
-      engine = document.createElement('div');
-      engine.id = 'google_translate_element';
-      engine.className = 'google-translate-engine';
-      engine.setAttribute('aria-hidden', 'true');
-      document.body.appendChild(engine);
+      engine = document.createElement('div'); engine.id = 'google_translate_element'; engine.className = 'google-translate-engine'; engine.setAttribute('aria-hidden', 'true'); document.body.appendChild(engine);
     }
-
-    if (!window.googleTranslateElementInit) {
-      window.googleTranslateElementInit = () => {
-        if (!window.google?.translate?.TranslateElement) return;
-        if (engine.dataset.ready === 'true') return;
-        new window.google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'hi', autoDisplay: false }, 'google_translate_element');
-        engine.dataset.ready = 'true';
-      };
-    }
-
-    if (!document.querySelector('script[data-google-translate]')) {
-      const script = document.createElement('script');
-      script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-      script.async = true;
-      script.setAttribute('data-google-translate', '');
-      document.body.appendChild(script);
-    }
-
-    const setGoogtransCookie = (value) => {
-      const expires = value ? '' : ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
-      document.cookie = `googtrans=${value}${expires};path=/;SameSite=Lax`;
-      const host = window.location.hostname;
-      if (host && !host.includes('localhost')) document.cookie = `googtrans=${value}${expires};path=/;domain=.${host};SameSite=Lax`;
+    if (!window.googleTranslateElementInit) window.googleTranslateElementInit = () => {
+      if (!window.google?.translate?.TranslateElement || engine.dataset.ready === 'true') return;
+      new window.google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'hi', autoDisplay: false }, 'google_translate_element'); engine.dataset.ready = 'true';
     };
-
+    if (!document.querySelector('script[data-google-translate]')) {
+      const script = document.createElement('script'); script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'; script.async = true; script.setAttribute('data-google-translate', ''); document.body.appendChild(script);
+    }
+    const setCookie = (value) => { const expires = value ? '' : ';expires=Thu, 01 Jan 1970 00:00:00 GMT'; document.cookie = `googtrans=${value}${expires};path=/;SameSite=Lax`; };
     const translateToHindi = (attempt = 0) => {
       const combo = document.querySelector('.goog-te-combo');
-      if (combo) {
-        combo.value = 'hi';
-        combo.dispatchEvent(new Event('change', { bubbles: true }));
-        document.documentElement.setAttribute('data-translated-language', 'hi');
-        return;
-      }
-      if (attempt < 24) {
-        window.setTimeout(() => translateToHindi(attempt + 1), 180);
-        return;
-      }
+      if (combo) { combo.value = 'hi'; combo.dispatchEvent(new Event('change', { bubbles: true })); return; }
+      if (attempt < 24) return window.setTimeout(() => translateToHindi(attempt + 1), 180);
       window.location.href = `https://translate.google.com/translate?sl=en&tl=hi&u=${encodeURIComponent(window.location.href)}`;
     };
-
-    const restoreEnglish = () => {
-      setGoogtransCookie('');
-      const clean = new URL(window.location.href);
-      clean.hash = '';
-      window.location.href = clean.toString();
-    };
-
     languageMenu.addEventListener('click', (event) => {
-      const button = event.target.closest('[data-language]');
-      if (!button) return;
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      const lang = button.dataset.language;
-      if (lang === 'hi') {
-        setGoogtransCookie('/en/hi');
-        translateToHindi();
-      } else restoreEnglish();
-      const trigger = document.querySelector('[data-language-trigger]');
-      if (trigger) trigger.querySelector('span').textContent = lang === 'hi' ? 'HI' : 'EN';
+      const button = event.target.closest('[data-language]'); if (!button) return;
+      event.preventDefault(); event.stopImmediatePropagation();
+      if (button.dataset.language === 'hi') { setCookie('/en/hi'); translateToHindi(); }
+      else { setCookie(''); window.location.reload(); }
       languageMenu.hidden = true;
-      trigger?.setAttribute('aria-expanded', 'false');
     }, true);
   };
 
   const cleanupInquiryForms = () => {
     if (path !== '/Inquiry/') return;
-    const main = document.querySelector('main.inquiry-page');
-    if (!main) return;
-    const removeLegacyForms = (root = main) => {
-      root.querySelectorAll?.('form').forEach((form) => { if (!form.matches('[data-inquiry-form]')) form.remove(); });
-    };
-    removeLegacyForms();
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => mutation.addedNodes.forEach((node) => {
-        if (!(node instanceof Element)) return;
-        if (node.matches('form') && !node.matches('[data-inquiry-form]')) node.remove();
-        else removeLegacyForms(node);
-      }));
-    });
+    const main = document.querySelector('main.inquiry-page'); if (!main) return;
+    const removeLegacy = (root = main) => root.querySelectorAll?.('form').forEach((form) => { if (!form.matches('[data-inquiry-form]')) form.remove(); });
+    removeLegacy();
+    const observer = new MutationObserver((mutations) => mutations.forEach((mutation) => mutation.addedNodes.forEach((node) => { if (node instanceof Element) removeLegacy(node); })));
     observer.observe(main, { childList: true, subtree: true });
   };
 
@@ -206,32 +127,17 @@
   setupHomeTechTriggers();
   setupLanguageSwitcher();
   cleanupInquiryForms();
+  fixInternalLinks();
+
+  const linkObserver = new MutationObserver((mutations) => mutations.forEach((mutation) => mutation.addedNodes.forEach((node) => { if (node instanceof Element) fixInternalLinks(node); })));
+  if (basePath) linkObserver.observe(document.body, { childList: true, subtree: true });
 
   const images = IMAGE_MAP[path];
   const main = document.querySelector('main');
   if (!main || !images || main.matches('[data-page-visuals]') || main.querySelector('[data-page-visuals]')) return;
-
-  const section = document.createElement('section');
-  section.className = 'visual-stack';
-  section.setAttribute('data-page-visuals', '');
-  section.setAttribute('aria-label', 'Page visuals');
-  const inner = document.createElement('div');
-  inner.className = 'visual-stack-inner';
-  const list = document.createElement('div');
-  list.className = 'visual-stack-list';
-
-  images.forEach(([src, alt], index) => {
-    const figure = document.createElement('figure');
-    const img = document.createElement('img');
-    img.src = src;
-    img.alt = alt;
-    img.decoding = 'async';
-    img.loading = path === '/' && index === 0 ? 'eager' : 'lazy';
-    figure.appendChild(img);
-    list.appendChild(figure);
-  });
-
-  inner.appendChild(list);
-  section.appendChild(inner);
-  main.appendChild(section);
+  const section = document.createElement('section'); section.className = 'visual-stack'; section.setAttribute('data-page-visuals', ''); section.setAttribute('aria-label', 'Page visuals');
+  const inner = document.createElement('div'); inner.className = 'visual-stack-inner';
+  const list = document.createElement('div'); list.className = 'visual-stack-list';
+  images.forEach(([src, alt], index) => { const figure = document.createElement('figure'); const img = document.createElement('img'); img.src = src; img.alt = alt; img.decoding = 'async'; img.loading = path === '/' && index === 0 ? 'eager' : 'lazy'; figure.appendChild(img); list.appendChild(figure); });
+  inner.appendChild(list); section.appendChild(inner); main.appendChild(section);
 })();
