@@ -21,13 +21,6 @@
 
   const path = normalizePath(window.location.pathname);
 
-  /* ---------------------------------------------------------
-     Global language switcher enhancement
-     - Keep Inquiry first, language selector immediately after it.
-     - Translate the current DOM in place via Google Translate.
-     - Fall back to Google's website translator URL if the widget
-       is blocked or unavailable on the current browser.
-  --------------------------------------------------------- */
   const setupLanguageSwitcher = () => {
     const nav = document.querySelector('[data-nav]');
     const languageRoot = document.querySelector('[data-language-switcher]');
@@ -72,9 +65,7 @@
       const expires = value ? '' : ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
       document.cookie = `googtrans=${value}${expires};path=/;SameSite=Lax`;
       const host = window.location.hostname;
-      if (host && !host.includes('localhost')) {
-        document.cookie = `googtrans=${value}${expires};path=/;domain=.${host};SameSite=Lax`;
-      }
+      if (host && !host.includes('localhost')) document.cookie = `googtrans=${value}${expires};path=/;domain=.${host};SameSite=Lax`;
     };
 
     const translateToHindi = (attempt = 0) => {
@@ -89,7 +80,6 @@
         window.setTimeout(() => translateToHindi(attempt + 1), 180);
         return;
       }
-      /* Widget fallback: use Google's current-page website translation. */
       const sourceUrl = window.location.href;
       window.location.href = `https://translate.google.com/translate?sl=en&tl=hi&u=${encodeURIComponent(sourceUrl)}`;
     };
@@ -101,7 +91,6 @@
       window.location.href = clean.toString();
     };
 
-    /* Capture phase overrides the old redirect handler in common.js. */
     languageMenu.addEventListener('click', (event) => {
       const button = event.target.closest('[data-language]');
       if (!button) return;
@@ -121,23 +110,33 @@
     }, true);
   };
 
-  /* ---------------------------------------------------------
-     Inquiry defensive cleanup
-     Only the 8-step project form should exist on this page.
-     This removes stale/legacy forms if a cached fragment is injected.
-  --------------------------------------------------------- */
   const cleanupInquiryForms = () => {
     if (path !== '/Inquiry/') return;
-    document.querySelectorAll('form').forEach((form) => {
-      if (!form.matches('[data-inquiry-form]') && !form.closest('#google_translate_element')) form.remove();
+    const main = document.querySelector('main.inquiry-page');
+    if (!main) return;
+
+    const removeLegacyForms = (root = main) => {
+      root.querySelectorAll?.('form').forEach((form) => {
+        if (!form.matches('[data-inquiry-form]')) form.remove();
+      });
+    };
+
+    removeLegacyForms();
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (!(node instanceof Element)) return;
+          if (node.matches('form') && !node.matches('[data-inquiry-form]')) node.remove();
+          else removeLegacyForms(node);
+        });
+      });
     });
+    observer.observe(main, { childList: true, subtree: true });
   };
 
   setupLanguageSwitcher();
   cleanupInquiryForms();
 
-  /* Page image stack is only added to legacy pages that do not already
-     place their provided images explicitly in the layout. */
   const images = IMAGE_MAP[path];
   const main = document.querySelector('main');
   if (!main || !images || main.matches('[data-page-visuals]') || main.querySelector('[data-page-visuals]')) return;
