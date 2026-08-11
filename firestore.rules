@@ -1,0 +1,58 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    function isShortString(value, max) {
+      return value is string && value.size() <= max;
+    }
+
+    function validInquiryCreate() {
+      return request.resource.data.keys().hasAll(['id', 'type', 'createdAtISO'])
+        && request.resource.data.type == 'inquiry'
+        && isShortString(request.resource.data.id, 120)
+        && isShortString(request.resource.data.createdAtISO, 64);
+    }
+
+    function validContactCreate() {
+      return request.resource.data.keys().hasAll(['id', 'type', 'createdAtISO'])
+        && request.resource.data.type == 'contact'
+        && isShortString(request.resource.data.id, 120)
+        && isShortString(request.resource.data.createdAtISO, 64)
+        && (!request.resource.data.keys().hasAny(['message']) || isShortString(request.resource.data.message, 12000));
+    }
+
+    function validVisitWrite(docId) {
+      return request.resource.data.keys().hasAll(['id', 'type', 'sessionId', 'visitorId'])
+        && request.resource.data.type == 'visit'
+        && request.resource.data.id == docId
+        && request.resource.data.sessionId == docId
+        && isShortString(request.resource.data.visitorId, 160)
+        && request.resource.data.pageViews is int
+        && request.resource.data.pageViews >= 1
+        && request.resource.data.pageViews <= 10000;
+    }
+
+    match /inquiries/{inquiryId} {
+      allow create: if validInquiryCreate();
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /contacts/{contactId} {
+      allow create: if validContactCreate();
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /visits/{sessionId} {
+      allow create, update: if validVisitWrite(sessionId);
+      allow read, delete: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
