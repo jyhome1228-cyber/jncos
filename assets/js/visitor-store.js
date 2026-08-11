@@ -5,6 +5,7 @@
   const TOTAL_COUNTED_KEY = 'jncos_traffic_total_counted_v2';
   const DAY_COUNTED_KEY = 'jncos_traffic_day_counted_v2';
   const SESSION_COUNTED_KEY = 'jncos_traffic_session_counted_v2';
+  const RUNTIME_VERSION = '20260812-0050';
   const basePath = window.JNCOS_BASE_PATH || (location.hostname.endsWith('github.io') ? '/jncos' : '');
   const safeParse = (value, fallback) => { try { return JSON.parse(value); } catch (_) { return fallback; } };
   const uid = (prefix) => window.crypto?.randomUUID?.() || `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -40,7 +41,7 @@
       return;
     }
     const script = document.createElement('script');
-    script.src = `${basePath}${src}`;
+    script.src = `${basePath}${src}${src.includes('?') ? '&' : '?'}v=${RUNTIME_VERSION}`;
     script.setAttribute('data-loader', key);
     script.onload = () => { script.dataset.loaded = 'true'; resolve(Boolean(window[key])); };
     script.onerror = () => resolve(false);
@@ -49,8 +50,8 @@
 
   let backendPromise;
   const ensureBackend = () => backendPromise ||= (async () => {
-    if (!window.JNCOS_FIREBASE_CONFIG) await loadScript('/assets/js/firebase-config.js?v=20260811-2345', 'JNCOS_FIREBASE_CONFIG');
-    if (!window.JNCOSCloudStore) await loadScript('/assets/js/cloud-store.js?v=20260811-2345', 'JNCOSCloudStore');
+    if (!window.JNCOS_FIREBASE_CONFIG) await loadScript('/assets/js/firebase-config.js', 'JNCOS_FIREBASE_CONFIG');
+    if (!window.JNCOSCloudStore) await loadScript('/assets/js/cloud-store.js', 'JNCOSCloudStore');
     return Boolean(window.JNCOSCloudStore?.configured);
   })();
 
@@ -132,7 +133,7 @@
     let aggregateResult = await window.JNCOSCloudStore.incrementTraffic(dateKey, deltas.day, deltas.total);
 
     if (!rawResult?.ok || !aggregateResult?.ok) {
-      console.warn('[JNCOS Traffic] initial Firestore write failed', { rawResult, aggregateResult });
+      console.warn('[JNCOS Traffic] initial Firestore write failed', { rawResult, aggregateResult, host:location.hostname });
       await sleep(900);
       if (!rawResult?.ok) rawResult = await window.JNCOSCloudStore.put('visits', sessionId, record);
       if (!aggregateResult?.ok) aggregateResult = await window.JNCOSCloudStore.incrementTraffic(dateKey, deltas.day, deltas.total);
@@ -144,65 +145,92 @@
   const trackPageView = async () => {
     if (/\/admin\/?(?:index\.html)?$/i.test(location.pathname)) return { skipped:true, reason:'admin' };
 
-    const backendReady = await ensureBackend();
-    const now = new Date().toISOString();
-    const dateKey = indiaDate();
-    const list = localList();
-    const existing = list.find((item) => item.id === sessionId);
-    const params = new URLSearchParams(location.search);
-    const record = existing ? {
-      ...existing,
-      lastSeen:now,
-      date:dateKey,
-      pageViews:(Number(existing.pageViews)||0)+1,
-      currentPage:location.pathname
-    } : {
-      id:sessionId,
-      visitorId,
-      sessionId,
-      type:'visit',
-      createdAt:now,
-      firstSeen:now,
-      lastSeen:now,
-      date:dateKey,
-      pageViews:1,
-      landingPage:location.pathname,
-      currentPage:location.pathname,
-      referrer:document.referrer || '',
-      utmSource:params.get('utm_source') || '',
-      utmMedium:params.get('utm_medium') || '',
-      utmCampaign:params.get('utm_campaign') || '',
-      language:navigator.language || '',
-      device:/Mobi|Android/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop'
-    };
-
-    writeLocal([record, ...list.filter((item) => item.id !== sessionId)]);
-
-    const firstTotalVisit = localStorage.getItem(TOTAL_COUNTED_KEY) !== '1';
-    const firstVisitToday = localStorage.getItem(DAY_COUNTED_KEY) !== dateKey;
-    const firstPageThisSession = sessionStorage.getItem(SESSION_COUNTED_KEY) !== sessionId;
-    const deltas = {
-      day:{ visitors:firstVisitToday ? 1 : 0, sessions:firstPageThisSession ? 1 : 0, pageViews:1 },
-      total:{ visitors:firstTotalVisit ? 1 : 0, sessions:firstPageThisSession ? 1 : 0, pageViews:1 }
-    };
-
-    const { rawResult, aggregateResult } = await writeCloud(dateKey, record, deltas);
-
-    if (aggregateResult?.ok) {
-      if (firstTotalVisit) localStorage.setItem(TOTAL_COUNTED_KEY, '1');
-      if (firstVisitToday) localStorage.setItem(DAY_COUNTED_KEY, dateKey);
-      if (firstPageThisSession) sessionStorage.setItem(SESSION_COUNTED_KEY, sessionId);
+    const pageKey = `${location.pathname}${location.search}`;
+    if (window.JNCOS_TRAFFIC_TRACKING_PAGE === pageKey) {
+      return window.JNCOS_TRAFFIC_LAST_RESULT || { skipped:true, reason:'already-tracking', page:pageKey };
     }
+    window.JNCOS_TRAFFIC_TRACKING_PAGE = pageKey;
 
-    const result = { ok:Boolean(rawResult?.ok), backendReady, record, rawResult, aggregateResult };
-    window.JNCOS_TRAFFIC_LAST_RESULT = result;
-    if (!rawResult?.ok) console.error('[JNCOS Traffic] visit record was not saved to Firestore', result);
-    return result;
+    try {
+      const backendReady = await ensureBackend();
+      const now = new Date().toISOString();
+      const dateKey = indiaDate();
+      const list = localList();
+      const existing = list.find((item) => item.id === sessionId);
+      const params = new URLSearchParams(location.search);
+      const record = existing ? {
+        ...existing,
+        lastSeen:now,
+        date:dateKey,
+        pageViews:(Number(existing.pageViews)||0)+1,
+        currentPage:location.pathname
+      } : {
+        id:sessionId,
+        visitorId,
+        sessionId,
+        type:'visit',
+        createdAt:now,
+        firstSeen:now,
+        lastSeen:now,
+        date:dateKey,
+        pageViews:1,
+        landingPage:location.pathname,
+        currentPage:location.pathname,
+        referrer:document.referrer || '',
+        utmSource:params.get('utm_source') || '',
+        utmMedium:params.get('utm_medium') || '',
+        utmCampaign:params.get('utm_campaign') || '',
+        language:navigator.language || '',
+        device:/Mobi|Android/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+        host:location.hostname
+      };
+
+      writeLocal([record, ...list.filter((item) => item.id !== sessionId)]);
+
+      const firstTotalVisit = localStorage.getItem(TOTAL_COUNTED_KEY) !== '1';
+      const firstVisitToday = localStorage.getItem(DAY_COUNTED_KEY) !== dateKey;
+      const firstPageThisSession = sessionStorage.getItem(SESSION_COUNTED_KEY) !== sessionId;
+      const deltas = {
+        day:{ visitors:firstVisitToday ? 1 : 0, sessions:firstPageThisSession ? 1 : 0, pageViews:1 },
+        total:{ visitors:firstTotalVisit ? 1 : 0, sessions:firstPageThisSession ? 1 : 0, pageViews:1 }
+      };
+
+      const { rawResult, aggregateResult } = await writeCloud(dateKey, record, deltas);
+
+      if (aggregateResult?.ok) {
+        if (firstTotalVisit) localStorage.setItem(TOTAL_COUNTED_KEY, '1');
+        if (firstVisitToday) localStorage.setItem(DAY_COUNTED_KEY, dateKey);
+        if (firstPageThisSession) sessionStorage.setItem(SESSION_COUNTED_KEY, sessionId);
+      }
+
+      const result = { ok:Boolean(rawResult?.ok), backendReady, record, rawResult, aggregateResult, runtimeVersion:RUNTIME_VERSION };
+      window.JNCOS_TRAFFIC_LAST_RESULT = result;
+
+      if (!rawResult?.ok) console.error('[JNCOS Traffic] visit record was not saved to Firestore', result);
+      if (!aggregateResult?.ok) console.error('[JNCOS Traffic] aggregate counters were not saved to Firestore', result);
+
+      if (!rawResult?.ok) {
+        window.JNCOS_TRAFFIC_TRACKING_PAGE = '';
+        if (!window.JNCOS_TRAFFIC_RETRY_TIMER) {
+          window.JNCOS_TRAFFIC_RETRY_TIMER = setTimeout(() => {
+            window.JNCOS_TRAFFIC_RETRY_TIMER = null;
+            trackPageView().catch((error) => console.error('[JNCOS Traffic] retry failed', error));
+          }, 1800);
+        }
+      }
+
+      return result;
+    } catch (error) {
+      window.JNCOS_TRAFFIC_TRACKING_PAGE = '';
+      console.error('[JNCOS Traffic] unexpected tracking error', error);
+      throw error;
+    }
   };
 
   window.JNCOSVisitorStore = {
     get mode() { return window.JNCOSCloudStore?.configured ? 'firestore+local' : 'local'; },
     get lastResult() { return window.JNCOS_TRAFFIC_LAST_RESULT || null; },
+    get diagnostics() { return { host:location.hostname, projectId:window.JNCOS_FIREBASE_CONFIG?.projectId || '', runtimeVersion:RUNTIME_VERSION, lastResult:window.JNCOS_TRAFFIC_LAST_RESULT || null }; },
     trackPageView,
     async list() {
       await ensureBackend();
@@ -213,4 +241,8 @@
       return aggregate || localStats();
     }
   };
+
+  Promise.resolve().then(() => trackPageView()).catch((error) => {
+    console.error('[JNCOS Traffic] auto-start failed', error);
+  });
 })();
