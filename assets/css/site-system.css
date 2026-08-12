@@ -1,3 +1,5 @@
+@import url('./mobile-nav-fix.css?v=20260812-2305');
+
 /* JN COS TECH — unified public site system */
 :root{--max:1320px;--footer:#2f1b13;--footer-line:rgba(255,255,255,.16)}
 body.public-page{font-size:14px}
