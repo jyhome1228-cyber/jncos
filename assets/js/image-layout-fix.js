@@ -14,6 +14,7 @@
 
   ensureStyle('data-legacy-site-polish', '/assets/css/legacy-site-polish.css?v=20260813-1655');
   ensureStyle('data-approved-images', '/assets/css/approved-images.css?v=20260813-1655');
+  ensureStyle('data-layout-consistency', '/assets/css/layout-consistency.css?v=20260813-1735');
 
   const enhanceProductCapabilities = () => {
     const descriptions = [
