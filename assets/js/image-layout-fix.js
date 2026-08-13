@@ -3,13 +3,17 @@
 
   const basePath = window.JNCOS_BASE_PATH || '';
 
-  if (!document.querySelector('link[data-legacy-site-polish]')) {
+  const ensureStyle = (marker, href) => {
+    if (document.querySelector(`link[${marker}]`)) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = `${basePath}/assets/css/legacy-site-polish.css?v=20260813-1655`;
-    link.setAttribute('data-legacy-site-polish', '');
+    link.href = `${basePath}${href}`;
+    link.setAttribute(marker, '');
     document.head.appendChild(link);
-  }
+  };
+
+  ensureStyle('data-legacy-site-polish', '/assets/css/legacy-site-polish.css?v=20260813-1655');
+  ensureStyle('data-approved-images', '/assets/css/approved-images.css?v=20260813-1655');
 
   const enhanceProductCapabilities = () => {
     const descriptions = [
