@@ -3,7 +3,8 @@
 
 :root{
   --jn-public-rail:1320px;
-  --jn-public-hero-h:460px;
+  --jn-public-side:clamp(28px,3vw,48px);
+  --jn-public-hero-h:520px;
   --jn-public-section-y:86px;
 }
 
@@ -27,6 +28,8 @@ body.public-page .inquiry-page .site-container{
   max-width:var(--jn-public-rail) !important;
   margin-left:auto !important;
   margin-right:auto !important;
+  padding-left:var(--jn-public-side) !important;
+  padding-right:var(--jn-public-side) !important;
 }
 
 /* Beat old page-specific 1120 / 1540 rails loaded by legacy styles. */
@@ -36,6 +39,8 @@ body.public-page .partnership-page .partnership-section > .site-container,
 body.public-page .home-main > section > .site-container{
   width:min(100%,var(--jn-public-rail)) !important;
   max-width:var(--jn-public-rail) !important;
+  padding-left:var(--jn-public-side) !important;
+  padding-right:var(--jn-public-side) !important;
 }
 
 /* Remove inner centered rails that made some pages look tiny. */
@@ -58,13 +63,17 @@ body.public-page:not(.home-page) :is(
   margin-right:0 !important;
 }
 
-/* Text-only subpage heroes had an extra 900px centered cap. Remove it. */
-body.public-page .subpage-hero.text-only .subpage-hero-grid,
-body.public-page .partnership-hero .subpage-hero-grid{
+/* Text-only subpage heroes use the shared rail. Partnership's inner grid stays inside its parent rail. */
+body.public-page .subpage-hero.text-only .subpage-hero-grid{
   width:min(100%,var(--jn-public-rail)) !important;
   max-width:var(--jn-public-rail) !important;
   margin-left:auto !important;
   margin-right:auto !important;
+}
+body.public-page .partnership-hero .subpage-hero-grid{
+  width:100% !important;
+  max-width:none !important;
+  margin:0 !important;
 }
 
 /* Keep prose readable without changing the shared LEFT edge. */
@@ -81,6 +90,13 @@ body.public-page:not(.home-page) :is(
   max-width:860px !important;
   margin-left:0 !important;
   margin-right:0 !important;
+}
+
+/* Header and content use identical physical inset. */
+body.public-page .header-inner,
+body.public-page .home-hero-grid{
+  margin-left:auto !important;
+  margin-right:auto !important;
 }
 
 /* ---------------------------------------------------------
@@ -152,12 +168,12 @@ body.public-page:not(.home-page) :is(
   .contact-hero,
   .inquiry-hero
 ) h1{
-  max-width:900px !important;
+  max-width:880px !important;
   margin:0 0 18px !important;
-  font-size:clamp(38px,3vw,44px) !important;
-  line-height:1.12 !important;
+  font-size:clamp(36px,2.8vw,43px) !important;
+  line-height:1.14 !important;
   font-weight:740 !important;
-  letter-spacing:-.045em !important;
+  letter-spacing:-.044em !important;
 }
 
 body.public-page:not(.home-page) :is(
@@ -180,46 +196,61 @@ body.public-page .home-hero{
   background:#f2ece6 !important;
 }
 body.public-page .home-hero-grid{
+  width:min(100%,var(--jn-public-rail)) !important;
+  max-width:var(--jn-public-rail) !important;
   height:100% !important;
-  grid-template-columns:minmax(0,.94fr) minmax(480px,1.06fr) !important;
-  gap:64px !important;
+  grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr) !important;
+  gap:72px !important;
   align-items:center !important;
 }
 body.public-page .home-hero-copy{
-  max-width:620px !important;
+  width:100% !important;
+  max-width:560px !important;
+  padding-left:0 !important;
+  margin-left:0 !important;
 }
 body.public-page .home-hero h1{
-  max-width:590px !important;
+  max-width:550px !important;
   margin:0 !important;
-  font-size:clamp(42px,3.2vw,52px) !important;
-  line-height:1.15 !important;
-  letter-spacing:-.05em !important;
+  font-size:clamp(38px,2.65vw,46px) !important;
+  line-height:1.16 !important;
+  font-weight:750 !important;
+  letter-spacing:-.048em !important;
 }
 body.public-page .home-copy{
-  max-width:590px !important;
+  max-width:555px !important;
   margin-top:28px !important;
-  font-size:14px !important;
-  line-height:1.78 !important;
+  font-size:13.5px !important;
+  line-height:1.8 !important;
 }
 body.public-page .home-actions{
-  margin-top:34px !important;
+  margin-top:32px !important;
+  gap:12px !important;
 }
 body.public-page .home-button{
-  min-height:50px !important;
-  min-width:210px !important;
+  min-height:48px !important;
+  min-width:200px !important;
 }
+
+/* The visual fills its full grid column so its right edge follows the same rail as the header. */
 body.public-page .home-hero-visual{
-  max-height:390px !important;
+  width:100% !important;
+  height:410px !important;
+  max-height:410px !important;
   margin:0 !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
+  aspect-ratio:auto !important;
+  display:block !important;
+  overflow:hidden !important;
+  background:#e9e4df !important;
 }
 body.public-page .home-hero-visual img{
-  max-height:390px !important;
+  display:block !important;
   width:100% !important;
-  height:auto !important;
-  object-fit:contain !important;
+  height:100% !important;
+  max-height:none !important;
+  aspect-ratio:auto !important;
+  object-fit:cover !important;
+  object-position:center !important;
 }
 
 /* ---------------------------------------------------------
@@ -290,6 +321,7 @@ body.public-page main :is(
 --------------------------------------------------------- */
 @media (max-width:1024px){
   :root{
+    --jn-public-side:clamp(22px,4vw,40px);
     --jn-public-section-y:72px;
   }
 
@@ -305,35 +337,45 @@ body.public-page main :is(
   ){
     height:auto !important;
     max-height:none !important;
-    min-height:360px !important;
-    padding-top:58px !important;
-    padding-bottom:58px !important;
+    min-height:380px !important;
+    padding-top:64px !important;
+    padding-bottom:64px !important;
     align-items:center !important;
   }
 
   body.public-page .home-hero-grid{
     height:auto !important;
     grid-template-columns:1fr !important;
-    gap:38px !important;
+    gap:40px !important;
+  }
+  body.public-page .home-hero-copy{
+    max-width:680px !important;
+  }
+  body.public-page .home-hero h1{
+    font-size:clamp(36px,6vw,44px) !important;
   }
   body.public-page .home-hero-visual{
-    max-width:760px !important;
+    width:100% !important;
+    height:auto !important;
     max-height:none !important;
   }
   body.public-page .home-hero-visual img{
-    max-height:none !important;
+    width:100% !important;
+    height:auto !important;
+    object-fit:contain !important;
   }
 
   body.public-page .partnership-hero,
   body.public-page .partnership-hero .site-container{
     height:auto !important;
     max-height:none !important;
-    min-height:360px !important;
+    min-height:380px !important;
   }
 }
 
 @media (max-width:720px){
   :root{
+    --jn-public-side:20px;
     --jn-public-section-y:64px;
   }
 
@@ -347,9 +389,9 @@ body.public-page main :is(
     .contact-hero,
     .inquiry-hero
   ){
-    min-height:320px !important;
-    padding-top:44px !important;
-    padding-bottom:44px !important;
+    min-height:330px !important;
+    padding-top:48px !important;
+    padding-bottom:48px !important;
   }
 
   body.public-page:not(.home-page) :is(
@@ -377,6 +419,6 @@ body.public-page main :is(
 
   body.public-page .partnership-hero,
   body.public-page .partnership-hero .site-container{
-    min-height:320px !important;
+    min-height:330px !important;
   }
 }
