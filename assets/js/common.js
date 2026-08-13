@@ -1,12 +1,13 @@
 (() => {
+  'use strict';
+
   const isGithubProjectPage = window.location.hostname.endsWith('github.io');
   const basePath = isGithubProjectPage ? '/jncos' : '';
   window.JNCOS_BASE_PATH = basePath;
 
   const withBase = (path) => {
     if (!path.startsWith('/')) return path;
-    if (!basePath) return path;
-    if (path === basePath || path.startsWith(`${basePath}/`)) return path;
+    if (!basePath || path === basePath || path.startsWith(`${basePath}/`)) return path;
     return `${basePath}${path}`;
   };
 
@@ -22,13 +23,15 @@
   const path = normalizePath();
   const isAdmin = /\/admin\/?$/i.test(path);
   const isHome = document.querySelector('.home-main') !== null;
+
   if (!isAdmin) {
     document.body.classList.add('public-page');
     document.body.classList.toggle('home-page', isHome);
   }
 
   const SITE_URL = 'https://jncostech.com';
-  const DEFAULT_IMAGE = 'https://cdn.imweb.me/upload/S2023030963558ef55ba8e/9c00c42704695.jpg';
+  const DEFAULT_IMAGE = 'https://cdn.imweb.me/upload/S20260608d59dd46fbc08b/e03905f0f7c3b.jpg';
+
   const seoMap = {
     '/': {
       title: 'JN COS TECH | Cosmetic OEM ODM Manufacturer in India',
@@ -40,49 +43,49 @@
       title: 'About JN COS TECH | Cosmetic Manufacturing Partner in India',
       description: 'Learn about JN COS TECH, an India-based cosmetic development and manufacturing company combining Korean skincare expertise, formulation science, quality systems and global OEM/ODM collaboration.',
       keywords: 'JN COS TECH, cosmetic manufacturer India, Korean skincare technology India, cosmetic development company Gujarat, cosmetic R&D India, OEM ODM company Ahmedabad',
-      image: 'https://cdn.imweb.me/upload/S2023030963558ef55ba8e/4ec6a98aa3f21.jpg'
+      image: 'https://cdn.imweb.me/upload/S20260608d59dd46fbc08b/fcf8f8a2e2829.jpg'
     },
     '/Products/': {
       title: 'Cosmetic Products & Services | JN COS TECH OEM ODM',
       description: 'Explore JN COS TECH OEM/ODM capabilities across serums, creams, cleansers, sunscreen, masks, hair care, scalp care, body care and specialty cosmetic formulations.',
       keywords: 'serum manufacturer India, cream manufacturer India, sunscreen OEM India, skincare OEM products, hair care OEM India, body care manufacturer India, cosmetic mask manufacturer, private label skincare products',
-      image: 'https://cdn.imweb.me/upload/S2023030963558ef55ba8e/8df4c931a8b92.jpg'
+      image: 'https://cdn.imweb.me/upload/S20260608d59dd46fbc08b/6a4c2ea3d58c1.jpg'
     },
     '/OEMODM/': {
       title: 'Cosmetic OEM ODM Manufacturer India | JN COS TECH',
       description: 'JN COS TECH offers cosmetic OEM and ODM manufacturing, custom formulation, private label development, packaging coordination, pilot batches, quality control and scalable production in India.',
       keywords: 'cosmetic OEM manufacturer India, cosmetic ODM manufacturer India, private label cosmetics India, third party cosmetic manufacturer, custom skincare formulation India, OEM skincare Gujarat, ODM cosmetics Ahmedabad',
-      image: 'https://cdn.imweb.me/upload/S2023030963558ef55ba8e/c772a2c8c81d0.jpg'
+      image: 'https://cdn.imweb.me/upload/S20260608d59dd46fbc08b/9d4f2b898d188.jpg'
     },
     '/Technology/': {
       title: 'Cosmetic R&D & Formulation Technology | JN COS TECH',
       description: 'Explore JN COS TECH cosmetic R&D platforms including barrier repair, peptides, ceramides, hydrogel delivery, encapsulation, liposome, niosome, emulsion engineering and functional ingredients.',
       keywords: 'cosmetic R&D India, skincare formulation technology, peptide skincare formulation, ceramide technology, hydrogel cosmetics, liposome niosome cosmetics, cosmetic emulsion engineering, functional cosmetic ingredients',
-      image: 'https://cdn.imweb.me/upload/S2023030963558ef55ba8e/645ad0367d91e.jpg'
+      image: 'https://cdn.imweb.me/upload/S20260608d59dd46fbc08b/91e7ec54992e7.jpg'
     },
     '/Manufacturing/': {
       title: 'Cosmetic Manufacturing Facility India | JN COS TECH',
       description: 'Discover JN COS TECH cosmetic manufacturing infrastructure, mixing, emulsification, homogenization, filling, labeling, sealing, quality control and production support in Gujarat, India.',
       keywords: 'cosmetic manufacturing facility India, cosmetic factory Gujarat, skincare manufacturing India, cosmetic production Ahmedabad, cosmetic filling packaging India, cosmetic quality control, contract cosmetic manufacturing',
-      image: 'https://cdn.imweb.me/upload/S2023030963558ef55ba8e/b3f84f24cd6cc.jpg'
+      image: 'https://cdn.imweb.me/upload/S20260608d59dd46fbc08b/a1ae2a77c50a2.jpg'
     },
     '/Partnership/': {
       title: 'Global Cosmetic Manufacturing Partnership | JN COS TECH',
       description: 'Partner with JN COS TECH for global cosmetic OEM/ODM development, white label manufacturing, custom OEM, packaging collaboration, technical communication and international market support.',
       keywords: 'global cosmetic manufacturing partner, cosmetic export manufacturer India, white label cosmetics India, international OEM ODM partner, cosmetic distribution support, beauty brand manufacturing partner',
-      image: 'https://cdn.imweb.me/upload/S2023030963558ef55ba8e/4ec6a98aa3f21.jpg'
+      image: DEFAULT_IMAGE
     },
     '/Contact/': {
       title: 'Contact JN COS TECH | Cosmetic OEM ODM Ahmedabad India',
       description: 'Contact JN COS TECH in Ahmedabad and Kheda, Gujarat for cosmetic OEM/ODM manufacturing, formulation development, R&D, packaging, quality and global partnership inquiries.',
       keywords: 'JN COS TECH contact, cosmetic manufacturer Ahmedabad, cosmetic OEM Gujarat, cosmetic ODM Ahmedabad, skincare manufacturer Kheda, cosmetic factory contact India',
-      image: 'https://cdn.imweb.me/upload/S2023030963558ef55ba8e/0867ff1868205.jpg'
+      image: 'https://cdn.imweb.me/upload/S20260608d59dd46fbc08b/b581f79585346.jpg'
     },
     '/Inquiry/': {
       title: 'Cosmetic OEM ODM Project Inquiry | JN COS TECH',
       description: 'Submit a detailed cosmetic OEM/ODM project brief covering product category, formulation, ingredients, packaging, target market, production quantity and launch timeline.',
       keywords: 'cosmetic OEM inquiry, cosmetic ODM quote India, private label cosmetic inquiry, skincare manufacturing quotation, custom formulation project, cosmetic production inquiry India',
-      image: 'https://cdn.imweb.me/upload/S2023030963558ef55ba8e/c772a2c8c81d0.jpg'
+      image: DEFAULT_IMAGE
     },
     '/Privacy/': {
       title: 'Privacy Policy | JN COS TECH',
@@ -115,7 +118,8 @@
   };
 
   const ensureLink = (rel, href, extra = {}) => {
-    let el = document.head.querySelector(`link[rel="${rel}"]${extra.hreflang ? `[hreflang="${extra.hreflang}"]` : ''}`);
+    const suffix = extra.hreflang ? `[hreflang="${extra.hreflang}"]` : '';
+    let el = document.head.querySelector(`link[rel="${rel}"]${suffix}`);
     if (!el) {
       el = document.createElement('link');
       el.rel = rel;
@@ -159,12 +163,7 @@
     ensureLink('alternate', canonicalUrl, { hreflang: 'en-IN' });
     ensureLink('alternate', canonicalUrl, { hreflang: 'x-default' });
 
-    const oldStructured = document.head.querySelector('script[data-jncos-structured-data]');
-    oldStructured?.remove();
-    const crumbs = path === '/' ? [] : [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
-      { '@type': 'ListItem', position: 2, name: seo.title.split('|')[0].trim(), item: canonicalUrl }
-    ];
+    document.head.querySelector('script[data-jncos-structured-data]')?.remove();
     const graph = [
       {
         '@type': 'Organization',
@@ -205,7 +204,17 @@
         inLanguage: 'en-IN'
       }
     ];
-    if (crumbs.length) graph.push({ '@type': 'BreadcrumbList', itemListElement: crumbs });
+
+    if (path !== '/') {
+      graph.push({
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+          { '@type': 'ListItem', position: 2, name: seo.title.split('|')[0].trim(), item: canonicalUrl }
+        ]
+      });
+    }
+
     const script = document.createElement('script');
     script.type = 'application/ld+json';
     script.setAttribute('data-jncos-structured-data', '');
@@ -230,14 +239,14 @@
 
     if (!document.querySelector('script[data-page-images]')) {
       const script = document.createElement('script');
-      script.src = withBase('/assets/js/page-images.js?v=20260812-0037');
+      script.src = withBase('/assets/js/page-images.js?v=20260813-1655');
       script.setAttribute('data-page-images', '');
       document.body.appendChild(script);
     }
 
     if (!document.querySelector('script[data-image-layout-fix]')) {
       const script = document.createElement('script');
-      script.src = withBase('/assets/js/image-layout-fix.js?v=20260812-0037');
+      script.src = withBase('/assets/js/image-layout-fix.js?v=20260813-1655');
       script.setAttribute('data-image-layout-fix', '');
       document.body.appendChild(script);
     }
@@ -273,7 +282,7 @@
             </button>
             <div class="language-switcher-menu" id="language-menu" data-language-menu hidden>
               <button type="button" data-language="en"><strong>English</strong><span>Original</span></button>
-              <button type="button" data-language="hi"><strong>हिन्दी</strong><span>India · Google Translate</span></button>
+              <button type="button" data-language="ko"><strong>한국어</strong><span>Google Translate</span></button>
             </div>
           </div>
           <a class="nav-cta" href="${withBase('/Inquiry/')}">Inquiry</a>
@@ -291,21 +300,11 @@
           </div>
           <div>
             <span class="global-footer-label">Company</span>
-            <div class="global-footer-links">
-              <a href="${withBase('/About/')}">About</a>
-              <a href="${withBase('/Products/')}">Products &amp; Services</a>
-              <a href="${withBase('/Partnership/')}">Partnership</a>
-              <a href="${withBase('/Contact/')}">Contact us</a>
-            </div>
+            <div class="global-footer-links"><a href="${withBase('/About/')}">About</a><a href="${withBase('/Products/')}">Products &amp; Services</a><a href="${withBase('/Partnership/')}">Partnership</a><a href="${withBase('/Contact/')}">Contact us</a></div>
           </div>
           <div>
             <span class="global-footer-label">Capabilities</span>
-            <div class="global-footer-links">
-              <a href="${withBase('/OEMODM/')}">OEM / ODM</a>
-              <a href="${withBase('/Technology/')}">Technology &amp; R&amp;D</a>
-              <a href="${withBase('/Manufacturing/')}">Manufacturing</a>
-              <a href="${withBase('/Inquiry/')}">Project Inquiry</a>
-            </div>
+            <div class="global-footer-links"><a href="${withBase('/OEMODM/')}">OEM / ODM</a><a href="${withBase('/Technology/')}">Technology &amp; R&amp;D</a><a href="${withBase('/Manufacturing/')}">Manufacturing</a><a href="${withBase('/Inquiry/')}">Project Inquiry</a></div>
           </div>
           <div class="global-footer-contact">
             <span class="global-footer-label">Get in Touch</span>
@@ -316,11 +315,7 @@
         </div>
         <div class="global-footer-bottom">
           <span>© <span data-year></span> JN COS TECH Pvt. Ltd. All rights reserved.</span>
-          <div class="global-footer-legal">
-            <a href="${withBase('/Privacy/')}">Privacy Policy</a>
-            <a href="${withBase('/Terms/')}">Terms of Use</a>
-            <a href="${withBase('/Cookies/')}">Cookie Policy</a>
-          </div>
+          <div class="global-footer-legal"><a href="${withBase('/Privacy/')}">Privacy Policy</a><a href="${withBase('/Terms/')}">Terms of Use</a><a href="${withBase('/Cookies/')}">Cookie Policy</a></div>
         </div>
       </div>
     </footer>`;
@@ -374,18 +369,6 @@
       const open = languageTrigger.getAttribute('aria-expanded') === 'true';
       languageTrigger.setAttribute('aria-expanded', String(!open));
       languageMenu.hidden = open;
-    });
-    languageMenu.addEventListener('click', (event) => {
-      const button = event.target.closest('[data-language]');
-      if (!button) return;
-      const lang = button.dataset.language;
-      const canonical = `${SITE_URL}${path === '/' ? '/' : path}`;
-      if (lang === 'en') {
-        window.location.href = isGithubProjectPage ? withBase(path) : canonical;
-      } else if (lang === 'hi') {
-        const sourceUrl = isGithubProjectPage ? window.location.href : canonical;
-        window.location.href = `https://translate.google.com/translate?sl=en&tl=hi&u=${encodeURIComponent(sourceUrl)}`;
-      }
     });
     document.addEventListener('click', (event) => {
       if (languageRoot && !languageRoot.contains(event.target)) closeLanguage();
