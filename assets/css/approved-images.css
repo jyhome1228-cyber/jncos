@@ -1,0 +1,189 @@
+/* JN COS TECH — final approved image layer, 2026-08-13 */
+
+/* No legacy photographic backgrounds on pages where no hero image was supplied. */
+.about-hero-bg,
+.products-page .product-hero::before,
+.oem-hero-bg,
+.contact-hero::before,
+.partnership-hero-mark{
+  display:none !important;
+}
+
+.products-page .product-hero,
+.about-page .about-hero,
+.oem-page .oem-hero,
+.contact-page .contact-hero,
+.partnership-page .partnership-hero,
+.technology-page .subpage-hero.text-only,
+.manufacturing-page .subpage-hero.text-only{
+  background:#f2ece6 !important;
+  background-image:none !important;
+}
+
+.products-page .product-hero::after,
+.about-page .about-hero::after,
+.oem-page .oem-hero::after,
+.contact-page .contact-hero::after,
+.partnership-page .partnership-hero::after{
+  background:none !important;
+  display:none !important;
+}
+
+/* Technology, Manufacturing and Partnership use text-only heroes unless an approved hero is explicitly supplied. */
+.subpage-hero.text-only .subpage-hero-grid,
+.partnership-hero .subpage-hero-grid{
+  grid-template-columns:minmax(0,900px) !important;
+  max-width:900px !important;
+  width:100% !important;
+  display:grid !important;
+}
+.subpage-hero.text-only .subpage-hero-visual,
+.partnership-hero .subpage-hero-visual{
+  display:none !important;
+}
+.partnership-hero,
+.partnership-hero .site-container{
+  min-height:450px !important;
+}
+.partnership-hero .site-container{
+  display:flex !important;
+  align-items:flex-end !important;
+}
+.partnership-hero .subpage-lead{
+  color:#5f514a !important;
+}
+
+/* Home approved hero — show the source faithfully, no grayscale or crop. */
+.home-hero-visual{
+  height:auto !important;
+  aspect-ratio:auto !important;
+  background:#eeeae7 !important;
+  overflow:hidden !important;
+}
+.home-hero-visual img{
+  display:block !important;
+  width:100% !important;
+  height:auto !important;
+  max-height:none !important;
+  aspect-ratio:auto !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  filter:none !important;
+  transform:none !important;
+}
+.home-hero-visual:hover img{transform:none !important;}
+
+/* Every approved supporting image keeps the native composition. */
+.public-page main :is(
+  .about-story-visual,
+  .about-founder-photo,
+  .about-signature-visual,
+  .product-wide-visual,
+  .product-visual-strip,
+  .oem-wide-image,
+  .oem-pack-image,
+  .tech-philosophy figure,
+  .tech-optimization figure,
+  .mfg-wide-image,
+  .contact-map
+){
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  aspect-ratio:auto !important;
+  overflow:hidden !important;
+  background:#f3f0ed !important;
+}
+.public-page main :is(
+  .about-story-visual,
+  .about-founder-photo,
+  .about-signature-visual,
+  .product-wide-visual,
+  .product-visual-strip,
+  .oem-wide-image,
+  .oem-pack-image,
+  .tech-philosophy figure,
+  .tech-optimization figure,
+  .mfg-wide-image,
+  .contact-map
+) > img{
+  display:block !important;
+  width:100% !important;
+  max-width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  aspect-ratio:auto !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  margin:0 !important;
+  filter:none !important;
+  transform:none !important;
+}
+.public-page main :is(
+  .about-story-visual,
+  .about-founder-photo,
+  .product-wide-visual,
+  .product-visual-strip,
+  .oem-wide-image,
+  .oem-pack-image,
+  .tech-philosophy figure,
+  .tech-optimization figure,
+  .mfg-wide-image,
+  .contact-map
+):hover > img{transform:none !important;}
+
+/* Signature is an asset, not a handwriting font substitute. */
+.about-signature-visual{
+  width:min(220px,60%);
+  margin:28px 0 12px !important;
+  background:transparent !important;
+}
+.about-signature-visual img{
+  width:100% !important;
+  background:transparent !important;
+}
+.about-signature-script{display:none !important;}
+
+/* Six approved equipment visuals, exact supplied order. */
+.mfg-equipment-visual-grid{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:14px !important;
+  margin:0 0 48px !important;
+  width:100% !important;
+}
+.mfg-equipment-visual-grid figure{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  margin:0 !important;
+  padding:0 !important;
+  width:100% !important;
+  aspect-ratio:4/3 !important;
+  overflow:hidden !important;
+  background:#f3f0ed !important;
+  border:1px solid #e0d5ce !important;
+}
+.mfg-equipment-visual-grid img{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:100% !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  filter:none !important;
+  transform:none !important;
+}
+
+/* Contact location photos: no map-like crop or hover zoom. */
+.contact-map img{height:auto !important;filter:none !important;transform:none !important;}
+.contact-location-card:hover .contact-map img{transform:none !important;}
+
+@media(max-width:900px){
+  .mfg-equipment-visual-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
+}
+@media(max-width:720px){
+  .mfg-equipment-visual-grid{grid-template-columns:1fr !important;gap:10px !important;margin-bottom:34px !important;}
+  .partnership-hero,.partnership-hero .site-container{min-height:320px !important;}
+}
