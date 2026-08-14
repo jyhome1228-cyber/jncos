@@ -1,0 +1,51 @@
+/* JN COS TECH — header / first-section stability fix
+   Keeps the header geometry identical before and after common.js loads,
+   and removes the desktop hover dead-zone between the header and page. */
+
+:root{
+  --header-h:98px;
+}
+
+.site-header{
+  height:98px!important;
+  min-height:98px!important;
+  margin:0!important;
+  overflow:visible!important;
+  background:#fff!important;
+  border-bottom:1px solid #e8dfd9!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+.site-header + main{
+  margin-top:0!important;
+}
+
+@media (min-width:1025px){
+  .nav-capabilities{
+    padding-bottom:0!important;
+    margin-bottom:0!important;
+  }
+
+  .nav-capabilities::after{
+    left:-16px!important;
+    right:-16px!important;
+    top:100%!important;
+    height:8px!important;
+  }
+
+  .nav-capabilities-menu{
+    margin-top:8px!important;
+  }
+}
+
+@media (max-width:1024px){
+  :root{
+    --header-h:76px;
+  }
+
+  .site-header{
+    height:76px!important;
+    min-height:76px!important;
+  }
+}
