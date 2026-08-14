@@ -2,12 +2,12 @@
 .home-main{overflow:hidden}
 .home-main .site-container{width:min(100%,1320px)}
 
-.home-hero{padding:92px 0 98px;background:#f2ece6}
-.home-hero-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(440px,1.1fr);gap:64px;align-items:center}
-.home-hero-copy{padding-left:0;max-width:600px}
-.home-hero h1{max-width:500px;margin:0;font-size:clamp(32px,2.65vw,40px);font-weight:750;line-height:1.1;letter-spacing:-.05em}
-.home-copy{max-width:540px;margin:24px 0 0;color:#75665f;font-size:12.5px;line-height:1.82}
-.home-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px}
+.home-hero{padding:112px 0 116px;background:#f2ece6}
+.home-hero-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(440px,1.1fr);gap:72px;align-items:center}
+.home-hero-copy{padding-left:0;max-width:570px}
+.home-hero h1{max-width:470px;margin:0;font-size:clamp(30px,2.35vw,36px);font-weight:750;line-height:1.12;letter-spacing:-.05em}
+.home-copy{max-width:540px;margin:28px 0 0;color:#75665f;font-size:12.5px;line-height:1.82}
+.home-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px}
 .home-button{display:inline-flex;align-items:center;justify-content:center;min-width:174px;min-height:40px;padding:0 22px;border:1px solid #352018;border-radius:0;font-size:11.5px;font-weight:620;letter-spacing:.07em;transition:transform .2s ease,background .2s ease,color .2s ease,border-color .2s ease}
 .home-button:hover{transform:translateY(-2px)}
 .home-button-dark{background:#352018;color:#fff}
@@ -49,21 +49,22 @@
 .home-button-light-outline:hover{background:rgba(255,255,255,.08)}
 .desktop-only{display:initial}
 
-@media(max-width:1180px){.home-hero-grid{gap:44px}}
+@media(max-width:1180px){.home-hero-grid{gap:48px}}
 @media(max-width:1024px){
-  .home-hero{padding:70px 0}
+  .home-hero{padding:78px 0 84px}
   .home-hero-grid{grid-template-columns:1fr}
   .home-hero-copy{max-width:680px}
+  .home-hero h1{max-width:520px}
   .home-hero-visual{height:min(58vw,520px)}
   .business-grid,.tech-grid{width:100%}
 }
 @media(max-width:720px){
-  .home-hero{padding:58px 0 64px}
-  .home-hero h1{font-size:30px}
-  .home-copy{margin-top:20px;font-size:12.5px}
-  .home-actions{width:100%;margin-top:28px}
+  .home-hero{padding:62px 0 68px}
+  .home-hero h1{font-size:29px;line-height:1.14}
+  .home-copy{margin-top:22px;font-size:12.5px}
+  .home-actions{width:100%;margin-top:30px}
   .home-button{width:100%;min-width:0}
-  .home-hero-visual{margin-top:14px;height:64vw;min-height:250px}
+  .home-hero-visual{margin-top:16px;height:64vw;min-height:250px}
   .home-intro,.home-business,.home-technology,.home-cta{padding:66px 0}
   .home-center-block h2,.home-section-title{font-size:27px}
   .home-center-block p{margin-top:18px;font-size:12.5px}
