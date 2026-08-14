@@ -236,6 +236,7 @@
     ensureCss('data-site-system-css', '/assets/css/site-system.css');
     ensureCss('data-layout-unify-css', '/assets/css/layout-unify.css');
     ensureCss('data-final-polish-css', '/assets/css/final-polish.css');
+    ensureCss('data-mobile-corrections-css', '/assets/css/mobile-corrections.css?v=20260815-0827');
 
     if (!document.querySelector('script[data-page-images]')) {
       const script = document.createElement('script');
@@ -269,12 +270,22 @@
         </button>
         <nav class="site-nav" id="site-nav" aria-label="Primary navigation" data-nav>
           <a href="${withBase('/About/')}">About</a>
-          <a href="${withBase('/Products/')}">Products &amp; Services</a>
-          <a href="${withBase('/OEMODM/')}">OEM / ODM</a>
-          <a href="${withBase('/Technology/')}">Technology &amp; R&amp;D</a>
+          <div class="nav-capabilities" data-capabilities>
+            <button class="nav-capabilities-trigger" type="button" aria-expanded="false" aria-controls="capabilities-menu" data-capabilities-trigger>
+              <span>Capabilities</span>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5 10 12.5 15 7.5"/></svg>
+            </button>
+            <div class="nav-capabilities-menu" id="capabilities-menu" data-capabilities-menu>
+              <span class="nav-capabilities-eyebrow">WHAT WE DO</span>
+              <a class="nav-capability-link" href="${withBase('/Products/')}"><span>Products &amp; Services</span><small>Explore skincare, sun care, hair, body and treatment categories.</small><b aria-hidden="true">↗</b></a>
+              <a class="nav-capability-link" href="${withBase('/OEMODM/')}"><span>OEM / ODM</span><small>From project brief and formulation to packaging and scalable manufacturing.</small><b aria-hidden="true">↗</b></a>
+              <a class="nav-capability-link" href="${withBase('/Technology/')}"><span>Technology &amp; R&amp;D</span><small>Research platforms, functional ingredients and formulation technologies.</small><b aria-hidden="true">↗</b></a>
+            </div>
+          </div>
           <a href="${withBase('/Manufacturing/')}">Manufacturing</a>
           <a href="${withBase('/Partnership/')}">Partnership</a>
           <a href="${withBase('/Contact/')}">Contact us</a>
+          <a class="nav-cta" href="${withBase('/Inquiry/')}">Inquiry</a>
           <div class="language-switcher" data-language-switcher>
             <button class="language-switcher-trigger" type="button" aria-expanded="false" aria-controls="language-menu" data-language-trigger>
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.4 4 5.5 4 9s-1.4 6.6-4 9M12 3c-2.6 2.4-4 5.5-4 9s1.4 6.6 4 9"/></svg>
@@ -285,7 +296,6 @@
               <button type="button" data-language="ko"><strong>한국어</strong><span>Google Translate</span></button>
             </div>
           </div>
-          <a class="nav-cta" href="${withBase('/Inquiry/')}">Inquiry</a>
         </nav>
       </div>`;
   };
@@ -334,6 +344,8 @@
 
   const toggle = document.querySelector('[data-menu-toggle]');
   const nav = document.querySelector('[data-nav]');
+  const capabilitiesRoot = document.querySelector('[data-capabilities]');
+  const capabilitiesTrigger = document.querySelector('[data-capabilities-trigger]');
   const languageRoot = document.querySelector('[data-language-switcher]');
   const languageTrigger = document.querySelector('[data-language-trigger]');
   const languageMenu = document.querySelector('[data-language-menu]');
@@ -344,13 +356,41 @@
     languageMenu.hidden = true;
   };
 
+  const closeCapabilities = () => {
+    if (!capabilitiesRoot || !capabilitiesTrigger) return;
+    capabilitiesRoot.classList.remove('is-open');
+    capabilitiesTrigger.setAttribute('aria-expanded', 'false');
+  };
+
   const closeMenu = () => {
     if (!toggle || !nav) return;
     toggle.setAttribute('aria-expanded', 'false');
     nav.classList.remove('is-open');
     document.body.classList.remove('menu-open');
+    closeCapabilities();
     closeLanguage();
   };
+
+  if (capabilitiesRoot && capabilitiesTrigger) {
+    const setCapabilities = (open) => {
+      capabilitiesRoot.classList.toggle('is-open', open);
+      capabilitiesTrigger.setAttribute('aria-expanded', String(open));
+    };
+
+    capabilitiesTrigger.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const isOpen = capabilitiesTrigger.getAttribute('aria-expanded') === 'true';
+      setCapabilities(!isOpen);
+      if (!isOpen) closeLanguage();
+    });
+
+    capabilitiesRoot.addEventListener('mouseenter', () => {
+      if (window.innerWidth > 1024) setCapabilities(true);
+    });
+    capabilitiesRoot.addEventListener('mouseleave', () => {
+      if (window.innerWidth > 1024) setCapabilities(false);
+    });
+  }
 
   if (toggle && nav) {
     toggle.addEventListener('click', () => {
@@ -358,9 +398,17 @@
       toggle.setAttribute('aria-expanded', String(!isOpen));
       nav.classList.toggle('is-open', !isOpen);
       document.body.classList.toggle('menu-open', !isOpen);
+      if (isOpen) {
+        closeCapabilities();
+        closeLanguage();
+      }
     });
     nav.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
-    window.addEventListener('resize', () => { if (window.innerWidth > 1024) closeMenu(); });
+    window.addEventListener('resize', () => {
+      closeCapabilities();
+      closeLanguage();
+      if (window.innerWidth > 1024) closeMenu();
+    });
   }
 
   if (languageTrigger && languageMenu) {
@@ -369,11 +417,21 @@
       const open = languageTrigger.getAttribute('aria-expanded') === 'true';
       languageTrigger.setAttribute('aria-expanded', String(!open));
       languageMenu.hidden = open;
-    });
-    document.addEventListener('click', (event) => {
-      if (languageRoot && !languageRoot.contains(event.target)) closeLanguage();
+      if (!open) closeCapabilities();
     });
   }
+
+  document.addEventListener('click', (event) => {
+    if (capabilitiesRoot && !capabilitiesRoot.contains(event.target)) closeCapabilities();
+    if (languageRoot && !languageRoot.contains(event.target)) closeLanguage();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    closeCapabilities();
+    closeLanguage();
+    if (window.innerWidth <= 1024) closeMenu();
+  });
 
   document.querySelectorAll('[data-year]').forEach((el) => {
     el.textContent = new Date().getFullYear();
