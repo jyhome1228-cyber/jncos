@@ -3,7 +3,7 @@
    and removes the desktop hover dead-zone between the header and page. */
 
 :root{
-  --header-h:98px;
+  --header-h:98px!important;
 }
 
 .site-header{
@@ -41,7 +41,7 @@
 
 @media (max-width:1024px){
   :root{
-    --header-h:76px;
+    --header-h:76px!important;
   }
 
   .site-header{
