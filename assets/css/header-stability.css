@@ -21,6 +21,52 @@
   margin-top:0!important;
 }
 
+/* Shared menu-page hero image */
+.about-hero,
+.product-hero,
+.subpage-hero,
+.oem-hero,
+.contact-hero,
+.inquiry-hero,
+.legal-hero{
+  position:relative!important;
+  overflow:hidden!important;
+  background-color:#f2ece6!important;
+  background-image:url('https://cdn.imweb.me/upload/S20260219b829e728b3f2e/d698bde10a91f.jpg')!important;
+  background-size:cover!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
+  border-bottom:1px solid rgba(47,32,27,.08)!important;
+}
+
+/* Existing hero image layers use the same approved source. */
+.product-hero::before,
+.contact-hero::before{
+  background-image:url('https://cdn.imweb.me/upload/S20260219b829e728b3f2e/d698bde10a91f.jpg')!important;
+  background-position:center center!important;
+  background-size:cover!important;
+  filter:saturate(.72) contrast(.96)!important;
+  opacity:.72!important;
+}
+
+.about-hero-bg,
+.oem-hero-bg{
+  background-image:url('https://cdn.imweb.me/upload/S20260219b829e728b3f2e/d698bde10a91f.jpg')!important;
+  background-position:center center!important;
+  background-size:cover!important;
+  filter:saturate(.72) contrast(.96)!important;
+  opacity:.72!important;
+}
+
+/* Keep copy readable while allowing the image to remain visible. */
+.about-hero::after,
+.product-hero::after,
+.subpage-hero::after,
+.oem-hero::after,
+.contact-hero::after{
+  background:linear-gradient(90deg,rgba(244,239,235,.80) 0%,rgba(244,239,235,.66) 52%,rgba(244,239,235,.36) 100%)!important;
+}
+
 @media (min-width:1025px){
   .nav-capabilities{
     padding-bottom:0!important;
@@ -47,5 +93,19 @@
   .site-header{
     height:76px!important;
     min-height:76px!important;
+  }
+
+  .about-hero,
+  .product-hero,
+  .subpage-hero,
+  .oem-hero,
+  .contact-hero,
+  .inquiry-hero,
+  .legal-hero,
+  .product-hero::before,
+  .contact-hero::before,
+  .about-hero-bg,
+  .oem-hero-bg{
+    background-position:58% center!important;
   }
 }
