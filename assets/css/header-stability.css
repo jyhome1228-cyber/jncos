@@ -21,48 +21,74 @@
   margin-top:0!important;
 }
 
-/* Shared menu-page hero image */
-.about-hero,
-.product-hero,
-.subpage-hero,
-.oem-hero,
-.contact-hero,
-.inquiry-hero,
-.legal-hero{
+/* ---------------------------------------------------------
+   Shared subpage hero image — HOME IS EXCLUDED
+   One approved image is used across every menu-page hero.
+   The previous near-opaque ivory overlays were the reason the
+   image looked like a flat solid background, so they are reduced.
+--------------------------------------------------------- */
+body.public-page:not(.home-page) :is(
+  .about-hero,
+  .product-hero,
+  .subpage-hero,
+  .oem-hero,
+  .contact-hero,
+  .inquiry-hero,
+  .legal-hero,
+  .content-hero
+){
   position:relative!important;
   overflow:hidden!important;
-  background-color:#f2ece6!important;
-  background-image:url('https://cdn.imweb.me/upload/S20260219b829e728b3f2e/d698bde10a91f.jpg')!important;
+  background-color:#e9e1da!important;
+  background-image:url('https://cdn.imweb.me/upload/S20260219b829e728b3f2e/d698bde10a91f.jpg?v=20260815-1941')!important;
   background-size:cover!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
   border-bottom:1px solid rgba(47,32,27,.08)!important;
 }
 
-.product-hero::before,
-.contact-hero::before{
-  background-image:url('https://cdn.imweb.me/upload/S20260219b829e728b3f2e/d698bde10a91f.jpg')!important;
+/* Existing page-specific image layers are normalized to the same source. */
+body.public-page:not(.home-page) :is(.product-hero,.contact-hero)::before,
+body.public-page:not(.home-page) :is(.about-hero-bg,.oem-hero-bg){
+  background-image:url('https://cdn.imweb.me/upload/S20260219b829e728b3f2e/d698bde10a91f.jpg?v=20260815-1941')!important;
   background-position:center center!important;
   background-size:cover!important;
-  filter:saturate(.72) contrast(.96)!important;
-  opacity:.72!important;
+  background-repeat:no-repeat!important;
+  filter:saturate(.82) contrast(.98)!important;
+  opacity:.88!important;
 }
 
-.about-hero-bg,
-.oem-hero-bg{
-  background-image:url('https://cdn.imweb.me/upload/S20260219b829e728b3f2e/d698bde10a91f.jpg')!important;
-  background-position:center center!important;
-  background-size:cover!important;
-  filter:saturate(.72) contrast(.96)!important;
-  opacity:.72!important;
+/* IMPORTANT: old page styles used 0.9–0.98 ivory masks, which hid the photo.
+   Keep only a light readability veil so the supplied image is clearly visible. */
+body.public-page:not(.home-page) :is(
+  .about-hero,
+  .product-hero,
+  .subpage-hero,
+  .oem-hero,
+  .contact-hero
+)::after{
+  background:linear-gradient(
+    90deg,
+    rgba(244,239,235,.48) 0%,
+    rgba(244,239,235,.32) 52%,
+    rgba(244,239,235,.12) 100%
+  )!important;
 }
 
-.about-hero::after,
-.product-hero::after,
-.subpage-hero::after,
-.oem-hero::after,
-.contact-hero::after{
-  background:linear-gradient(90deg,rgba(244,239,235,.80) 0%,rgba(244,239,235,.66) 52%,rgba(244,239,235,.36) 100%)!important;
+/* Keep hero copy above any image/overlay layers. */
+body.public-page:not(.home-page) :is(
+  .about-hero,
+  .product-hero,
+  .subpage-hero,
+  .oem-hero,
+  .contact-hero,
+  .inquiry-hero,
+  .legal-hero,
+  .content-hero
+) > .site-container,
+body.public-page:not(.home-page) .subpage-hero-grid{
+  position:relative!important;
+  z-index:2!important;
 }
 
 @media (min-width:1025px){
@@ -91,17 +117,18 @@
     min-height:76px!important;
   }
 
-  .about-hero,
-  .product-hero,
-  .subpage-hero,
-  .oem-hero,
-  .contact-hero,
-  .inquiry-hero,
-  .legal-hero,
-  .product-hero::before,
-  .contact-hero::before,
-  .about-hero-bg,
-  .oem-hero-bg{
+  body.public-page:not(.home-page) :is(
+    .about-hero,
+    .product-hero,
+    .subpage-hero,
+    .oem-hero,
+    .contact-hero,
+    .inquiry-hero,
+    .legal-hero,
+    .content-hero
+  ),
+  body.public-page:not(.home-page) :is(.product-hero,.contact-hero)::before,
+  body.public-page:not(.home-page) :is(.about-hero-bg,.oem-hero-bg){
     background-position:58% center!important;
   }
 
