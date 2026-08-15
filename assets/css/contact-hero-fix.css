@@ -1,0 +1,52 @@
+/* JN COS TECH — Contact hero approved background fix (2026-08-15) */
+
+html body .contact-page .contact-hero{
+  position:relative!important;
+  overflow:hidden!important;
+  background-color:#f2ece6!important;
+  background-image:url('https://cdn.imweb.me/upload/S20260219b829e728b3f2e/d698bde10a91f.jpg')!important;
+  background-size:cover!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
+}
+
+html body .contact-page .contact-hero::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:0!important;
+  display:block!important;
+  background-image:url('https://cdn.imweb.me/upload/S20260219b829e728b3f2e/d698bde10a91f.jpg')!important;
+  background-size:cover!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
+  filter:none!important;
+  opacity:1!important;
+  transform:none!important;
+}
+
+html body .contact-page .contact-hero::after{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:1!important;
+  display:block!important;
+  background:linear-gradient(90deg,rgba(244,239,235,.68) 0%,rgba(244,239,235,.48) 52%,rgba(244,239,235,.18) 100%)!important;
+  pointer-events:none!important;
+}
+
+html body .contact-page .contact-hero > .site-container{
+  position:relative!important;
+  z-index:2!important;
+}
+
+@media(max-width:720px){
+  html body .contact-page .contact-hero,
+  html body .contact-page .contact-hero::before{
+    background-position:58% center!important;
+  }
+
+  html body .contact-page .contact-hero::after{
+    background:linear-gradient(90deg,rgba(244,239,235,.76) 0%,rgba(244,239,235,.56) 60%,rgba(244,239,235,.28) 100%)!important;
+  }
+}
