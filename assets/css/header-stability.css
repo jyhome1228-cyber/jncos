@@ -21,6 +21,122 @@
   margin-top:0!important;
 }
 
+/* 2026-08-15 — unified top visual */
+.home-hero,
+.about-hero,
+.product-hero,
+.subpage-hero,
+.oem-hero,
+.contact-hero,
+.inquiry-hero,
+.legal-hero{
+  position:relative!important;
+  overflow:hidden!important;
+  background-image:
+    linear-gradient(rgba(241,235,230,.76),rgba(241,235,230,.76)),
+    url('https://cdn.imweb.me/upload/S20260608d59dd46fbc08b/c60ee5f932424.jpg')!important;
+  background-size:cover!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
+  border-bottom:1px solid rgba(47,32,27,.08)!important;
+}
+
+/* About had its own opaque overlay; keep the image visible beneath it. */
+.about-hero::after{
+  background:linear-gradient(90deg,rgba(241,235,230,.70) 0%,rgba(241,235,230,.58) 58%,rgba(241,235,230,.48) 100%)!important;
+}
+
+/* Homepage follows the large editorial typography reference. */
+.home-hero{
+  min-height:690px!important;
+  padding:116px 0 124px!important;
+  display:flex!important;
+  align-items:center!important;
+}
+
+.home-hero-grid{
+  display:block!important;
+}
+
+.home-hero-copy{
+  width:100%!important;
+  max-width:1120px!important;
+  padding-left:0!important;
+}
+
+body .home-hero h1{
+  max-width:1080px!important;
+  margin:0!important;
+  color:#2f201b!important;
+  font-family:Arial,'Helvetica Neue',Helvetica,sans-serif!important;
+  font-size:clamp(56px,6.1vw,96px)!important;
+  font-weight:800!important;
+  line-height:.99!important;
+  letter-spacing:-.058em!important;
+}
+
+body .home-hero .home-copy{
+  max-width:980px!important;
+  margin-top:48px!important;
+  color:#74675f!important;
+  font-family:Arial,'Helvetica Neue',Helvetica,sans-serif!important;
+  font-size:clamp(18px,1.55vw,25px)!important;
+  font-weight:400!important;
+  line-height:1.7!important;
+  letter-spacing:-.025em!important;
+}
+
+.home-hero-visual{
+  display:none!important;
+}
+
+.home-hero .home-actions{
+  margin-top:42px!important;
+}
+
+/* Shared subpage hero treatment. */
+.about-hero,
+.product-hero,
+.subpage-hero,
+.oem-hero,
+.contact-hero,
+.inquiry-hero,
+.legal-hero{
+  min-height:455px!important;
+  padding:84px 0!important;
+  display:flex!important;
+  align-items:center!important;
+}
+
+body .about-hero h1,
+body .product-hero h1,
+body .subpage-hero h1,
+body .oem-hero h1,
+body .contact-hero h1,
+body .inquiry-hero h1,
+body .legal-hero h1{
+  max-width:920px!important;
+  color:#2f201b!important;
+  font-family:Arial,'Helvetica Neue',Helvetica,sans-serif!important;
+  font-size:clamp(46px,4.6vw,70px)!important;
+  font-weight:800!important;
+  line-height:1.02!important;
+  letter-spacing:-.055em!important;
+}
+
+body .about-hero p:not(.about-kicker),
+body .product-hero p:not(.eyebrow),
+body .subpage-hero .subpage-lead,
+body .oem-hero p,
+body .contact-hero p:not(.eyebrow),
+body .inquiry-hero .inquiry-lead,
+body .legal-hero p:not(.eyebrow){
+  max-width:920px!important;
+  color:#74675f!important;
+  font-size:clamp(14px,1.2vw,18px)!important;
+  line-height:1.78!important;
+}
+
 @media (min-width:1025px){
   .nav-capabilities{
     padding-bottom:0!important;
@@ -47,5 +163,81 @@
   .site-header{
     height:76px!important;
     min-height:76px!important;
+  }
+
+  .home-hero{
+    min-height:600px!important;
+    padding:92px 0 100px!important;
+  }
+
+  body .home-hero h1{
+    font-size:clamp(50px,8.2vw,74px)!important;
+  }
+
+  body .home-hero .home-copy{
+    max-width:760px!important;
+    margin-top:34px!important;
+    font-size:clamp(17px,2.2vw,21px)!important;
+  }
+
+  .about-hero,
+  .product-hero,
+  .subpage-hero,
+  .oem-hero,
+  .contact-hero,
+  .inquiry-hero,
+  .legal-hero{
+    min-height:410px!important;
+    padding:72px 0!important;
+  }
+}
+
+@media (max-width:720px){
+  .home-hero,
+  .about-hero,
+  .product-hero,
+  .subpage-hero,
+  .oem-hero,
+  .contact-hero,
+  .inquiry-hero,
+  .legal-hero{
+    background-position:58% center!important;
+  }
+
+  .home-hero{
+    min-height:520px!important;
+    padding:70px 0 76px!important;
+  }
+
+  body .home-hero h1{
+    font-size:clamp(42px,12.5vw,58px)!important;
+    line-height:1.01!important;
+  }
+
+  body .home-hero .home-copy{
+    margin-top:28px!important;
+    font-size:16px!important;
+    line-height:1.65!important;
+  }
+
+  .about-hero,
+  .product-hero,
+  .subpage-hero,
+  .oem-hero,
+  .contact-hero,
+  .inquiry-hero,
+  .legal-hero{
+    min-height:350px!important;
+    padding:58px 0!important;
+  }
+
+  body .about-hero h1,
+  body .product-hero h1,
+  body .subpage-hero h1,
+  body .oem-hero h1,
+  body .contact-hero h1,
+  body .inquiry-hero h1,
+  body .legal-hero h1{
+    font-size:clamp(38px,10.5vw,52px)!important;
   }
 }
