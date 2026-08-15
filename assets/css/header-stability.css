@@ -39,7 +39,6 @@
   border-bottom:1px solid rgba(47,32,27,.08)!important;
 }
 
-/* Existing hero image layers use the same approved source. */
 .product-hero::before,
 .contact-hero::before{
   background-image:url('https://cdn.imweb.me/upload/S20260219b829e728b3f2e/d698bde10a91f.jpg')!important;
@@ -58,7 +57,6 @@
   opacity:.72!important;
 }
 
-/* Keep copy readable while allowing the image to remain visible. */
 .about-hero::after,
 .product-hero::after,
 .subpage-hero::after,
@@ -86,9 +84,7 @@
 }
 
 @media (max-width:1024px){
-  :root{
-    --header-h:76px!important;
-  }
+  :root{--header-h:76px!important}
 
   .site-header{
     height:76px!important;
@@ -107,5 +103,106 @@
   .about-hero-bg,
   .oem-hero-bg{
     background-position:58% center!important;
+  }
+
+  /* Critical mobile navigation fallback. This deliberately uses high specificity
+     so desktop dropdown/card rules can never create a left/right split on phones. */
+  html body.public-page .site-header .site-nav > .nav-capabilities{
+    position:relative!important;
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:64px!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:visible!important;
+  }
+
+  html body.public-page .site-header .nav-capabilities-trigger{
+    position:relative!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    width:100%!important;
+    height:64px!important;
+    min-height:64px!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-bottom:1px solid #dfd5ce!important;
+    background:#fff!important;
+    color:#2f1b13!important;
+    font-size:17px!important;
+  }
+
+  html body.public-page .site-header .nav-capabilities-menu{
+    position:static!important;
+    inset:auto!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:auto!important;
+    display:none!important;
+    float:none!important;
+    clear:both!important;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    height:auto!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-bottom:1px solid #dfd5ce!important;
+    background:#faf7f5!important;
+    box-shadow:none!important;
+    opacity:1!important;
+    visibility:visible!important;
+    pointer-events:auto!important;
+    transform:none!important;
+  }
+
+  html body.public-page .site-header .nav-capabilities.is-open .nav-capabilities-menu{
+    display:block!important;
+  }
+
+  html body.public-page .site-header .nav-capabilities-eyebrow,
+  html body.public-page .site-header .nav-capability-link > small{
+    display:none!important;
+  }
+
+  html body.public-page .site-header .nav-capability-link{
+    position:relative!important;
+    display:flex!important;
+    align-items:center!important;
+    width:100%!important;
+    max-width:none!important;
+    min-height:58px!important;
+    height:auto!important;
+    margin:0!important;
+    padding:16px 14px 16px 18px!important;
+    border:0!important;
+    border-top:1px solid #eee4dd!important;
+    background:#faf7f5!important;
+    color:#2f1b13!important;
+    box-shadow:none!important;
+    transform:none!important;
+  }
+
+  html body.public-page .site-header .nav-capability-link > span{
+    display:block!important;
+    flex:1 1 auto!important;
+    color:#2f1b13!important;
+    font-size:15px!important;
+    line-height:1.35!important;
+    font-weight:700!important;
+  }
+
+  html body.public-page .site-header .nav-capability-link > b{
+    position:static!important;
+    flex:0 0 auto!important;
+    margin-left:auto!important;
+    transform:none!important;
+    color:#9a745d!important;
   }
 }
