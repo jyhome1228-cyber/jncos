@@ -33,12 +33,12 @@ body.public-page:not(.home-page) .section-pad{padding-top:clamp(66px,6vw,92px);p
 .public-page:not(.home-page) :is(.content-hero,.subpage-hero,.about-hero) p:not(.eyebrow):not(.about-kicker){max-width:880px;font-size:13.5px;line-height:1.8}
 
 /* subpages use one wide banner language */
-.public-page .subpage-hero{position:relative;display:flex;align-items:center;overflow:hidden;padding:58px 0!important;background:#ebe4de;border-bottom:1px solid var(--line)}
+.public-page .subpage-hero{position:relative;display:flex;align-items:center;overflow:hidden;padding:58px 0!important;background-color:#e9e1da;background-image:url('https://cdn.imweb.me/upload/S20260219b829e728b3f2e/d698bde10a91f.jpg?v=20260815-1941');background-size:cover;background-position:center center;background-repeat:no-repeat;border-bottom:1px solid var(--line)}
 .public-page .subpage-hero-grid{display:block!important;position:static!important}
 .public-page .subpage-hero-grid>div:first-child{position:relative;z-index:2;max-width:940px}
-.public-page .subpage-hero-visual{position:absolute!important;inset:0!important;z-index:0;margin:0!important;overflow:hidden;background:#e5ddd7;opacity:.27}
+.public-page .subpage-hero-visual{position:absolute!important;inset:0!important;z-index:0;margin:0!important;overflow:hidden;background:transparent;opacity:0}
 .public-page .subpage-hero-visual img{width:100%;height:100%;aspect-ratio:auto!important;object-fit:cover;filter:saturate(.55) contrast(.92)}
-.public-page .subpage-hero::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(244,239,235,.98) 0%,rgba(244,239,235,.9) 48%,rgba(244,239,235,.4) 100%);pointer-events:none}
+.public-page .subpage-hero::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(244,239,235,.48) 0%,rgba(244,239,235,.32) 52%,rgba(244,239,235,.12) 100%);pointer-events:none}
 .public-page .subpage-lead{max-width:850px!important;font-size:13.5px!important;line-height:1.8!important}
 
 /* subtle interaction for informational grid cards */
@@ -85,6 +85,7 @@ body.public-page:not(.home-page) .section-pad{padding-top:clamp(66px,6vw,92px);p
  .public-page .site-nav{font-size:19px;font-weight:500}
  .public-page .site-nav>a,.public-page .site-nav .nav-cta{min-height:60px;padding:0;border-radius:0;background:transparent;color:var(--text);border-bottom:1px solid var(--line)}
  .public-page:not(.home-page) :is(.content-hero,.subpage-hero,.about-hero){min-height:280px}
+ .public-page .subpage-hero{background-position:58% center}
 }
 @media(max-width:720px){
  body.public-page:not(.home-page) h1{font-size:31px}
