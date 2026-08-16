@@ -31,6 +31,7 @@
 
   const SITE_URL = 'https://jncostech.com';
   const DEFAULT_IMAGE = 'https://cdn.imweb.me/upload/S20260608d59dd46fbc08b/e03905f0f7c3b.jpg';
+  const FAVICON_URL = 'https://cdn.imweb.me/upload/S20260219b829e728b3f2e/2ffe8b598ebeb.png';
 
   const seoMap = {
     '/': {
@@ -128,6 +129,26 @@
     el.href = href;
     Object.entries(extra).forEach(([key, value]) => el.setAttribute(key, value));
     return el;
+  };
+
+  const ensureFavicons = () => {
+    const entries = [
+      { rel: 'icon', type: 'image/png' },
+      { rel: 'shortcut icon', type: 'image/png' },
+      { rel: 'apple-touch-icon' }
+    ];
+
+    entries.forEach(({ rel, type }) => {
+      let link = document.head.querySelector(`link[rel="${rel}"]`);
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = rel;
+        document.head.appendChild(link);
+      }
+      if (type) link.type = type;
+      else link.removeAttribute('type');
+      link.href = FAVICON_URL;
+    });
   };
 
   const applySeo = () => {
@@ -337,6 +358,7 @@
     else document.body.insertAdjacentHTML('beforeend', footerMarkup());
   };
 
+  ensureFavicons();
   applySeo();
   ensureSharedAssets();
   renderHeader();
