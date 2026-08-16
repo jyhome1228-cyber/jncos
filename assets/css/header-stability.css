@@ -91,6 +91,23 @@ body.public-page:not(.home-page) .subpage-hero-grid{
   z-index:2!important;
 }
 
+/* Subpage/menu hero titles: 70% of the shared 30–42px title scale.
+   HOME is deliberately excluded. High specificity keeps page-specific CSS
+   from enlarging these titles again later in the cascade. */
+html body.public-page:not(.home-page) main :is(
+  .about-hero,
+  .product-hero,
+  .subpage-hero,
+  .oem-hero,
+  .contact-hero,
+  .inquiry-hero,
+  .legal-hero,
+  .content-hero
+) h1{
+  font-size:clamp(21px,2.1vw,30px)!important;
+  line-height:1.12!important;
+}
+
 @media (min-width:1025px){
   .nav-capabilities{
     padding-bottom:0!important;
