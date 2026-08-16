@@ -40,7 +40,7 @@ body.public-page:not(.home-page) :is(
   position:relative!important;
   overflow:hidden!important;
   background-color:#e9e1da!important;
-  background-image:url('https://cdn.imweb.me/upload/S20260219b829e728b3f2e/d698bde10a91f.jpg?v=20260815-1941')!important;
+  background-image:url('https://cdn.imweb.me/upload/S20260219b829e728b3f2e/d698bde10a91f.jpg?v=20260816-1100')!important;
   background-size:cover!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
@@ -50,7 +50,7 @@ body.public-page:not(.home-page) :is(
 /* Existing page-specific image layers are normalized to the same source. */
 body.public-page:not(.home-page) :is(.product-hero,.contact-hero)::before,
 body.public-page:not(.home-page) :is(.about-hero-bg,.oem-hero-bg){
-  background-image:url('https://cdn.imweb.me/upload/S20260219b829e728b3f2e/d698bde10a91f.jpg?v=20260815-1941')!important;
+  background-image:url('https://cdn.imweb.me/upload/S20260219b829e728b3f2e/d698bde10a91f.jpg?v=20260816-1100')!important;
   background-position:center center!important;
   background-size:cover!important;
   background-repeat:no-repeat!important;
@@ -91,10 +91,11 @@ body.public-page:not(.home-page) .subpage-hero-grid{
   z-index:2!important;
 }
 
-/* Subpage/menu hero titles: 70% of the shared 30–42px title scale.
-   HOME is deliberately excluded. High specificity keeps page-specific CSS
-   from enlarging these titles again later in the cascade. */
-html body.public-page:not(.home-page) main :is(
+/* Unified hero title scale.
+   Subpage titles were 21–30px; this is exactly 20% larger (about 25–36px).
+   Home now follows the same scale so every hero title feels consistent. */
+html body.public-page main :is(
+  .home-hero,
   .about-hero,
   .product-hero,
   .subpage-hero,
@@ -104,7 +105,7 @@ html body.public-page:not(.home-page) main :is(
   .legal-hero,
   .content-hero
 ) h1{
-  font-size:clamp(21px,2.1vw,30px)!important;
+  font-size:clamp(25px,2.52vw,36px)!important;
   line-height:1.12!important;
 }
 
