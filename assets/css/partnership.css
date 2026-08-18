@@ -65,6 +65,10 @@ details.partnership-model summary p{max-width:100%;min-height:68px}
 .partnership-cta .hero-actions{justify-content:center;margin-top:28px}
 .partnership-cta .button{background:transparent;border-color:#a58d80;color:#fff}
 
+/* Shared CTA override loads later; keep a clear primary / secondary hierarchy here. */
+html body.public-page main section.partnership-cta .hero-actions .button:first-child{background:#fff!important;border-color:#fff!important;color:#2f1b13!important}
+html body.public-page main section.partnership-cta .hero-actions .button:last-child{background:transparent!important;border-color:rgba(255,255,255,.58)!important;color:#fff!important}
+
 @media(max-width:1050px){.partnership-benefit-grid{grid-template-columns:repeat(2,1fr)}.partnership-world{grid-template-columns:1fr}.partnership-map-selector{grid-column:1}}
 @media(max-width:900px){.partnership-model-grid{grid-template-columns:repeat(2,1fr)}.partnership-hero-mark{width:62vw;right:-8%}.partnership-map-canvas{min-height:360px}details.partnership-model summary{min-height:176px}}
 @media(max-width:720px){
